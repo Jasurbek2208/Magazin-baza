@@ -63,7 +63,7 @@ export default function StoragePage() {
   //     },
   //   ],
   // };
- 
+
   useEffect(() => {
     onSnapshot(doc(db, "storage", "Sfl8cREiSMCgqKr89WD5"), (doc) => {
       setProducts(doc?.data()?.products);
@@ -200,8 +200,14 @@ const StyledStorage = styled.div`
       ul {
         display: flex;
         align-items: center;
-        justify-content: flex-start;
+        justify-content: center;
         gap: 32px;
+        row-gap: 20px;
+        flex-wrap: wrap;
+
+        li:last-of-type {
+          width: 300px;
+        }
       }
     }
   }

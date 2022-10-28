@@ -73,6 +73,7 @@ const StyledInput = styled.div`
   row-gap: 8px;
 
   .input {
+    width: 100%;
     padding: 12px;
     margin: 1px;
     color: #000;

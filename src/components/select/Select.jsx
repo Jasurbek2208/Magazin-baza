@@ -20,7 +20,6 @@ export default function Select({ content, list, sortData }) {
         className={(isOpen ? "On " : "") + "select-modal__wrapper"}
         onClick={() => {
           setIsOpen(false);
-          console.log(isOpen);
         }}
       ></div>
       {isOpen ? (

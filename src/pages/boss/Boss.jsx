@@ -34,7 +34,6 @@ export default function Boss() {
           img="fa-sack-dollar"
         />
       </div>
-
       <Statistics />
     </StyledBossPage>
   );
@@ -44,6 +43,6 @@ const StyledBossPage = styled.div`
   .bossCard__wrapper {
     display: flex;
     justify-content: center;
-    /* flex-wrap: wrap; */
+    flex-wrap: wrap;
   }
 `;
