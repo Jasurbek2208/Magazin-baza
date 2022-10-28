@@ -1,0 +1,17 @@
+.icon {
+  display: inline-block;
+  min-width: 30px;
+  min-height: 30px;
+  color: #000;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  -webkit-mask-position: center;
+}
+
+.icon.icon-arrow-up-down {
+  mask-image: url("../icons/arrow-up-down-line.svg");
+  -webkit-mask-image: url("../icons/arrow-up-down-line.svg");
+}
