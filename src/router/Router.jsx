@@ -8,6 +8,7 @@ import PagesLayout from "../layout/PagesLayout";
 // Pages
 import Home from "../pages/Home";
 import Login from "../pages/auth/Login";
+import Kassa from "../pages/kassa/Kassa";
 import StoragePage from "../pages/storagePage/StoragePage";
 import SavdoForm from "../pages/marketingPage/SavdoForm";
 import MarketingPage from "../pages/marketingPage/MarketingPage";
@@ -35,6 +36,7 @@ export default function Router() {
           <Route path="ombor" element={<StoragePage />} />
           <Route path="savdo" element={<MarketingPage />} />
           <Route path="savdoForm" element={<SavdoForm />} />
+          <Route path="kassa" element={<Kassa />} />
           <Route path="*" element={<Navigate to="home" />} />
         </Route>
       </Routes>
