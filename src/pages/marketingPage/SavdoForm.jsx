@@ -13,8 +13,10 @@ import Button from "../../components/button/Button";
 // Custom Hooks
 import { addStoreHistory } from "../../customHooks/useAddStoreHistory";
 import { getStoreHistory } from "../../customHooks/useGetStoreHistory";
+import { useLocation } from "react-router-dom";
 
 export default function SavdoForm() {
+  const location = useLocation().pathname;
   const [disbl, setDisbl] = useState(false);
   const [error, setError] = useState({ nomi: false, soni: false });
   const [user, setUser] = useState();
@@ -109,7 +111,11 @@ export default function SavdoForm() {
   return (
     <StyledSavdoForm>
       <div className="container">
-        {/* <h1>Mahsulot sotish</h1> */}
+        {location === "/mahsulot-sotish" ? (
+          <h1>Mahsulot sotish</h1>
+        ) : (
+          <h1>Mahsulot sotib olish</h1>
+        )}
         <form onSubmit={handleSubmit(addProducts)} className="form__wrapper">
           <div className="input__wrapper">
             <Input
@@ -169,31 +175,59 @@ export default function SavdoForm() {
               label="Soni *"
               option={{
                 ...register("soni", {
-                  required: "Mahsulot qancha sotilishi kiritilmadi !",
+                  required:
+                    location === "/mahsulot-sotish"
+                      ? "Mahsulot qancha sotilishi kiritilmadi !"
+                      : "Mahsulot qancha sotib olinishi kiritilmadi !",
                   minLength: {
                     value: 3,
-                    message: "Minimal 100 ta sotish mumkin !",
+                    message:
+                      location === "/mahsulot-sotish"
+                        ? "Minimal 100 ta sotish mumkin !"
+                        : "Minimal 100 ta sotib olish mumkin !",
                   },
                 }),
               }}
             />
           </div>
           <div className="input__wrapper">
-            <Input
-              errors={errors}
-              errName="qaysiKorxonagaSotildi"
-              placeholder="Qaysi korxonaga sotishingizni kiriting"
-              label="Qaysi korxonaga sotmoqchsiz ? *"
-              option={{
-                ...register("qaysiKorxonagaSotildi", {
-                  required: "Mahsulot nomi kiritilmadi !",
-                }),
-              }}
-            />
+            {location === "/mahsulot-sotish" ? (
+              <Input
+                errors={errors}
+                errName="qaysiKorxonagaSotildi"
+                placeholder="Qaysi korxonaga sotishingizni kiriting"
+                label="Qaysi korxonaga sotmoqchsiz ? *"
+                option={{
+                  ...register("qaysiKorxonagaSotildi", {
+                    required: "Mahsulot nomi kiritilmadi !",
+                  }),
+                }}
+              />
+            ) : (
+              <Input
+                errors={errors}
+                errName="qaysiKorxonadanSotibOlindi"
+                placeholder="Qaysi korxonadan olishingizni kiriting"
+                label="Qaysi korxonadan sotib olmoqchsiz ? *"
+                option={{
+                  ...register("qaysiKorxonagaSotildi", {
+                    required: "Mahsulot nomi kiritilmadi !",
+                  }),
+                }}
+              />
+            )}
           </div>
 
           <div className="input__wrapper">
-            <Button disbl={disbl} type="submit" content="Mahsulotni sotish" />
+            {location === "/mahsulot-sotish" ? (
+              <Button disbl={disbl} type="submit" content="Mahsulotni sotish" />
+            ) : (
+              <Button
+                disbl={disbl}
+                type="submit"
+                content="Mahsulotni sotib olish"
+              />
+            )}
           </div>
         </form>
       </div>
@@ -216,12 +250,13 @@ const StyledSavdoForm = styled.div`
 
     .form__wrapper {
       margin: 0 auto;
-      display: flex;
       max-width: 700px;
+      display: flex;
+      align-items: flex-end;
       justify-content: space-around;
-      flex-wrap: wrap;
       gap: 46px;
       row-gap: 43px;
+      flex-wrap: wrap;
 
       .input__wrapper {
         position: relative;

@@ -18,11 +18,15 @@ const StyledBossCard = styled.div`
   justify-content: center;
   flex-direction: column;
   row-gap: 20px;
-  width: 300px;
+  width: 270px;
   height: 200px;
   border: 1px solid #1e90ff;
   background-color: #fff;
   transition: transform 300ms, background-color 100ms;
+
+  h2 {
+    text-align: center;
+  }
 
   &:hover {
     color: #fff;

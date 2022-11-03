@@ -11,6 +11,9 @@ import Button from "../../components/button/Button";
 import Select from "../../components/select/Select";
 import Input from "../../components/input/Input";
 
+// Custom Hooks
+import numSort from "../../customHooks/useNumberSortForMoney";
+
 export default function StoragePage() {
   const [products, setProducts] = useState();
   const [filteredData, setFilteredData] = useState();
@@ -65,15 +68,11 @@ export default function StoragePage() {
   // };
 
   useEffect(() => {
-    onSnapshot(doc(db, "storage", "Sfl8cREiSMCgqKr89WD5"), (doc) => {
+    onSnapshot(doc(db, "storage2", "RQVXHDw3ev7t7N37HU1M"), (doc) => {
       setProducts(doc?.data()?.products);
       setFilteredData(doc?.data()?.products);
     });
   }, []);
-
-  useEffect(() => {
-    // console.log(filteredData?.forEach((i) => console.log(i.mahsulotNomi)));
-  }, [filteredData]);
 
   // SORT PRODUCTS
   function sortData(sort) {
@@ -177,9 +176,9 @@ export default function StoragePage() {
                 <tr key={i?.mahsulotNomi + idx}>
                   <td>{idx + 1}</td>
                   <td>{i?.mahsulotNomi}</td>
-                  <td>{i?.soni}</td>
-                  <td>{i?.narxi} so'm</td>
-                  <td>{i?.jamiNarxi} so'm</td>
+                  <td>{numSort(i?.soni)}</td>
+                  <td>{numSort(i?.narxi)} so'm</td>
+                  <td>{numSort(i?.soni) * numSort(i?.narxi)} so'm</td>
                 </tr>
               ))}
             </tbody>
