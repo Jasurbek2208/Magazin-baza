@@ -178,7 +178,7 @@ export default function StoragePage() {
                   <td>{i?.mahsulotNomi}</td>
                   <td>{numSort(i?.soni)}</td>
                   <td>{numSort(i?.narxi)} so'm</td>
-                  <td>{numSort(i?.soni) * numSort(i?.narxi)} so'm</td>
+                  <td>{numSort(i?.soni * i?.narxi)} so'm</td>
                 </tr>
               ))}
             </tbody>
