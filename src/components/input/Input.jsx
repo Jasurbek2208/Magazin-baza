@@ -27,6 +27,7 @@ export default function Input({
               (error.error ? " borderError" : "")
             }
             name={label}
+            value={value}
             placeholder={placeholder}
             onValueChange={onChange}
             {...option}

@@ -7,14 +7,14 @@ export default function Statistics() {
       {JSON.parse(localStorage.getItem("storeHistory"))?.map((i, idx) => (
         <div key={i.mahsulotNomi + idx} className="action__wrapper">
           <div className="top">
-            <p>{i.qachonSotildi}</p>
+            <p>{i.qachonSotildi || i.qanchonSotibOlindi}</p>
             <p>{i.kimTomonidan}</p>
           </div>
           <div className="body">
             <div className="left">
-              <h3 className="title">{i.mahsulotNomi.toUpperCase() + " "}</h3>
+              <h3 className="title">{i.mahsulotNomi?.toUpperCase() + " "}</h3>
               <h4 className={i.qanchaSotildi ? "sotildi" : ""}>
-                {i.qanchaSotildi + " "}
+                {i.qanchaSotildi || i.qanchaSotibOlindi + " "}
                 <span>ta</span>
               </h4>
               <div className="current-cash">
@@ -26,9 +26,9 @@ export default function Statistics() {
                   <span>
                     {" " +
                       Number(i.narxi) *
-                        (i.qanchaSotildi
+                        (i.qanchaSotildi || i.qanchaSotibOlindi
                           ? Number(i.qanchaSotildi)
-                          : i.qanchaSotibOlindi)}
+                          : Number(i.qanchaSotibOlindi))}
                   </span>
                 </p>
               </div>

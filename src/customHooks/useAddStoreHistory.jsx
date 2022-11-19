@@ -5,18 +5,33 @@ import { db } from "../firebase";
 // Custom Hooks
 import { getNowTime } from "./useGetNowTime";
 
-export async function addStoreHistory(data, narxi) {
-  const historyData = {
-    qachonSotildi: getNowTime(),
-    qanchaSotildi: data.soni,
-    narxi,
-    mahsulotNomi: data.mahsulotNomi,
-    qaysiKorxonagaYokiShaxsga: data.qaysiKorxonagaSotildi,
-    kimTomonidan:
-      JSON.parse(localStorage.getItem("rol"))?.ism +
-      " " +
-      JSON.parse(localStorage.getItem("rol"))?.familiya,
-  };
+export async function addStoreHistory(data, narxi, location) {
+  let historyData = null;
+
+  location === "/mahsulot-sotish"
+    ? (historyData = {
+        qachonSotildi: getNowTime(),
+        qanchaSotildi: data.soni,
+        narxi,
+        mahsulotNomi: data.mahsulotNomi,
+        qaysiKorxonagaYokiShaxsga: data.qaysiKorxonagaSotildi,
+        kimTomonidan:
+          JSON.parse(localStorage.getItem("rol"))?.ism +
+          " " +
+          JSON.parse(localStorage.getItem("rol"))?.familiya,
+      })
+    : (historyData = {
+        qachonSotibOlindi: getNowTime(),
+        qanchaSotibOlindi: data.soni,
+        narxi,
+        mahsulotNomi: data.mahsulotNomi,
+        qaysiKorxonadanYokiShaxsdan: data.qaysiKorxonagaSotildi,
+        kimTomonidan:
+          JSON.parse(localStorage.getItem("rol"))?.ism +
+          " " +
+          JSON.parse(localStorage.getItem("rol"))?.familiya,
+      });
+
   // localStorage.setItem(
   //   "rol",
   //   JSON.stringify({

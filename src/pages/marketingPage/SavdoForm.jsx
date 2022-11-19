@@ -12,7 +12,6 @@ import Button from "../../components/button/Button";
 
 // Custom Hooks
 import { addStoreHistory } from "../../customHooks/useAddStoreHistory";
-import { getStoreHistory } from "../../customHooks/useGetStoreHistory";
 import { useLocation } from "react-router-dom";
 
 export default function SavdoForm() {
@@ -34,10 +33,12 @@ export default function SavdoForm() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   // POST PRODUCTS
   async function addProducts(data) {
+    setDisbl(true);
     setMahsulotName((p) => ({ ...p, mahsulotNomi: data.mahsulotNomi }));
     let newData = products;
     let isNomiError = true;
@@ -50,7 +51,9 @@ export default function SavdoForm() {
         narxi = i.narxi;
         isNomiError = false;
         Number(i.soni) > Number(numValue)
-          ? (i.soni = Number(i.soni - numValue))
+          ? location === "/mahsulot-sotish"
+            ? (i.soni = Number(i.soni - numValue))
+            : (i.soni = Number(i.soni + Number(numValue)))
           : (isSoniError = true);
         data.soni = numValue;
       }
@@ -60,13 +63,25 @@ export default function SavdoForm() {
 
     if (!isNomiError && !isSoniError) {
       try {
-        addStoreHistory(data, narxi);
+        addStoreHistory(data, narxi, location);
         await setDoc(doc(db, "storage2", "RQVXHDw3ev7t7N37HU1M"), {
           products: newData,
         });
         getDatas();
+        setIsSelect("");
+        setNumValue("");
+        data = { mahsulotNomi: "", soni: "", qaysiKorxonagaSotildi: "" };
+        reset({ mahsulotNomi: "", soni: "", qaysiKorxonagaSotildi: "" });
+        setMahsulotName({
+          mahsulotNomi: "",
+          soni: "",
+          narxi: "",
+        });
       } catch (err) {
         console.log(err);
+      } finally {
+        setDisbl(false);
+        localStorage.removeItem("storeHistory");
       }
     }
   }
@@ -165,6 +180,7 @@ export default function SavdoForm() {
                 setError(false);
               }}
               type="number"
+              value={numValue}
               errors={errors}
               error={{
                 error: error?.soni,
