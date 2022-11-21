@@ -7,12 +7,14 @@ export default function Button({
   content,
   disbl,
   customize,
+  width,
   className,
 }) {
   return (
     <StyledButton
       className={className + (customize ? " customize" : "")}
       disabled={disbl}
+      style={{ width: width }}
       type={type}
       onClick={onClick}
     >

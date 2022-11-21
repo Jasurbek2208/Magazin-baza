@@ -10,8 +10,9 @@ import Home from "../pages/Home";
 import Login from "../pages/auth/Login";
 import Kassa from "../pages/kassa/Kassa";
 import SavdoForm from "../pages/marketingPage/SavdoForm";
-import StoragePage from "../pages/storagePage/StoragePage";
+import TaminotForm from "../pages/taminotPage/TaminotForm";
 import TaminotPage from "../pages/taminotPage/TaminotPage";
+import StoragePage from "../pages/storagePage/StoragePage";
 import MarketingPage from "../pages/marketingPage/MarketingPage";
 
 // Custom Hooks
@@ -39,6 +40,8 @@ export default function Router() {
           <Route path="taminot" element={<TaminotPage />} />
           <Route path="mahsulot-sotish" element={<SavdoForm />} />
           <Route path="mahsulot-sotib-olish" element={<SavdoForm />} />
+          <Route path="korxona-uchun-taminot" element={<TaminotForm />} />
+          <Route path="oziq-ovqat-uchun-chiqim" element={<TaminotForm />} />
           <Route path="kassa" element={<Kassa />} />
           <Route path="*" element={<Navigate to="home" />} />
         </Route>

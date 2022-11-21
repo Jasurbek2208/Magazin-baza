@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import styled from "styled-components";
 
 // Firebase
 import { doc, onSnapshot, setDoc } from "firebase/firestore";
@@ -15,12 +14,12 @@ import Button from "../../components/button/Button";
 import { addStoreHistory } from "../../customHooks/useAddStoreHistory";
 import { useLocation, useNavigate } from "react-router-dom";
 import numSort from "../../customHooks/useNumberSortForMoney";
+import { StyledSavdoForm } from "../../assets/style/formStyles";
 
 export default function SavdoForm() {
   const location = useLocation().pathname;
   const [disbl, setDisbl] = useState(false);
   const [error, setError] = useState({ nomi: false, soni: false });
-  const [user, setUser] = useState();
   const [products, setProducts] = useState();
   const [filteredData, setFilteredData] = useState([]);
   const [isSelect, setIsSelect] = useState("");
@@ -255,10 +254,16 @@ export default function SavdoForm() {
 
           <div className="input__wrapper">
             {location === "/mahsulot-sotish" ? (
-              <Button disbl={disbl} type="submit" content="Mahsulotni sotish" />
+              <Button
+                disbl={disbl}
+                width="100%"
+                type="submit"
+                content="Mahsulotni sotish"
+              />
             ) : (
               <Button
                 disbl={disbl}
+                width="100%"
                 type="submit"
                 content="Mahsulotni sotib olish"
               />
@@ -269,70 +274,3 @@ export default function SavdoForm() {
     </StyledSavdoForm>
   );
 }
-
-const StyledSavdoForm = styled.div`
-  padding: 10px 0px 0px;
-  margin: 0 auto;
-
-  .container {
-    padding: 10px 16px;
-    /* border: 1px solid #000; */
-
-    h1 {
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .form__wrapper {
-      margin: 0 auto;
-      max-width: 700px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-around;
-      gap: 46px;
-      row-gap: 43px;
-      flex-wrap: wrap;
-
-      .input__wrapper {
-        position: relative;
-        width: 320px;
-
-        .currProduct {
-          position: absolute;
-          width: max-content;
-          background-color: #fff;
-          box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
-            rgba(0, 0, 0, 0.23) 0px 6px 6px;
-          z-index: 3;
-
-          ul {
-            display: flex;
-            flex-direction: column;
-            row-gap: 0px !important;
-
-            li {
-              width: 100%;
-
-              button {
-                cursor: pointer;
-                padding: 10px 20px;
-                width: 100%;
-                color: #000;
-                border: none;
-                text-align: center;
-                background-color: #fff;
-                transition: 200ms;
-
-                &:hover,
-                &:focus {
-                  outline: none;
-                  background-color: silver;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;

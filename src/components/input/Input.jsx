@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CurrencyInput from "react-currency-input-field";
 import styled from "styled-components";
 
@@ -41,9 +41,12 @@ export default function Input({
         </>
       ) : (
         <>
+          {type === "file" ? <div className="checkImage__wrapper"></div> : null}
           <input
             className={
-              className + " input" + (error?.error ? " borderError" : "")
+              className +
+              " custom-file-input input" +
+              (error?.error ? " borderError" : "")
             }
             type={type}
             name={label}
@@ -113,6 +116,22 @@ const StyledInput = styled.div`
 
     &.narxi {
       transform: translateY(-33px);
+    }
+  }
+
+  /* /////////////////// */
+
+  .checkImage__wrapper {
+    width: 100%;
+    height: 200px;
+    border: 1px solid #005ed8;
+  }
+
+  .custom-file-input {
+    cursor: pointer;
+
+    &::-webkit-file-upload-button {
+      visibility: hidden;
     }
   }
 `;

@@ -11,7 +11,7 @@ export default function TaminotPage() {
         <BossCard
           title="Korxona uchun ta'minot"
           id="korxonaUchunTaminot"
-          navLink="/korxona-uchun-a'minot"
+          navLink="/korxona-uchun-taminot"
         />
         <BossCard
           title="Oziq-ovqat uchun chiqim"
