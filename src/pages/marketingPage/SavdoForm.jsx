@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 
 // Firebase
@@ -12,7 +13,8 @@ import Button from "../../components/button/Button";
 
 // Custom Hooks
 import { addStoreHistory } from "../../customHooks/useAddStoreHistory";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import numSort from "../../customHooks/useNumberSortForMoney";
 
 export default function SavdoForm() {
   const location = useLocation().pathname;
@@ -36,6 +38,9 @@ export default function SavdoForm() {
     reset,
   } = useForm();
 
+  // navigate
+  const navigate = useNavigate();
+
   // POST PRODUCTS
   async function addProducts(data) {
     setDisbl(true);
@@ -50,12 +55,17 @@ export default function SavdoForm() {
       if (i.mahsulotNomi === isSelect) {
         narxi = i.narxi;
         isNomiError = false;
-        Number(i.soni) > Number(numValue)
-          ? location === "/mahsulot-sotish"
-            ? (i.soni = Number(i.soni - numValue))
-            : (i.soni = Number(i.soni + Number(numValue)))
-          : (isSoniError = true);
-        data.soni = numValue;
+        if (location === "/mahsulot-sotish") {
+          if (Number(i.soni) > Number(numValue)) {
+            i.soni = Number(i.soni - numValue);
+          } else {
+            isSoniError = true;
+            setMahsulotName((p) => ({ ...p, soni: numSort(i.soni) }));
+          }
+        } else {
+          i.soni = Number(i.soni + Number(numValue));
+          data.soni = numValue;
+        }
       }
     });
     if (isNomiError) setError((p) => ({ ...p, nomi: true }));
@@ -77,8 +87,17 @@ export default function SavdoForm() {
           soni: "",
           narxi: "",
         });
+        navigate("..");
+        location === "/mahsulot-sotish"
+          ? toast.success("Mahsulot muvofaqiyatli sotildi !")
+          : toast.success("Mahsulot muvofaqiyatli sotib olindi !");
       } catch (err) {
         console.log(err);
+        location === "/mahsulot-sotish"
+          ? toast.success("Mahsulot sotishda xatolik yoki internet o'chiq !")
+          : toast.success(
+              "Mahsulot sotib olishda xatolik yoki internet o'chiq !"
+            );
       } finally {
         setDisbl(false);
         localStorage.removeItem("storeHistory");
@@ -215,7 +234,7 @@ export default function SavdoForm() {
                 label="Qaysi korxonaga sotmoqchsiz ? *"
                 option={{
                   ...register("qaysiKorxonagaSotildi", {
-                    required: "Mahsulot nomi kiritilmadi !",
+                    required: "Qaysi korxonaga sotishingizni kiriting !",
                   }),
                 }}
               />
@@ -227,7 +246,7 @@ export default function SavdoForm() {
                 label="Qaysi korxonadan sotib olmoqchsiz ? *"
                 option={{
                   ...register("qaysiKorxonagaSotildi", {
-                    required: "Mahsulot nomi kiritilmadi !",
+                    required: "Qaysi korxonadan sotib olishingizni kiriting !",
                   }),
                 }}
               />

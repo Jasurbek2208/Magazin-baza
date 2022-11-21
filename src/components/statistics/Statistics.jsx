@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import numSort from "../../customHooks/useNumberSortForMoney";
 
 export default function Statistics() {
   return (
@@ -14,21 +15,21 @@ export default function Statistics() {
             <div className="left">
               <h3 className="title">{i.mahsulotNomi?.toUpperCase() + " "}</h3>
               <h4 className={i.qanchaSotildi ? "sotildi" : ""}>
-                {i.qanchaSotildi || i.qanchaSotibOlindi + " "}
+                {numSort(i.qanchaSotildi || i.qanchaSotibOlindi) + " "}
                 <span>ta</span>
               </h4>
               <div className="current-cash">
                 <p>
-                  Narxi: <span>{" " + i.narxi}</span>
+                  Narxi: <span>{" " + numSort(i.narxi)}</span>
                 </p>
                 <p>
                   Jami narxi:
                   <span>
                     {" " +
-                      Number(i.narxi) *
-                        (i.qanchaSotildi || i.qanchaSotibOlindi
-                          ? Number(i.qanchaSotildi)
-                          : Number(i.qanchaSotibOlindi))}
+                      numSort(
+                        Number(i.narxi) *
+                          Number(i.qanchaSotildi || i.qanchaSotibOlindi)
+                      )}
                   </span>
                 </p>
               </div>
