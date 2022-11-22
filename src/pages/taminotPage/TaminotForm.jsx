@@ -1,12 +1,24 @@
 import React, { useState } from "react";
-import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import { v4 as uuidV4 } from "uuid";
+
+// Firebase
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 
 // Style
 import { StyledSavdoForm } from "../../assets/style/formStyles";
+
+// Components
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
+import { addStoreHistory } from "../../customHooks/useAddStoreHistory";
 
 export default function TaminotForm() {
   const location = useLocation().pathname;
@@ -14,19 +26,12 @@ export default function TaminotForm() {
   //
   const [image, setImage] = useState("");
   const [disbl, setDisbl] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [numValue, setNumValue] = useState("");
 
   //
   const [error, setError] = useState({ nomi: false, soni: false });
-  const [products, setProducts] = useState();
   const [filteredData, setFilteredData] = useState([]);
-  const [isSelect, setIsSelect] = useState("");
-  const [numValue, setNumValue] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const [mahsulotName, setMahsulotName] = useState({
-    mahsulotNomi: "",
-    soni: "",
-    narxi: "",
-  });
   const {
     register,
     handleSubmit,
@@ -34,10 +39,20 @@ export default function TaminotForm() {
     reset,
   } = useForm();
 
+  // navigate
+  const navigate = useNavigate();
+
   async function addSupply(data) {
     setDisbl(true);
+    data = { ...data, check: image, masulShaxs: "Shomaqsudov Jasurbek" };
 
     try {
+      addStoreHistory(data, null, location);
+      data = null;
+      setNumValue("");
+      reset({ soni: "" });
+      navigate("..");
+      toast.success("Check muvofaqiyatli qo'shildi !");
     } catch (error) {
       console.log(error);
     } finally {
@@ -45,9 +60,38 @@ export default function TaminotForm() {
     }
   }
 
-  useEffect(() => {
-    console.log(image);
-  }, [image]);
+  function uploadImage(e) {
+    setIsLoading(true);
+    const storage = getStorage();
+    const storageRef = ref(storage, "oziqOvqatCheck/" + `check-${uuidV4()}`);
+    const file = e.target.files[0];
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImage(downloadURL);
+          setIsLoading(false);
+        });
+      }
+    );
+  }
 
   return (
     <StyledSavdoForm>
@@ -73,23 +117,24 @@ export default function TaminotForm() {
               errors={errors}
               error={{
                 error: error?.soni,
-                errName: `Omborda ${mahsulotName.mahsulotNomi} ${mahsulotName.soni} ta bor. Bundan ko'p mahsulot sotaolmaysiz !`,
+                errName: "as",
+                // errName: `Omborda ${mahsulotName.mahsulotNomi} ${mahsulotName.soni} ta bor. Bundan ko'p mahsulot sotaolmaysiz !`,
               }}
               errName="soni"
-              placeholder="Mahsulotdan qancha sotishingizni kiriting"
-              label="Sarflangan budjet *"
+              placeholder="Sarflangan chiqimni kiriting"
+              label="Sarflangan budjet (so'mda) *"
               option={{
                 ...register("soni", {
                   required:
-                    location === "/mahsulot-sotish"
-                      ? "Mahsulot qancha sotilishi kiritilmadi !"
-                      : "Mahsulot qancha sotib olinishi kiritilmadi !",
+                    location === "/oziq-ovqat-uchun-chiqim"
+                      ? "Sarflangan chiqim kiritilmadi !"
+                      : "Sarflangan chiqim kiritilmadi !",
                   minLength: {
-                    value: 3,
+                    value: 4,
                     message:
-                      location === "/mahsulot-sotish"
-                        ? "Minimal 100 ta sotish mumkin !"
-                        : "Minimal 100 ta sotib olish mumkin !",
+                      location === "/oziq-ovqat-uchun-chiqim"
+                        ? "Minimal narx 1000 so'm !"
+                        : "Minimal narx 1000 so'm !",
                   },
                 }),
               }}
@@ -97,9 +142,9 @@ export default function TaminotForm() {
           </div>
           <div className="input__wrapper">
             <Input
-              onChange={(e) => {
-                setImage(e.target.files[0]);
-              }}
+              onChange={uploadImage}
+              image={image}
+              isLoading={isLoading}
               label="Checkni yuborish *"
               type="file"
             />
@@ -107,6 +152,7 @@ export default function TaminotForm() {
           <div className="input__wrapper">
             <Button
               disbl={disbl}
+              isLoading={isLoading}
               width="100%"
               type="submit"
               content="Tasdiqlash"

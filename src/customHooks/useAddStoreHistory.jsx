@@ -5,7 +5,7 @@ import { db } from "../firebase";
 // Custom Hooks
 import { getNowTime } from "./useGetNowTime";
 
-export async function addStoreHistory(data, narxi, location) {
+export async function addStoreHistory(data, narxi = "", location) {
   let historyData = null;
 
   location === "/mahsulot-sotish"
@@ -20,7 +20,8 @@ export async function addStoreHistory(data, narxi, location) {
           " " +
           JSON.parse(localStorage.getItem("rol"))?.familiya,
       })
-    : (historyData = {
+    : location === "/mahsulot-sotib-olish"
+    ? (historyData = {
         qachonSotibOlindi: getNowTime(),
         qanchaSotibOlindi: data.soni,
         narxi,
@@ -30,6 +31,12 @@ export async function addStoreHistory(data, narxi, location) {
           JSON.parse(localStorage.getItem("rol"))?.ism +
           " " +
           JSON.parse(localStorage.getItem("rol"))?.familiya,
+      })
+    : (historyData = {
+        kiritilganSana: getNowTime(),
+        chiqim: data.soni,
+        check: data.check,
+        masulShaxs: data.masulShaxs,
       });
 
   // localStorage.setItem(
@@ -42,12 +49,26 @@ export async function addStoreHistory(data, narxi, location) {
   // );
 
   try {
-    await setDoc(doc(db, "storage2", "zWcuaTnZqglflTVQHkAE"), {
-      storeHistory: [
-        ...JSON.parse(localStorage.getItem("storeHistory")),
-        historyData,
-      ],
-    });
+    location === "/mahsulot-sotib-olish" || location === "/mahsulot-sotish"
+      ? await setDoc(doc(db, "storage2", "zWcuaTnZqglflTVQHkAE"), {
+          storeHistory: [
+            ...JSON.parse(localStorage.getItem("storeHistory")),
+            historyData,
+          ],
+        })
+      : location === "/oziq-ovqat-uchun-chiqim"
+      ? await setDoc(doc(db, "storage2", "YVkxqmCuab7CedFFrMIU"), {
+        oziqOvqatChiqim: [
+            ...JSON.parse(localStorage.getItem("oziqOvqatChiqim")),
+            historyData,
+          ],
+        })
+      : await setDoc(doc(db, "storage2", "MCK41JPlggbyt5BSkqCx"), {
+          korxonaUchunChiqim: [
+            ...JSON.parse(localStorage.getItem("korxonaUchunChiqim")),
+            historyData,
+          ],
+        });
   } catch (err) {
     console.log(err);
   }

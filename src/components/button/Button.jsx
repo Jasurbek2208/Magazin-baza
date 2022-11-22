@@ -9,12 +9,13 @@ export default function Button({
   customize,
   width,
   className,
+  isLoading,
 }) {
   return (
     <StyledButton
       className={className + (customize ? " customize" : "")}
-      disabled={disbl}
-      style={{ width: width }}
+      disabled={disbl || isLoading}
+      style={{ width: width, cursor: isLoading ? "not-allowed" : "pointer" }}
       type={type}
       onClick={onClick}
     >

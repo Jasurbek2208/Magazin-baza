@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 
 // Style
 import { GlobalStyle } from "./assets/style/global";
+import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-toastify/dist/ReactToastify.css';
 
 // Components

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import CurrencyInput from "react-currency-input-field";
 import styled from "styled-components";
+import Loading from "../loading/Loading";
 
 export default function Input({
   type = "text",
@@ -13,6 +14,8 @@ export default function Input({
   errors,
   error,
   value,
+  image,
+  isLoading,
 }) {
   return (
     <StyledInput>
@@ -41,15 +44,34 @@ export default function Input({
         </>
       ) : (
         <>
-          {type === "file" ? <div className="checkImage__wrapper"></div> : null}
+          {type === "file" ? (
+            <div className="checkImage__wrapper">
+              {image ? (
+                <img src={image} alt="check" className="check-image" />
+              ) : (
+                <>
+                  <i className="icon fa-solid fa-receipt"></i>
+                  <p>Check yuklanmagan !</p>
+                </>
+              )}
+
+              {isLoading ? (
+                <div className="loading">
+                  <Loading />
+                </div>
+              ) : null}
+            </div>
+          ) : null}
           <input
             className={
               className +
-              " custom-file-input input" +
+              (type === "file" ? " custom-file-input input" : " input") +
               (error?.error ? " borderError" : "")
             }
             type={type}
             name={label}
+            style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
+            disabled={isLoading}
             value={value}
             placeholder={placeholder}
             onChange={onChange}
@@ -122,13 +144,62 @@ const StyledInput = styled.div`
   /* /////////////////// */
 
   .checkImage__wrapper {
+    position: relative;
+    display: grid;
+    place-items: center;
     width: 100%;
     height: 200px;
     border: 1px solid #005ed8;
+    overflow: hidden;
+
+    .loading {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 100%;
+      border: 1px solid #3b3b3b19;
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    .check-image {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .icon {
+      margin-bottom: -30px;
+      font-size: 100px;
+      color: #1c78f0;
+    }
+
+    p {
+      font-weight: 500;
+      color: #1c78f0;
+    }
   }
 
   .custom-file-input {
+    position: relative;
     cursor: pointer;
+    color: #fff;
+
+    &::before {
+      content: "Checkni yuklash";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-weight: 600;
+      color: #000;
+    }
 
     &::-webkit-file-upload-button {
       visibility: hidden;

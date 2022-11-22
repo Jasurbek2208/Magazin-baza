@@ -27,6 +27,8 @@ export default function Router() {
   useEffect(() => {
     localNum += 1;
     localStorage.removeItem("storeHistory");
+    localStorage.removeItem("oziqOvqatChiqim");
+    localStorage.removeItem("korxonaUchunChiqim");
     if (localNum === 1) getStoreHistory();
   }, []);
 
