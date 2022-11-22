@@ -1,5 +1,7 @@
 import React from "react";
-import styled from "styled-components";
+import { StyledStatistics } from "./StyledStatistics";
+
+//
 import numSort from "../../customHooks/useNumberSortForMoney";
 
 export default function Statistics() {
@@ -8,7 +10,7 @@ export default function Statistics() {
       {JSON.parse(localStorage.getItem("storeHistory"))?.map((i, idx) => (
         <div key={i.mahsulotNomi + idx} className="action__wrapper">
           <div className="top">
-            <p>{i.qachonSotildi || i.qanchonSotibOlindi}</p>
+            <p>{i.qachonSotildi || i.qachonSotibOlindi}</p>
             <p>{i.kimTomonidan}</p>
           </div>
           <div className="body">
@@ -50,82 +52,3 @@ export default function Statistics() {
     </StyledStatistics>
   );
 }
-
-const StyledStatistics = styled.main`
-  &.statistcs__wrapper {
-    margin-top: 80px;
-
-    .action__wrapper {
-      padding: 14px 10px;
-      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-
-      .top {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        margin-bottom: 10px;
-
-        p {
-          font-size: 13px;
-          color: #004386;
-        }
-      }
-
-      .body {
-        padding: 8px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 30px;
-        flex-wrap: wrap;
-
-        .left,
-        .right {
-          display: flex;
-          align-items: center;
-          gap: 20px;
-          flex-wrap: wrap;
-
-          h3.title {
-            color: #1e90ff;
-          }
-
-          h4 {
-            color: red;
-
-            &.sotildi {
-              color: green;
-            }
-
-            span {
-              color: #303030;
-            }
-          }
-
-          .current-cash {
-            padding-left: 30px;
-            display: flex;
-            flex-direction: column;
-            row-gap: 10px;
-
-            p {
-              color: #303030;
-
-              span {
-                font-weight: 600;
-              }
-            }
-          }
-
-          .icon-arrow-up-down {
-            background-color: green;
-
-            &.red {
-              background-color: red;
-            }
-          }
-        }
-      }
-    }
-  }
-`;
