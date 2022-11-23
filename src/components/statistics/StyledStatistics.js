@@ -123,13 +123,28 @@ export const StyledStatistics = styled.main`
     }
 
     .img-full {
+      position: absolute;
       width: 600px;
       transition: 300ms;
 
       &.zoomX {
-        transform: scale(2);
+        width: 150%;
+        cursor: grab;
+      }
+      
+      &.zoomX2 {
+        width: 300%;
+        cursor: grab;
       }
     }
+  }
+
+  @media (max-width: 700px) {  
+    .image-full-size {
+      .img-full {
+        width: 90%;
+      }
+    } 
   }
 }
 `;

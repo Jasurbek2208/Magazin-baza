@@ -1,10 +1,21 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { StyledStatistics } from "./StyledStatistics";
 
 export default function TaminotStatistics({ staticsType }) {
   const [isZoom, setIsZoom] = useState("");
   const [zoomX, setZoomX] = useState("");
+
+  function downloadImage(imageSrc) {
+    fetch(imageSrc).then((response) => {
+      response.blob().then((blob) => {
+        const fileURL = window.URL.createObjectURL(blob);
+        let alink = document.createElement("a");
+        alink.href = fileURL;
+        alink.download = "check";
+        alink.click();
+      });
+    });
+  }
 
   return (
     <StyledStatistics className="statistcs__wrapper">
@@ -42,7 +53,15 @@ export default function TaminotStatistics({ staticsType }) {
           <nav className="full-img-navbar">
             <ul>
               <li>
-                <i className="icon fa-sharp fa-solid fa-download"></i>
+                <a href={isZoom} download>
+                  Open
+                </a>
+              </li>
+              <li>
+                <i
+                  onClick={() => downloadImage(isZoom)}
+                  className="icon fa-sharp fa-solid fa-download"
+                ></i>
               </li>
               <li>
                 <i
@@ -53,7 +72,13 @@ export default function TaminotStatistics({ staticsType }) {
             </ul>
           </nav>
           <img
-            onDoubleClick={() => (zoomX ? setZoomX("") : setZoomX("zoomX "))}
+            onDoubleClick={() =>
+              zoomX === "zoomX2 "
+                ? setZoomX("")
+                : zoomX === "zoomX "
+                ? setZoomX("zoomX2 ")
+                : setZoomX("zoomX ")
+            }
             src={isZoom}
             alt="check"
             className={(zoomX ? zoomX : "") + "img-full"}

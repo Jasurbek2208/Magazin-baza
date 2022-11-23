@@ -31,7 +31,6 @@ export default function TaminotForm() {
 
   //
   const [error, setError] = useState({ nomi: false, soni: false });
-  const [filteredData, setFilteredData] = useState([]);
   const {
     register,
     handleSubmit,
@@ -63,7 +62,12 @@ export default function TaminotForm() {
   function uploadImage(e) {
     setIsLoading(true);
     const storage = getStorage();
-    const storageRef = ref(storage, "oziqOvqatCheck/" + `check-${uuidV4()}`);
+    const storageRef = ref(
+      storage,
+      location === "/oziq-ovqat-uchun-chiqim"
+        ? "oziqOvqatCheck/"
+        : "korxonaTaminotCheck/" + `check-${uuidV4()}`
+    );
     const file = e.target.files[0];
     const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(

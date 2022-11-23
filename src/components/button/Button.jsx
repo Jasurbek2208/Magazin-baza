@@ -10,10 +10,17 @@ export default function Button({
   width,
   className,
   isLoading,
+  statistics = false,
+  isActive,
 }) {
   return (
     <StyledButton
-      className={className + (customize ? " customize" : "")}
+      className={
+        (className ? className : "") +
+        (customize ? " customize" : "") +
+        (statistics ? " statistics" : "") +
+        (isActive ? " active" : "")
+      }
       disabled={disbl || isLoading}
       style={{ width: width, cursor: isLoading ? "not-allowed" : "pointer" }}
       type={type}
@@ -53,8 +60,8 @@ const StyledButton = styled.button`
     transition: 200ms;
   }
 
-  &:hover,
-  &:focus {
+  &:not(.statistics):hover,
+  &:not(.statistics):focus {
     outline: none;
     color: #fff;
 
@@ -84,6 +91,30 @@ const StyledButton = styled.button`
 
     &:active {
       transform: scale(96%);
+    }
+  }
+
+  &.statistics {
+    background-color: #fff;
+
+    &:not(.active):hover,
+    &:not(.active):focus {
+      outline: none;
+      transform: scale(1.1);
+      z-index: 20;
+    }
+
+    &:active {
+      transform: scale(1);
+    }
+
+    &.active {
+      color: #fff;
+
+      &::before {
+        background-color: #005ed8;
+        width: 100%;
+      }
     }
   }
 `;
