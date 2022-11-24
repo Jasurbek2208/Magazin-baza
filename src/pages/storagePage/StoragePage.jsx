@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import { DownloadTableExcel } from "react-export-table-to-excel";
 import styled from "styled-components";
-// import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 // Firebase
 import { doc, onSnapshot } from "firebase/firestore";
@@ -18,54 +18,9 @@ export default function StoragePage() {
   const [products, setProducts] = useState();
   const [filteredData, setFilteredData] = useState();
   const [sortedData, setSortedData] = useState("");
-  const [searchData, setSearchData] = useState();
 
-  // const data = {
-  //   products: [
-  //     {
-  //       mahsulotNomi: "Olma",
-  //       narxi: 4500000,
-  //       soni: 543,
-  //       jamiNarxi: 12345674124,
-  //     },
-  //     {
-  //       mahsulotNomi: "Tarvuz",
-  //       narxi: 4000,
-  //       soni: 143,
-  //       jamiNarxi: 67412,
-  //     },
-  //     {
-  //       mahsulotNomi: "Xrustal",
-  //       narxi: 220200,
-  //       soni: 1000,
-  //       jamiNarxi: 367464,
-  //     },
-  //     {
-  //       mahsulotNomi: "Anor",
-  //       narxi: 450000,
-  //       soni: 250,
-  //       jamiNarxi: 45674124,
-  //     },
-  //     {
-  //       mahsulotNomi: "Shisha",
-  //       narxi: 4800000,
-  //       soni: 54323,
-  //       jamiNarxi: 432345674124,
-  //     },
-  //     {
-  //       mahsulotNomi: "Plastmas",
-  //       narxi: 450000,
-  //       soni: 5432,
-  //       jamiNarxi: 412345674124,
-  //     },
-  //     {
-  //       mahsulotNomi: "Kartoshka",
-  //       narxi: 5200000,
-  //       soni: 503,
-  //       jamiNarxi: 1235674124,
-  //     },
-  //   ],
-  // };
+  // table excel
+  const tableRef = useRef(null);
 
   useEffect(() => {
     onSnapshot(doc(db, "storage2", "RQVXHDw3ev7t7N37HU1M"), (doc) => {
@@ -129,13 +84,13 @@ export default function StoragePage() {
         <div className="container">
           <ul>
             <li>
-              {/* <ReactHTMLTableToExcel
-                table="usersTable"
-                filename="teachersTable"
-                sheet="sheet"
-                buttonText="Excel"
-              /> */}
-              <Button content="Excel" customize={true} />
+              <DownloadTableExcel
+                filename="products table"
+                sheet="products"
+                currentTableRef={tableRef.current}
+              >
+                <Button content="Export excel" customize={true} />
+              </DownloadTableExcel>
             </li>
             <li>
               <Select
@@ -161,7 +116,7 @@ export default function StoragePage() {
       </nav>
       <div className="container">
         <main className="table__wrapper">
-          <table>
+          <table ref={tableRef}>
             <thead>
               <tr>
                 <th>N0_</th>

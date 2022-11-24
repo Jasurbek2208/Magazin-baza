@@ -14,7 +14,7 @@ export default function Select({ content, list, sortData }) {
         onClick={() => setIsOpen(true)}
       >
         <p className={(isSelect ? "On " : "") + "select_title"}>Select by</p>
-        <p>{selectValue}</p>
+        {selectValue ? <p className="selectValue">{selectValue}</p> : null}
       </button>
       <div
         className={(isOpen ? "On " : "") + "select-modal__wrapper"}
@@ -86,6 +86,11 @@ const StyledSelect = styled.div`
         background-color: #005ed8;
       }
     }
+
+    .select_title,
+    .selectValue {
+      margin: 0px !important;
+    }
   }
 
   .select-modal__wrapper {
@@ -109,6 +114,7 @@ const StyledSelect = styled.div`
     z-index: 3;
 
     ul {
+      padding: 0px;
       display: flex;
       flex-direction: column;
       row-gap: 0px !important;
@@ -130,6 +136,49 @@ const StyledSelect = styled.div`
           &:focus {
             outline: none;
             background-color: silver;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 648px) {
+    .select-modal {
+      width: max-content !important;
+
+      ul {
+        width: max-content !important;
+
+        li {
+          width: max-content !important;
+
+          button {
+            width: 200px;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 445px) {
+    .select-modal {
+      left: 0px;
+      width: 100% !important;
+
+      ul {
+        width: 100% !important;
+
+        li {
+          width: 100% !important;
+          border-top: 1px solid #005ed8;
+
+          &:first-of-type {
+            border: none;
+          }
+
+          button {
+            padding: 20px;
+            width: 100% !important;
           }
         }
       }

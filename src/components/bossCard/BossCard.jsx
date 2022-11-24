@@ -25,6 +25,7 @@ const StyledBossCard = styled.div`
   transition: transform 300ms, background-color 100ms;
 
   h2 {
+    max-width: 260px;
     text-align: center;
   }
 
