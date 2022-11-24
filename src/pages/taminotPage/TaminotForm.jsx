@@ -30,7 +30,7 @@ export default function TaminotForm() {
   const [numValue, setNumValue] = useState("");
 
   //
-  const [error, setError] = useState({ nomi: false, soni: false });
+  const [error, setError] = useState(false);
   const {
     register,
     handleSubmit,
@@ -42,6 +42,8 @@ export default function TaminotForm() {
   const navigate = useNavigate();
 
   async function addSupply(data) {
+    console.log("kirdi !");
+    if (!image) return;
     setDisbl(true);
     data = { ...data, check: image, masulShaxs: "Shomaqsudov Jasurbek" };
 
@@ -62,12 +64,11 @@ export default function TaminotForm() {
   function uploadImage(e) {
     setIsLoading(true);
     const storage = getStorage();
-    const storageRef = ref(
-      storage,
-      location === "/oziq-ovqat-uchun-chiqim"
+    const urlName =
+      (location === "/oziq-ovqat-uchun-chiqim"
         ? "oziqOvqatCheck/"
-        : "korxonaTaminotCheck/" + `check-${uuidV4()}`
-    );
+        : "korxonaTaminotCheck/") + `check-${uuidV4()}`;
+    const storageRef = ref(storage, urlName);
     const file = e.target.files[0];
     const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
@@ -92,9 +93,14 @@ export default function TaminotForm() {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImage(downloadURL);
           setIsLoading(false);
+          checkWatcher(true);
         });
       }
     );
+  }
+
+  function checkWatcher(isTrue = false) {
+    image || isTrue === true ? setError(false) : setError(true);
   }
 
   return (
@@ -115,24 +121,20 @@ export default function TaminotForm() {
               onChange={(e) => {
                 setNumValue(e);
                 setError(false);
+                checkWatcher();
               }}
               type="number"
               value={numValue}
               errors={errors}
               error={{
-                error: error?.soni,
-                errName: "as",
-                // errName: `Omborda ${mahsulotName.mahsulotNomi} ${mahsulotName.soni} ta bor. Bundan ko'p mahsulot sotaolmaysiz !`,
+                error: errors?.soni?.message ? true : false,
+                errName: errors?.soni?.message,
               }}
-              errName="soni"
               placeholder="Sarflangan chiqimni kiriting"
               label="Sarflangan budjet (so'mda) *"
               option={{
                 ...register("soni", {
-                  required:
-                    location === "/oziq-ovqat-uchun-chiqim"
-                      ? "Sarflangan chiqim kiritilmadi !"
-                      : "Sarflangan chiqim kiritilmadi !",
+                  required: "sarflangan chiqim kiritmadi !",
                   minLength: {
                     value: 4,
                     message:
@@ -146,7 +148,11 @@ export default function TaminotForm() {
           </div>
           <div className="input__wrapper">
             <Input
-              onChange={uploadImage}
+              onChange={(e) => {
+                uploadImage(e);
+                checkWatcher();
+              }}
+              error={{ error, errName: "check yuklanmagan !" }}
               image={image}
               isLoading={isLoading}
               label="Checkni yuborish *"
@@ -156,6 +162,7 @@ export default function TaminotForm() {
           <div className="input__wrapper">
             <Button
               disbl={disbl}
+              onClick={checkWatcher}
               isLoading={isLoading}
               width="100%"
               type="submit"
