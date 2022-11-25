@@ -5,16 +5,12 @@ export default function TaminotStatistics({ staticsType }) {
   const [isZoom, setIsZoom] = useState("");
   const [zoomX, setZoomX] = useState("");
 
-  function downloadImage(imageSrc) {
-    fetch(imageSrc).then((response) => {
-      response.blob().then((blob) => {
-        const fileURL = window.URL.createObjectURL(blob);
-        let alink = document.createElement("a");
-        alink.href = fileURL;
-        alink.download = "check";
-        alink.click();
-      });
-    });
+  // function downloadImage(imageSrc) {
+  // }
+
+  // image download
+  function downloadImage(isZoom) {
+    console.log(isZoom);
   }
 
   return (
@@ -53,7 +49,7 @@ export default function TaminotStatistics({ staticsType }) {
           <nav className="full-img-navbar">
             <ul>
               <li>
-                <a href={isZoom} download>
+                <a href={isZoom} download={true}>
                   Open
                 </a>
               </li>
@@ -81,6 +77,7 @@ export default function TaminotStatistics({ staticsType }) {
             }
             src={isZoom}
             alt="check"
+            id="myimg"
             className={(zoomX ? zoomX : "") + "img-full"}
           />
         </div>

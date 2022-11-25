@@ -33,6 +33,12 @@ export default function Boss() {
           title="Kassa"
           img="fa-sack-dollar"
         />
+        <BossCard
+          navLink="/admin-qo'shish"
+          id="kassa"
+          title="Admin qo'shish"
+          img="fa-user"
+        />
       </div>
       <Kassa />
     </StyledBossPage>

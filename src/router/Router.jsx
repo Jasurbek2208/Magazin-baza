@@ -9,6 +9,7 @@ import PagesLayout from "../layout/PagesLayout";
 import Home from "../pages/Home";
 import Login from "../pages/auth/Login";
 import Kassa from "../pages/kassa/Kassa";
+import AddAdmin from "../pages/rol/AddAdmin";
 import SavdoForm from "../pages/marketingPage/SavdoForm";
 import TaminotForm from "../pages/taminotPage/TaminotForm";
 import TaminotPage from "../pages/taminotPage/TaminotPage";
@@ -40,6 +41,7 @@ export default function Router() {
           <Route path="ombor" element={<StoragePage />} />
           <Route path="savdo" element={<MarketingPage />} />
           <Route path="taminot" element={<TaminotPage />} />
+          <Route path="admin-qo'shish" element={<AddAdmin />} />
           <Route path="mahsulot-sotish" element={<SavdoForm />} />
           <Route path="mahsulot-sotib-olish" element={<SavdoForm />} />
           <Route path="korxona-uchun-taminot" element={<TaminotForm />} />

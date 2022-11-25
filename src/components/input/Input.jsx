@@ -8,7 +8,7 @@ export default function Input({
   placeholder,
   label,
   option,
-  className,
+  className = "",
   onChange,
   errName,
   errors,
@@ -62,21 +62,35 @@ export default function Input({
               ) : null}
             </div>
           ) : null}
-          <input
-            className={
-              className +
-              (type === "file" ? " custom-file-input input" : " input") +
-              (error?.error ? " borderError" : "")
-            }
-            type={type}
-            name={label}
-            style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
-            disabled={isLoading}
-            value={value}
-            placeholder={placeholder}
-            onChange={onChange}
-            {...option}
-          />
+          {type === "file" ? (
+            <input
+              className={
+                className +
+                (type === "file" ? " custom-file-input input" : " input") +
+                (error?.error ? " borderError" : "")
+              }
+              type={type}
+              name={label}
+              style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
+              disabled={isLoading}
+              value={value}
+              placeholder={placeholder}
+              onChange={onChange}
+              {...option}
+            />
+          ) : (
+            <input
+              className={
+                className + (error?.error ? " borderError input" : " input")
+              }
+              type={type}
+              name={label}
+              disabled={isLoading}
+              placeholder={placeholder}
+              onChange={onChange}
+              {...option}
+            />
+          )}
           {error?.error && (
             <span className={(errName === "narxi" ? " narxi " : "") + "error"}>
               {error?.errName}

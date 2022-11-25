@@ -41,8 +41,8 @@ export default function TaminotForm() {
   // navigate
   const navigate = useNavigate();
 
+  // Historyga Check qo'shish
   async function addSupply(data) {
-    console.log("kirdi !");
     if (!image) return;
     setDisbl(true);
     data = { ...data, check: image, masulShaxs: "Shomaqsudov Jasurbek" };
@@ -61,6 +61,7 @@ export default function TaminotForm() {
     }
   }
 
+  // Storagega rasm yuklash
   function uploadImage(e) {
     setIsLoading(true);
     const storage = getStorage();
@@ -99,6 +100,7 @@ export default function TaminotForm() {
     );
   }
 
+  // img watcher
   function checkWatcher(isTrue = false) {
     image || isTrue === true ? setError(false) : setError(true);
   }

@@ -63,6 +63,37 @@ margin: 0 auto;
           }
         }
       }
+
+      span.select-lists-title {
+        font-weight: 600;
+      }
+      
+      .select-lists {
+        padding: 0px;
+        margin-top: 20px;
+        background-color: #f0f0;
+        
+        .list-wrapper {
+          cursor: pointer;
+          padding: 10px 20px;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 20px;
+          transition: 200ms;
+
+            & > label, input {
+              cursor: pointer;
+              padding: 0px;
+              margin: 0px;
+            }
+
+        &:hover,
+        &:focus {
+          background-color: #ccc;
+        }
+        }
+      }
     }
   }
 }
