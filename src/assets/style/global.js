@@ -6,8 +6,8 @@ import "./fonts.css";
 
 export const GlobalStyle = createGlobalStyle`
     * {
-        margin: 0;
-        padding: 0;
+        margin: 0px;
+        padding: 0px;
         list-style: none;
         text-decoration: none;
         box-sizing: border-box;
@@ -18,7 +18,6 @@ export const GlobalStyle = createGlobalStyle`
         margin: 0 auto;
         padding: 0px 16px;
         max-width: 1200px;
-        /* border: 1px solid red; */
     }
 
     /* SCROLLBAR STYLE */

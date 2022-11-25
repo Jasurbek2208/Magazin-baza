@@ -89,7 +89,7 @@ export default function StoragePage() {
                 sheet="products"
                 currentTableRef={tableRef.current}
               >
-                <Button content="Export excel" customize={true} />
+                <Button content="Export excel" width="100%" customize={true} />
               </DownloadTableExcel>
             </li>
             <li>
@@ -186,6 +186,22 @@ const StyledStorage = styled.div`
             padding: 10px;
             text-align: center;
             min-width: 60px;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 400px) {
+    .customize_navbar {
+      .container {
+        ul {
+          padding: 0px;
+          flex-direction: column;
+
+          li,
+          li:last-of-type {
+            width: 100%;
           }
         }
       }

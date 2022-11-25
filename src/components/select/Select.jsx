@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 export default function Select({ content, list, sortData }) {
@@ -49,6 +49,7 @@ export default function Select({ content, list, sortData }) {
 
 const StyledSelect = styled.div`
   .select-btn {
+    width: 100%;
     cursor: pointer;
     position: relative;
     padding: 10px 22px;
@@ -160,28 +161,18 @@ const StyledSelect = styled.div`
     }
   }
 
-  @media (max-width: 445px) {
+  @media (max-width: 545px) {
+    position: relative;
     .select-modal {
-      left: 0px;
-      width: 100% !important;
+      right: 0px;
+    }
+  }
 
-      ul {
-        width: 100% !important;
-
-        li {
-          width: 100% !important;
-          border-top: 1px solid #005ed8;
-
-          &:first-of-type {
-            border: none;
-          }
-
-          button {
-            padding: 20px;
-            width: 100% !important;
-          }
-        }
-      }
+  @media (max-width: 400px) {
+    position: relative;
+    .select-modal {
+      left: 50%;
+      transform: translateX(-50%);
     }
   }
 `;
