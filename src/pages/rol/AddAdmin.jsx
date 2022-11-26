@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+
+// Firebase
+import { doc, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase";
 
 // Style
 import { StyledSavdoForm } from "../../assets/style/formStyles";
@@ -9,7 +13,7 @@ import { StyledSavdoForm } from "../../assets/style/formStyles";
 // Components
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
-import Select from "../../components/select/Select";
+import { useEffect } from "react";
 
 export default function AddAdmin() {
   const {
@@ -18,50 +22,59 @@ export default function AddAdmin() {
     formState: { errors },
     reset,
   } = useForm();
-  //
-  const location = useLocation().pathname;
   const navigate = useNavigate();
-  //
   const [disbl, setDisbl] = useState(false);
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [numValue, setNumValue] = useState("");
-
-  // LIST
-  const list = [
-    "Savdo-sotiq bo'limi bosh ma'suli",
-    "Mahsulot sotish bo'limi ma'suli",
-    "Mahsulot sotib olish bo'limi ma'suli",
-    "Taminot bo'limi bosh ma'suli",
-    "Oziq-ovqat taminoti bo'limi ma'suli",
-    "Korxona ta'minoti bo'limi ma'suli",
-    "Ombor kuzatuvchisi",
-    "Bosh menejer",
-  ];
-
+  // LIST state
+  const [list, setList] = useState([]);
   // selectedLists
   const [selectedLists, setSelectedLists] = useState([]);
 
-  async function addAdmin(data) {
-    data = { ...data, rol: selectedLists };
-    setDisbl(true);
-    // data = { ...data, check: image, masulShaxs: "Shomaqsudov Jasurbek" };
-
-    // try {
-    //   data = null;
-    //   setNumValue("");
-    //   // reset({ email: "" });
-    //   navigate("..");
-    //   toast.success("Admin muvofaqiyatli qo'shildi !");
-    // } catch (error) {
-    //   console.log(error);
-    // } finally {
-    //   setDisbl(false);
-    // }
+  // Get select List
+  async function getSelectList() {
+    try {
+      onSnapshot(doc(db, "storage2", "qvPnVigdL7HPevjHAk5K"), (doc) => {
+        setList(doc?.data()?.rol);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
+  // Add ADMIN !
+  async function addAdmin(data) {
+    if (selectedLists.length < 1 || selectedLists.length > 2) {
+      setError(true);
+      return;
+    }
+    data = { ...data, rol: selectedLists };
+    console.log(data);
+    setDisbl(true);
+    setIsLoading(true);
+
+    try {
+      // addStoreHistory(data, narxi, location);
+      // await setDoc(doc(db, "users", "RQVXHDw3ev7t7N37HU1M"), {
+      //   products: newData,
+      // });
+      data = null;
+      reset({ firstName: "", lastName: "", email: "", password: "", rol: [] });
+      navigate("..");
+      toast.success("Admin muvofaqiyatli qo'shildi !");
+    } catch (error) {
+      console.log(error);
+      toast.error(
+        "Admin qo'shishda xatolik yuzaga keldi, qaytadan urinib ko'ring !"
+      );
+    } finally {
+      setDisbl(false);
+      setIsLoading(false);
+    }
+  }
+
+  // Add cheched list
   function addSelectList(currList) {
-    console.log(currList);
     let newList = [];
     if (selectedLists.includes(currList)) {
       newList = selectedLists.filter((j) => (j === currList ? false : true));
@@ -71,10 +84,44 @@ export default function AddAdmin() {
     }
   }
 
+  // Selected lists Error watcher !!!
+  useEffect(() => {
+    if (selectedLists.includes("Bosh menejer") && selectedLists.length > 1) {
+      setError(false);
+      let newList = [];
+      newList = selectedLists.filter((i) =>
+        i === "Bosh menejer" ? true : false
+      );
+      setSelectedLists(newList);
+      return;
+    }
+    if (selectedLists.length > 2) {
+      setError(true);
+    } else {
+      setError(false);
+    }
+  }, [selectedLists]);
+
+  // Checkbox disabled ?
+  function disablWatcher(i) {
+    let boolen = null;
+    selectedLists.includes("Bosh menejer")
+      ? i !== "Bosh menejer"
+        ? (boolen = true)
+        : (boolen = false)
+      : (boolen = false);
+    return boolen;
+  }
+
+  // get Select List
+  useEffect(() => {
+    getSelectList();
+  }, []);
+
   return (
     <StyledSavdoForm>
       <div className="container">
-        <h1>Add Admin</h1>
+        <h1>Admin qo'shish</h1>
         <form onSubmit={handleSubmit(addAdmin)} className="form__wrapper">
           <div className="input__wrapper">
             <Input
@@ -82,11 +129,11 @@ export default function AddAdmin() {
               placeholder="ism kiriting"
               errors={errors}
               error={{
-                error: errors?.ism?.message ? true : false,
-                errName: errors?.ism?.message,
+                error: errors?.firstName?.message ? true : false,
+                errName: errors?.firstName?.message,
               }}
               option={{
-                ...register("ism", {
+                ...register("firstName", {
                   required: "ism kiritilmadi !",
                   minLength: {
                     value: 3,
@@ -102,11 +149,11 @@ export default function AddAdmin() {
               placeholder="familiya kiriting"
               errors={errors}
               error={{
-                error: errors?.familiya?.message ? true : false,
-                errName: errors?.familiya?.message,
+                error: errors?.lastName?.message ? true : false,
+                errName: errors?.lastName?.message,
               }}
               option={{
-                ...register("familiya", {
+                ...register("lastName", {
                   required: "familiya kiritilmadi !",
                   minLength: {
                     value: 3,
@@ -161,18 +208,34 @@ export default function AddAdmin() {
             <span className="select-lists-title">
               Qaysi ma'suliyatlarni bermoqchisiz ?
             </span>
-            <ul className="select-lists">
+            <ul className={(error ? "error " : "") + "select-lists"}>
               {list.map((i, idx) => (
-                <li key={i + idx} className="list-wrapper">
+                <li
+                  key={i + idx}
+                  className={
+                    (selectedLists.includes("Bosh menejer")
+                      ? i !== "Bosh menejer"
+                        ? "not-select "
+                        : ""
+                      : "") + " list-wrapper"
+                  }
+                >
                   <input
                     onChange={() => addSelectList(i)}
                     type="checkbox"
+                    disabled={disablWatcher(i)}
+                    checked={selectedLists.includes(i) ? true : false}
                     id={"checkbox" + idx}
                   />
                   <label htmlFor={"checkbox" + idx}>{i}</label>
                 </li>
               ))}
             </ul>
+            {error && (
+              <label className="errrorName">
+                Maximal 2tagacha belgilash mumkin !
+              </label>
+            )}
           </div>
           <div className="input__wrapper">
             <Button
@@ -188,7 +251,3 @@ export default function AddAdmin() {
     </StyledSavdoForm>
   );
 }
-
-// const StyledAddAdmin = styled.div`
-
-// `

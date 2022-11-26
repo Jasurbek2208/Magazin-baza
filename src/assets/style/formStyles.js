@@ -64,6 +64,12 @@ margin: 0 auto;
         }
       }
 
+      /* LIST CHECKBOX SELECT */
+      .errrorName {
+        color: red;
+        font-size: 12px;
+      }
+
       span.select-lists-title {
         font-weight: 600;
       }
@@ -72,6 +78,11 @@ margin: 0 auto;
         padding: 0px;
         margin-top: 20px;
         background-color: #f0f0;
+        border: 1px solid #f0f0;
+
+        &.error {
+          border: 1px solid red;
+        }
         
         .list-wrapper {
           cursor: pointer;
@@ -86,12 +97,24 @@ margin: 0 auto;
               cursor: pointer;
               padding: 0px;
               margin: 0px;
+              min-width: max-content;
             }
 
         &:hover,
         &:focus {
           background-color: #ccc;
         }
+
+          &.not-select {
+              & > label, input {
+                color: silver;
+              }
+
+            &:hover,
+            &:focus {
+              background: none;
+            }
+          }
         }
       }
     }
