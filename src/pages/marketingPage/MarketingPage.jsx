@@ -1,14 +1,21 @@
 import React from "react";
+import { TabTitle } from "../../utils/Utils";
 import styled from "styled-components";
 
 // Components
 import BossCard from "../../components/bossCard/BossCard";
 
 export default function MarketingPage() {
+  TabTitle("Savdo-Sotiq | Magazin Baza");
+
   return (
     <StyledMarketing>
       <div className="container">
-        <BossCard title="Mahsulot sotish" id="sotish" navLink="/mahsulot-sotish" />
+        <BossCard
+          title="Mahsulot sotish"
+          id="sotish"
+          navLink="/mahsulot-sotish"
+        />
         <BossCard
           title="Mahsulot sotib olish"
           id="sotibOlish"

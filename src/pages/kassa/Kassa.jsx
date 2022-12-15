@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { TabTitle } from "../../utils/Utils";
 import styled from "styled-components";
 
 // Components
@@ -7,6 +9,8 @@ import Statistics from "../../components/statistics/Statistics";
 import TaminotStatistics from "../../components/statistics/TaminotStatistics";
 
 export default function Kassa() {
+  const location = useLocation().pathname;
+  if (location === "/kassa") TabTitle("Kassa | Magazin Baza");
   const [isStatics, setIsStatics] = useState("");
 
   const staticsArr = [

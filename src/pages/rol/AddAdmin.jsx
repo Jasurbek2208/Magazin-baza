@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { TabTitle } from "../../utils/Utils";
 
 // Firebase
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 import { db } from "../../firebase";
 
 // Style
@@ -13,9 +15,11 @@ import { StyledSavdoForm } from "../../assets/style/formStyles";
 // Components
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
-import { useEffect } from "react";
+import { v4 } from "uuid";
 
 export default function AddAdmin() {
+  TabTitle("Admin qo'shish | Magazin Baza");
+
   const {
     register,
     handleSubmit,
@@ -26,8 +30,13 @@ export default function AddAdmin() {
   const [disbl, setDisbl] = useState(false);
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
   // LIST state
   const [list, setList] = useState([]);
+
+  // Admins list state
+  const [adminsList, setAdminsList] = useState([]);
+
   // selectedLists
   const [selectedLists, setSelectedLists] = useState([]);
 
@@ -36,6 +45,9 @@ export default function AddAdmin() {
     try {
       onSnapshot(doc(db, "storage2", "qvPnVigdL7HPevjHAk5K"), (doc) => {
         setList(doc?.data()?.rol);
+      });
+      onSnapshot(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), (doc) => {
+        setAdminsList(doc?.data()?.admins);
       });
     } catch (error) {
       console.log(error);
@@ -48,16 +60,26 @@ export default function AddAdmin() {
       setError(true);
       return;
     }
+    const userID = v4();
     data = { ...data, rol: selectedLists };
-    console.log(data);
     setDisbl(true);
     setIsLoading(true);
 
     try {
-      // addStoreHistory(data, narxi, location);
-      // await setDoc(doc(db, "users", "RQVXHDw3ev7t7N37HU1M"), {
-      //   products: newData,
-      // });
+      const auth = getAuth();
+      await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      ).then((userCredential) => {
+        const user = userCredential.user;
+        data = { ...data, accessToken: user?.uid };
+      });
+      if (data.accessToken) {
+        await setDoc(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), {
+          admins: [...adminsList, data],
+        });
+      }
       data = null;
       reset({ firstName: "", lastName: "", email: "", password: "", rol: [] });
       navigate("..");

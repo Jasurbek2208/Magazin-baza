@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { TabTitle } from "../../utils/Utils";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -18,11 +19,16 @@ import { StyledSavdoForm } from "../../assets/style/formStyles";
 // Components
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
+
+// Custom Hooks
 import { addStoreHistory } from "../../customHooks/useAddStoreHistory";
 
 export default function TaminotForm() {
   const location = useLocation().pathname;
-
+  // Title
+  location === "/korxona-uchun-taminot"
+    ? TabTitle("Korxona-Ta'minoti | Magazin Baza")
+    : TabTitle("Oziq-Ovqat-Ta'minoti | Magazin Baza");
   //
   const [image, setImage] = useState("");
   const [disbl, setDisbl] = useState(false);

@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { TabTitle } from "../../utils/Utils";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+
+// Style
+import { StyledSavdoForm } from "../../assets/style/formStyles";
 
 // Firebase
 import { doc, onSnapshot, setDoc } from "firebase/firestore";
@@ -12,12 +17,15 @@ import Button from "../../components/button/Button";
 
 // Custom Hooks
 import { addStoreHistory } from "../../customHooks/useAddStoreHistory";
-import { useLocation, useNavigate } from "react-router-dom";
 import numSort from "../../customHooks/useNumberSortForMoney";
-import { StyledSavdoForm } from "../../assets/style/formStyles";
 
 export default function SavdoForm() {
   const location = useLocation().pathname;
+  // Title
+  location === "/mahsulot-sotish"
+    ? TabTitle("Mahsulot-Sotish | Magazin Baza")
+    : TabTitle("Mahsulot-Sotib-Olish | Magazin Baza");
+  //
   const [disbl, setDisbl] = useState(false);
   const [error, setError] = useState({ nomi: false, soni: false });
   const [products, setProducts] = useState();

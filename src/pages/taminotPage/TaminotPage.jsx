@@ -1,10 +1,13 @@
 import React from "react";
+import { TabTitle } from "../../utils/Utils";
 import styled from "styled-components";
 
 // Components
 import BossCard from "../../components/bossCard/BossCard";
 
 export default function TaminotPage() {
+  TabTitle("Ta'minot | Magazin Baza");
+
   return (
     <StyledTaminotPage>
       <div className="container">

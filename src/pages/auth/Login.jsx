@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { TabTitle } from "../../utils/Utils";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +13,8 @@ import Input from "../../components/input/Input";
 import { auth } from "../../firebase";
 
 export default function Login() {
+  TabTitle("Login | Magazin Baza");
+
   const [disbl, setDisbl] = useState(false);
   const [error, setError] = useState(false);
   const [user, setUser] = useState();
@@ -28,7 +31,8 @@ export default function Login() {
     try {
       signInWithEmailAndPassword(auth, data.email, data.password)
         .then((userCredential) => {
-          localStorage.setItem("TOKEN", userCredential?.user?.accessToken)
+          setUser(userCredential?.user);
+          localStorage.setItem("TOKEN", userCredential?.user?.uid);
           dispatch({ type: "LOG_IN" });
         })
         .catch(() => setError(true));
@@ -37,8 +41,7 @@ export default function Login() {
       setDisbl(false);
     }
   };
-  
-  console.log(user);
+
   return (
     <StyledLogin>
       <main className="login__wrapper">

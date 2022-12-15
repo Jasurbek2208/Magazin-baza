@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { DownloadTableExcel } from "react-export-table-to-excel";
+import { TabTitle } from "../../utils/Utils";
 import styled from "styled-components";
 
 // Firebase
@@ -15,6 +16,8 @@ import Input from "../../components/input/Input";
 import numSort from "../../customHooks/useNumberSortForMoney";
 
 export default function StoragePage() {
+  TabTitle("Ombor | Magazin Baza");
+
   const [products, setProducts] = useState();
   const [filteredData, setFilteredData] = useState();
   const [sortedData, setSortedData] = useState("");
