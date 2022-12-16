@@ -1,5 +1,5 @@
 // Firebase
-import { doc, setDoc } from "firebase/firestore";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 // Custom Hooks
@@ -8,6 +8,17 @@ import { getNowTime } from "./useGetNowTime";
 export async function addStoreHistory(data, narxi = "", location) {
   let historyData = null;
 
+  onSnapshot(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), (doc) => {
+    doc?.data()?.admins.map((currUser) => {
+      if (localStorage.getItem("TOKEN") === currUser.accessToken) {
+        localStorage.setItem(
+          "lastRol",
+          currUser.firstName + " " + currUser.lastName
+        );
+      }
+    });
+  });
+
   location === "/mahsulot-sotish"
     ? (historyData = {
         qachonSotildi: getNowTime(),
@@ -15,10 +26,7 @@ export async function addStoreHistory(data, narxi = "", location) {
         narxi,
         mahsulotNomi: data.mahsulotNomi,
         qaysiKorxonagaYokiShaxsga: data.qaysiKorxonagaSotildi,
-        kimTomonidan:
-          JSON.parse(localStorage.getItem("rol"))?.ism +
-          " " +
-          JSON.parse(localStorage.getItem("rol"))?.familiya,
+        kimTomonidan: localStorage.getItem("lastRol"),
       })
     : location === "/mahsulot-sotib-olish"
     ? (historyData = {
@@ -27,26 +35,14 @@ export async function addStoreHistory(data, narxi = "", location) {
         narxi,
         mahsulotNomi: data.mahsulotNomi,
         qaysiKorxonadanYokiShaxsdan: data.qaysiKorxonagaSotildi,
-        kimTomonidan:
-          JSON.parse(localStorage.getItem("rol"))?.ism +
-          " " +
-          JSON.parse(localStorage.getItem("rol"))?.familiya,
+        kimTomonidan: localStorage.getItem("lastRol"),
       })
     : (historyData = {
         kiritilganSana: getNowTime(),
         chiqim: data.soni,
         check: data.check,
-        masulShaxs: data.masulShaxs,
+        masulShaxs: localStorage.getItem("lastRol"),
       });
-
-  // localStorage.setItem(
-  //   "rol",
-  //   JSON.stringify({
-  //     rol: "sotuvchi",
-  //     ism: "Jasurbek",
-  //     familiya: "Shomaqsudov",
-  //   })
-  // );
 
   try {
     location === "/mahsulot-sotib-olish" || location === "/mahsulot-sotish"
@@ -58,7 +54,7 @@ export async function addStoreHistory(data, narxi = "", location) {
         })
       : location === "/oziq-ovqat-uchun-chiqim"
       ? await setDoc(doc(db, "storage2", "YVkxqmCuab7CedFFrMIU"), {
-        oziqOvqatChiqim: [
+          oziqOvqatChiqim: [
             ...JSON.parse(localStorage.getItem("oziqOvqatChiqim")),
             historyData,
           ],

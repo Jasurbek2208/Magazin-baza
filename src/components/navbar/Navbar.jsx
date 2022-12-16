@@ -1,6 +1,8 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+
+// Components
 import Button from "../button/Button";
 
 export default function Navbar() {

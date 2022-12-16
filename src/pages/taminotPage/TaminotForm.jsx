@@ -51,7 +51,7 @@ export default function TaminotForm() {
   async function addSupply(data) {
     if (!image) return;
     setDisbl(true);
-    data = { ...data, check: image, masulShaxs: "Shomaqsudov Jasurbek" };
+    data = { ...data, check: image };
 
     try {
       addStoreHistory(data, null, location);

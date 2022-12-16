@@ -28,28 +28,6 @@ export default function Boss() {
   return (
     <StyledBossPage>
       <div className="bossCard__wrapper">
-        {userPosit.includes("Oziq-ovqat taminoti bo'limi ma'suli") ||
-        userPosit.includes("Korxona ta'minoti bo'limi ma'suli") ||
-        userPosit.includes("Boss") ||
-        userPosit.includes("Bosh menejer") ? (
-          <BossCard
-            navLink="/taminot"
-            id="taminot"
-            title="Ta'minot"
-            img="fa-truck-droplet"
-          />
-        ) : null}
-        {userPosit.includes("Mahsulot sotib olish bo'limi ma'suli") ||
-        userPosit.includes("Mahsulot sotish bo'limi ma'suli") ||
-        userPosit.includes("Boss") ||
-        userPosit.includes("Bosh menejer") ? (
-          <BossCard
-            navLink="/savdo"
-            id="savdo"
-            title="Savdo"
-            img="fa-money-bill-trend-up"
-          />
-        ) : null}
         {userPosit.includes("Ombor kuzatuvchisi") ||
         userPosit.includes("Boss") ||
         userPosit.includes("Bosh menejer") ? (
@@ -61,12 +39,37 @@ export default function Boss() {
           />
         ) : null}
 
+        {userPosit.includes("Mahsulot sotib olish bo'limi ma'suli") ||
+        userPosit.includes("Mahsulot sotish bo'limi ma'suli") ||
+        userPosit.includes("Boss") ||
+        userPosit.includes("Bosh menejer") ? (
+          <BossCard
+            navLink="/savdo"
+            id="savdo"
+            title="Savdo"
+            img="fa-money-bill-trend-up"
+          />
+        ) : null}
+
+        {userPosit.includes("Oziq-ovqat taminoti bo'limi ma'suli") ||
+        userPosit.includes("Korxona ta'minoti bo'limi ma'suli") ||
+        userPosit.includes("Boss") ||
+        userPosit.includes("Bosh menejer") ? (
+          <BossCard
+            navLink="/taminot"
+            id="taminot"
+            title="Ta'minot"
+            img="fa-truck-droplet"
+          />
+        ) : null}
+
         <BossCard
           navLink="/kassa"
           id="kassa"
           title="Kassa"
           img="fa-sack-dollar"
         />
+
         {userPosit.includes("Boss") ? (
           <BossCard
             navLink="/admin-qo'shish"
