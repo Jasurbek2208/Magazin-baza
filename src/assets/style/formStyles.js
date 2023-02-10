@@ -10,6 +10,12 @@ margin: 0 auto;
   h1 {
     margin-bottom: 30px;
     text-align: center;
+    line-height: 40px;
+  }
+
+  .select__wrapper {
+    margin: 0 auto 36px;
+    width: 290px;
   }
 
   .form__wrapper {
@@ -37,6 +43,8 @@ margin: 0 auto;
         z-index: 3;
 
         ul {
+          padding: 0px;
+          margin: 0px;
           display: flex;
           flex-direction: column;
           row-gap: 0px !important;

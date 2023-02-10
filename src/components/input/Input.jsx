@@ -85,6 +85,7 @@ export default function Input({
               }
               type={type}
               name={label}
+              value={value}
               disabled={isLoading}
               placeholder={placeholder}
               onChange={onChange}

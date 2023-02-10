@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-export default function Select({ content, list, sortData }) {
+export default function Select({ label, list, sortData, isFormSelect = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSelect, setIsSelect] = useState(false);
-  const [selectValue, setSelectValue] = useState("");
+  const [selectValue, setSelectValue] = useState(isFormSelect ? list[0] : "");
 
   return (
     <StyledSelect>
+      {label ? <label htmlFor={label}>{label}</label> : null}
       <button
         type="button"
         className="select-btn"
         onClick={() => setIsOpen(true)}
       >
-        <p className={(isSelect ? "On " : "") + "select_title"}>Select by</p>
+        {isFormSelect ? null : <p className={(isSelect ? "On " : "") + "select_title"}>Select by</p>}
         {selectValue ? <p className="selectValue">{selectValue}</p> : null}
       </button>
       <div
@@ -48,6 +49,11 @@ export default function Select({ content, list, sortData }) {
 }
 
 const StyledSelect = styled.div`
+  label {
+    margin-bottom: 8px;
+    font-family: "Poppins", sans-serif;
+  }
+
   .select-btn {
     width: 100%;
     cursor: pointer;
@@ -119,6 +125,7 @@ const StyledSelect = styled.div`
       display: flex;
       flex-direction: column;
       row-gap: 0px !important;
+      margin-bottom: 0 !important;
 
       li {
         width: 100%;

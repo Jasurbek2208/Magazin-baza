@@ -21,6 +21,9 @@ import { getStoreHistory } from "../customHooks/useGetStoreHistory";
 import { useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
+import AddCompany from "../pages/companyPage/AddCompany";
+import CompaniesList from "../pages/companyPage/CompaniesList";
+import CompanyPage from "../pages/companyPage/CompanyPage";
 
 export default function Router() {
   let localNum = 0;
@@ -100,6 +103,10 @@ export default function Router() {
             <>
               <Route path="taminot" element={<TaminotPage />} />
               <Route path="oziq-ovqat-uchun-chiqim" element={<TaminotForm />} />
+
+              <Route path="company-page" element={<CompanyPage />} />
+              <Route path="kompaniya-qoshish" element={<AddCompany />} />
+              <Route path="kompaniyalar-royxati" element={<CompaniesList />} />
             </>
           ) : null}
 

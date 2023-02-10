@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { DownloadTableExcel } from "react-export-table-to-excel";
 import { TabTitle } from "../../utils/Utils";
-import styled from "styled-components";
+import { StyledStorage } from "../storagePage/StoragePage";
 
 // Firebase
 import { doc, onSnapshot } from "firebase/firestore";
@@ -15,8 +15,8 @@ import Input from "../../components/input/Input";
 // Custom Hooks
 import numSort from "../../customHooks/useNumberSortForMoney";
 
-export default function StoragePage() {
-  TabTitle("Ombor | Magazin Baza");
+export default function CompaniesList() {
+  TabTitle("Xaridorlar ro'yxati | Magazin Baza");
 
   const [products, setProducts] = useState();
   const [filteredData, setFilteredData] = useState();
@@ -26,7 +26,7 @@ export default function StoragePage() {
   const tableRef = useRef(null);
 
   useEffect(() => {
-    onSnapshot(doc(db, "storage2", "RQVXHDw3ev7t7N37HU1M"), (doc) => {
+    onSnapshot(doc(db, "storage2", "nDLTOuF4yuVFKBhwmCRC"), (doc) => {
       setProducts(doc?.data()?.products);
       setFilteredData(doc?.data()?.products);
     });
@@ -146,68 +146,3 @@ export default function StoragePage() {
     </StyledStorage>
   );
 }
-
-export const StyledStorage = styled.div`
-  .customize_navbar {
-    padding: 20px 0px;
-    margin: 20px 0px;
-    background-color: silver;
-
-    .container {
-      ul {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 32px;
-        row-gap: 20px;
-        flex-wrap: wrap;
-
-        li:last-of-type {
-          width: 300px;
-        }
-      }
-    }
-  }
-
-  .container {
-    .table__wrapper {
-      margin: 0 auto;
-      overflow-x: auto;
-      max-width: max-content;
-      min-height: 300px;
-      border: 1px solid silver;
-
-      table {
-        th,
-        td {
-          padding: 12px 36px 12px 10px;
-          text-align: left;
-          min-width: max-content;
-          border: 1px solid silver;
-
-          &:first-of-type {
-            padding: 10px;
-            text-align: center;
-            min-width: 60px;
-          }
-        }
-      }
-    }
-  }
-
-  @media (max-width: 400px) {
-    .customize_navbar {
-      .container {
-        ul {
-          padding: 0px;
-          flex-direction: column;
-
-          li,
-          li:last-of-type {
-            width: 100%;
-          }
-        }
-      }
-    }
-  }
-`;
