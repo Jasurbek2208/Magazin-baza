@@ -101,6 +101,7 @@ export default function AddCompany() {
           >
             <div className="input__wrapper">
               <Input
+                require
                 value={companyData.name}
                 onChange={(e) =>
                   setCompanyData((p) => ({ ...p, name: e.target.value }))
@@ -111,6 +112,7 @@ export default function AddCompany() {
             </div>
             <div className="input__wrapper">
               <Input
+                require
                 value={companyData.address}
                 onChange={(e) =>
                   changeData(setCompanyData, "address", e.target.value)
@@ -121,6 +123,7 @@ export default function AddCompany() {
             </div>
             <div className="input__wrapper">
               <Input
+                require
                 // type="number"
                 value={companyData.phoneNumber}
                 onChange={(e) =>
@@ -142,6 +145,7 @@ export default function AddCompany() {
             </div>
             <div className="input__wrapper">
               <Input
+                require
                 // type="number"
                 value={companyData.additionalPhoneNumber}
                 onChange={(e) =>
@@ -171,6 +175,7 @@ export default function AddCompany() {
           >
             <div className="input__wrapper">
               <Input
+                require
                 value={personData.name}
                 onChange={(e) =>
                   changeData(setPersonData, "name", e.target.value)
@@ -181,6 +186,7 @@ export default function AddCompany() {
             </div>
             <div className="input__wrapper">
               <Input
+                require
                 value={personData.address}
                 onChange={(e) =>
                   changeData(setPersonData, "address", e.target.value)
@@ -191,6 +197,7 @@ export default function AddCompany() {
             </div>
             <div className="input__wrapper">
               <Input
+                require
                 // type="number"
                 value={personData.phoneNumber}
                 onChange={(e) =>
@@ -202,6 +209,8 @@ export default function AddCompany() {
             </div>
             <div className="input__wrapper">
               <Input
+                type="number-2"
+                require
                 value={personData.birthday}
                 onChange={(e) =>
                   changeData(setPersonData, "birthday", e.target.value)
@@ -212,6 +221,7 @@ export default function AddCompany() {
             </div>
             <div className="input__wrapper">
               <Input
+                require
                 value={personData.genre}
                 onChange={(e) =>
                   changeData(setPersonData, "genre", e.target.value)

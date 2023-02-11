@@ -5,6 +5,7 @@ import Loading from "../loading/Loading";
 
 export default function Input({
   type = "text",
+  require = true,
   placeholder,
   label,
   option,
@@ -41,6 +42,18 @@ export default function Input({
               {error.errName}
             </span>
           )}
+        </>
+      ) : type === "number-2" ? (
+        <>
+          <input
+            type="date"
+            className={className + " input"}
+            name={label}
+            value={value}
+            required={require}
+            placeholder={placeholder}
+            onChange={onChange}
+          />
         </>
       ) : (
         <>
@@ -84,6 +97,7 @@ export default function Input({
                 className + (error?.error ? " borderError input" : " input")
               }
               type={type}
+              required={require}
               name={label}
               value={value}
               disabled={isLoading}
