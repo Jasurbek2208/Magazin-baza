@@ -6,14 +6,12 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../../firebase";
 
 // Components
-import Kassa from "../../pages/kassa/Kassa";
 import BossCard from "../../components/bossCard/BossCard";
 import Loading from "../../components/loading/Loading";
 
 export default function Boss() {
   // Admins's rol state
   const [userPosit, setUserPosit] = useState([""]);
-  //
 
   function userPosition() {
     onSnapshot(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), (doc) => {
@@ -24,6 +22,7 @@ export default function Boss() {
       });
     });
   }
+
   userPosition();
 
   return (
@@ -69,13 +68,6 @@ export default function Boss() {
             />
           ) : null}
 
-          <BossCard
-            navLink="/kassa"
-            id="kassa"
-            title="Kassa"
-            img="fa-sack-dollar"
-          />
-
           {userPosit.includes("Boss") ? (
             <>
               <BossCard
@@ -92,9 +84,15 @@ export default function Boss() {
               />
             </>
           ) : null}
+
+          <BossCard
+            navLink="/kassa"
+            id="kassa"
+            title="Kassa"
+            img="fa-sack-dollar"
+          />
         </div>
       )}
-      {/* <Kassa /> */}
     </StyledBossPage>
   );
 }
@@ -104,7 +102,7 @@ const StyledBossPage = styled.div`
     width: 100%;
     height: calc(100vh - 200px);
     display: grid;
-    place-items: center
+    place-items: center;
   }
 
   .bossCard__wrapper {

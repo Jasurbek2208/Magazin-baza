@@ -79,7 +79,7 @@ export default function Router() {
             </>
           ) : null}
 
-          {userPosit.includes("Mahsulot sotib olish bo'limi ma'suli") ||
+          {userPosit.includes("Mahsulot sotish bo'limi ma'suli") ||
           userPosit.includes("Boss") ||
           userPosit.includes("Bosh menejer") ? (
             <>

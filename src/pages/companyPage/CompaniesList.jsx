@@ -12,13 +12,12 @@ import Button from "../../components/button/Button";
 import Select from "../../components/select/Select";
 import Input from "../../components/input/Input";
 
-// Custom Hooks
-import numSort from "../../customHooks/useNumberSortForMoney";
-
 export default function CompaniesList() {
   TabTitle("Xaridorlar ro'yxati | Magazin Baza");
 
-  const [products, setProducts] = useState();
+  let tableNum = 1;
+  const [isCompany, setIsCompany] = useState(true);
+  const [partners, setPartners] = useState();
   const [filteredData, setFilteredData] = useState();
   const [sortedData, setSortedData] = useState("");
 
@@ -27,56 +26,39 @@ export default function CompaniesList() {
 
   useEffect(() => {
     onSnapshot(doc(db, "storage2", "nDLTOuF4yuVFKBhwmCRC"), (doc) => {
-      setProducts(doc?.data()?.products);
-      setFilteredData(doc?.data()?.products);
+      setPartners(doc?.data()?.companies);
+      setFilteredData(doc?.data()?.companies);
     });
   }, []);
 
-  // SORT PRODUCTS
+  // SORT partners
   function sortData(sort) {
     setSortedData(sort);
-    sort.includes("Nomi")
-      ? sort.includes("(A-Z)")
-        ? setFilteredData(
-            [...products].sort((a, b) =>
-              a.mahsulotNomi.localeCompare(b.mahsulotNomi)
-            )
-          )
-        : setFilteredData(
-            [...products].sort((a, b) =>
-              b.mahsulotNomi.localeCompare(a.mahsulotNomi)
-            )
-          )
-      : sort.includes("Soni")
-      ? sort.includes("(0-100)")
-        ? setFilteredData([...products].sort((a, b) => a.soni - b.soni))
-        : setFilteredData([...products].sort((a, b) => b.soni - a.soni))
-      : sort.includes("Narxi")
-      ? sort.includes("(0-100)")
-        ? setFilteredData([...products].sort((a, b) => a.narxi - b.narxi))
-        : setFilteredData([...products].sort((a, b) => b.narxi - a.narxi))
-      : sort.includes("(0-100)")
-      ? setFilteredData([...products].sort((a, b) => a.jamiNarxi - b.jamiNarxi))
+
+    sort.includes("Nomi (A-Z)")
+      ? setFilteredData(
+          [...partners].sort((a, b) => a.name.localeCompare(b.name))
+        )
       : setFilteredData(
-          [...products].sort((a, b) => b.jamiNarxi - a.jamiNarxi)
+          [...partners].sort((a, b) => b.name.localeCompare(a.name))
         );
   }
 
   // SEARCH FUNCTION
-  function searchProducts(search) {
-    let curProducts = products;
+  function searchPartners(search) {
+    let curPartners = partners;
     let curData = [];
+
     if (search.target.value === "") {
       curData = [];
       sortData(sortedData);
     } else {
-      curData = curProducts?.filter((i) =>
-        i?.mahsulotNomi
-          ?.toLowerCase()
-          .includes(search.target.value.toLowerCase())
+      curData = curPartners?.filter((i) =>
+        i.name?.toLowerCase().includes(search.target.value.toLowerCase())
           ? true
           : false
       );
+
       setFilteredData(curData);
     }
   }
@@ -88,8 +70,12 @@ export default function CompaniesList() {
           <ul>
             <li>
               <DownloadTableExcel
-                filename="products table"
-                sheet="products"
+                filename={
+                  isCompany
+                    ? "partner companies table"
+                    : "partner persons table"
+                }
+                sheet={isCompany ? "partner companies" : "partner persons"}
                 currentTableRef={tableRef.current}
               >
                 <Button content="Export excel" width="100%" customize={true} />
@@ -99,48 +85,85 @@ export default function CompaniesList() {
               <Select
                 content="Sort"
                 sortData={sortData}
-                list={[
-                  "Nomi (A-Z)",
-                  "Nomi (Z-A)",
-                  "Soni (0-100)",
-                  "Soni (100-0)",
-                  "Narxi (0-100)",
-                  "Narxi (100-0)",
-                  "Jami Narxi (0-100)",
-                  "Jami Narxi (100-0)",
-                ]}
+                list={["Nomi (A-Z)", "Nomi (Z-A)"]}
               />
             </li>
             <li>
-              <Input placeholder="Search..." onChange={searchProducts} />
+              <Button
+                onClick={() => setIsCompany((p) => !p)}
+                content={isCompany ? "Kompaniya" : "Shaxs"}
+                customize
+                width="140px"
+              />
+            </li>
+            <li>
+              <Input placeholder="Search..." onChange={searchPartners} />
             </li>
           </ul>
         </div>
       </nav>
       <div className="container">
         <main className="table__wrapper">
-          <table ref={tableRef}>
-            <thead>
-              <tr>
-                <th>N0_</th>
-                <th>Mahsulot nomi</th>
-                <th>Soni</th>
-                <th>Mahsulot narxi</th>
-                <th>Jami narxi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData?.map((i, idx) => (
-                <tr key={i?.mahsulotNomi + idx}>
-                  <td>{idx + 1}</td>
-                  <td>{i?.mahsulotNomi}</td>
-                  <td>{numSort(i?.soni)}</td>
-                  <td>{numSort(i?.narxi)} so'm</td>
-                  <td>{numSort(i?.soni * i?.narxi)} so'm</td>
+          {filteredData?.length === 0 ? (
+            <h1 className="no-found-message">
+              {console.log("Topilmadi tablelar !!")}Topilmadi!
+            </h1>
+          ) : null}
+          {isCompany ? (
+            <table ref={tableRef}>
+              <thead>
+                <tr>
+                  <th>N0_</th>
+                  <th>Kompaniya nomi</th>
+                  <th>Direktor</th>
+                  <th>Telefon raqam</th>
+                  <th>Qo'shimcha Telefon raqam</th>
+                  <th>Manzil</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredData?.map((i, idx) =>
+                  i.companyBoss ? (
+                    <tr key={i.name + idx}>
+                      <td>{tableNum++}</td>
+                      <td>{i.name}</td>
+                      <td>{i.companyBoss}</td>
+                      <td>{i.phoneNumber}</td>
+                      <td>{i.additionalPhoneNumber}</td>
+                      <td>{i.address}</td>
+                    </tr>
+                  ) : null
+                )}
+              </tbody>
+            </table>
+          ) : (
+            <table ref={tableRef}>
+              <thead>
+                <tr>
+                  <th>N0_</th>
+                  <th>Familiya, Ism (F.I.O.)</th>
+                  <th>Telefon raqam</th>
+                  <th>Tug'ilgan sana</th>
+                  <th>Jinsi</th>
+                  <th>Manzil</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredData?.map((i, idx) =>
+                  !i.companyBoss ? (
+                    <tr key={i.name + idx}>
+                      <td>{tableNum++}</td>
+                      <td>{i.name}</td>
+                      <td>{i.phoneNumber}</td>
+                      <td>{i.birthday}</td>
+                      <td>{i.genre}</td>
+                      <td>{i.address}</td>
+                    </tr>
+                  ) : null
+                )}
+              </tbody>
+            </table>
+          )}
         </main>
       </div>
     </StyledStorage>

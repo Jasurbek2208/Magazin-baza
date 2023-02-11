@@ -171,11 +171,19 @@ export const StyledStorage = styled.div`
 
   .container {
     .table__wrapper {
+      position: relative;
       margin: 0 auto;
       overflow-x: auto;
       max-width: max-content;
       min-height: 300px;
       border: 1px solid silver;
+
+      .no-found-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
 
       table {
         th,

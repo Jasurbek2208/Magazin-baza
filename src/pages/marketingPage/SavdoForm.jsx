@@ -28,11 +28,20 @@ export default function SavdoForm() {
   //
   const [disbl, setDisbl] = useState(false);
   const [error, setError] = useState({ nomi: false, soni: false });
+
   const [products, setProducts] = useState();
+  const [companies, setCompanies] = useState();
+
   const [filteredData, setFilteredData] = useState([]);
+  const [filteredCompaniesData, setFilteredCompaniesData] = useState([]);
+
   const [isSelect, setIsSelect] = useState("");
-  const [numValue, setNumValue] = useState("");
+  const [isCompanySelect, setIsCompanySelect] = useState("");
+
   const [isOpen, setIsOpen] = useState(false);
+  const [isCompaniesOpen, setIsCompaniesOpen] = useState(false);
+
+  const [numValue, setNumValue] = useState("");
   const [mahsulotName, setMahsulotName] = useState({
     mahsulotNomi: "",
     soni: "",
@@ -52,6 +61,7 @@ export default function SavdoForm() {
   async function addProducts(data) {
     setDisbl(true);
     setMahsulotName((p) => ({ ...p, mahsulotNomi: data.mahsulotNomi }));
+    
     let newData = products;
     let isNomiError = true;
     let isSoniError = false;
@@ -86,6 +96,7 @@ export default function SavdoForm() {
         });
         getDatas();
         setIsSelect("");
+        setIsCompanySelect("");
         setNumValue("");
         data = { mahsulotNomi: "", soni: "", qaysiKorxonagaSotildi: "" };
         reset({ mahsulotNomi: "", soni: "", qaysiKorxonagaSotildi: "" });
@@ -113,12 +124,15 @@ export default function SavdoForm() {
   }
   //////////////////////////////////
 
-  // SEARCH FUNCTION
+  // SEARCH FUNCTION===============================
+  // products search
   function searchProducts(search) {
     setIsSelect(search.target.value);
+
     setIsOpen(true);
     let curProducts = products;
     let curData = [];
+
     if (search.target.value === "") {
       curData = [];
     } else {
@@ -133,11 +147,35 @@ export default function SavdoForm() {
     setFilteredData(curData);
   }
 
+  // companies search
+  function searchCompanies(search) {
+    setIsCompanySelect(search.target.value);
+
+    setIsCompaniesOpen(true);
+    let curProducts = companies;
+    let curData = [];
+
+    if (search.target.value === "") {
+      curData = [];
+    } else {
+      curData = curProducts?.filter((i) =>
+        i?.name?.toLowerCase().includes(search.target.value.toLowerCase())
+          ? true
+          : false
+      );
+    }
+    setFilteredCompaniesData(curData);
+  }
+  // ================================================
+
   // GetDatas
   function getDatas() {
     try {
       onSnapshot(doc(db, "storage2", "RQVXHDw3ev7t7N37HU1M"), (doc) => {
         setProducts(doc?.data()?.products);
+      });
+      onSnapshot(doc(db, "storage2", "nDLTOuF4yuVFKBhwmCRC"), (doc) => {
+        setCompanies(doc.data().companies);
       });
     } catch (err) {
       console.log(err);
@@ -235,6 +273,7 @@ export default function SavdoForm() {
           <div className="input__wrapper">
             {location === "/mahsulot-sotish" ? (
               <Input
+                value={isCompanySelect}
                 errors={errors}
                 errName="qaysiKorxonagaSotildi"
                 placeholder="Qaysi korxonaga sotishingizni kiriting"
@@ -242,11 +281,16 @@ export default function SavdoForm() {
                 option={{
                   ...register("qaysiKorxonagaSotildi", {
                     required: "Qaysi korxonaga sotishingizni kiriting !",
+                    onChange: (e) => {
+                      searchCompanies(e);
+                      setError(false);
+                    },
                   }),
                 }}
               />
             ) : (
               <Input
+                value={isCompanySelect}
                 errors={errors}
                 errName="qaysiKorxonadanSotibOlindi"
                 placeholder="Qaysi korxonadan olishingizni kiriting"
@@ -254,10 +298,33 @@ export default function SavdoForm() {
                 option={{
                   ...register("qaysiKorxonagaSotildi", {
                     required: "Qaysi korxonadan sotib olishingizni kiriting !",
+                    onChange: (e) => {
+                      searchCompanies(e);
+                      setError(false);
+                    },
                   }),
                 }}
               />
             )}
+            {filteredCompaniesData?.length > 0 && isCompaniesOpen ? (
+              <div className="currProduct">
+                <ul>
+                  {filteredCompaniesData?.map((i, idx) => (
+                    <li key={i?.name + " " + idx}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsCompanySelect(i?.name);
+                          setIsCompaniesOpen(false);
+                        }}
+                      >
+                        {i?.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </div>
 
           <div className="input__wrapper">
