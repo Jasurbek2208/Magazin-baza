@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 // Layouts
 import PagesLayout from "../layout/PagesLayout";
@@ -26,6 +26,8 @@ import CompaniesList from "../pages/companyPage/CompaniesList";
 import CompanyPage from "../pages/companyPage/CompanyPage";
 
 export default function Router() {
+  const location = useLocation().pathname;
+
   let localNum = 0;
   const isAuth =
     useSelector((state) => state.isAuth) |
@@ -35,13 +37,21 @@ export default function Router() {
   const [userPosit, setUserPosit] = useState([""]);
 
   useEffect(() => {
-    localNum += 1;
-    localStorage.removeItem("storeHistory");
-    localStorage.removeItem("oziqOvqatChiqim");
-    localStorage.removeItem("korxonaUchunChiqim");
-    if (localNum === 1) getStoreHistory();
-    userPosition();
-  }, []);
+    if (location !== "/home") {
+      window.scrollTo(0, 0);
+    }
+  }, [location]);
+
+  useEffect(() => {
+    if (isAuth) {
+      localNum += 1;
+      localStorage.removeItem("storeHistory");
+      localStorage.removeItem("oziqOvqatChiqim");
+      localStorage.removeItem("korxonaUchunChiqim");
+      if (localNum === 1) getStoreHistory();
+      userPosition();
+    }
+  }, [isAuth]);
 
   //
   function userPosition() {
@@ -49,6 +59,10 @@ export default function Router() {
       doc?.data()?.admins.map((currUser) => {
         if (localStorage.getItem("TOKEN") === currUser.accessToken) {
           setUserPosit(currUser.rol);
+          localStorage.setItem(
+            "lastRol",
+            currUser.firstName + " " + currUser.lastName
+          );
         }
       });
     });

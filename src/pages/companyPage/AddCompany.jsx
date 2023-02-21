@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { TabTitle } from "../../utils/Utils";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { StyledSavdoForm } from "../../assets/style/formStyles";
@@ -13,6 +14,8 @@ import Select from "../../components/select/Select";
 import Button from "../../components/button/Button";
 
 export default function AddCompany() {
+  TabTitle("Xaridor qo'shish | Magazin Baza");
+
   // navigate
   const navigate = useNavigate();
 

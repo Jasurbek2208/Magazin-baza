@@ -1,10 +1,13 @@
 import React from "react";
+import { TabTitle } from "../../utils/Utils";
 import styled from "styled-components";
 
 // Components
 import BossCard from "../../components/bossCard/BossCard";
 
 export default function CompanyPage() {
+  TabTitle("Xaridorlar | Magazin Baza");
+
   return (
     <StyledCompanyPage>
       <div className="container">

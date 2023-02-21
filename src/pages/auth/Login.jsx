@@ -42,6 +42,17 @@ export default function Login() {
     }
   };
 
+  // helper click
+  function helperClick(e) {
+    if (e.target.className.includes("clicked")) {
+      e.target.textContent = "G";
+      e.target.classList.remove("clicked");
+    } else {
+      e.target.innerHTML = `<span>G:</span> jasurbek@test.com <br /> <span>22Jasurbek08</span>`;
+      e.target.classList.add("clicked");
+    }
+  }
+
   return (
     <StyledLogin>
       <main className="login__wrapper">
@@ -93,6 +104,11 @@ export default function Login() {
             </span>
           )}
         </form>
+
+        {/* Boss account info */}
+        <button type="button" className="account-helper " onClick={helperClick}>
+          G
+        </button>
       </main>
     </StyledLogin>
   );
@@ -106,6 +122,7 @@ const StyledLogin = styled.div`
   background-color: #e7e7e7;
 
   .login__wrapper {
+    position: relative;
     padding: 28px 22px;
     width: 300px;
     border-radius: 20px;
@@ -130,6 +147,53 @@ const StyledLogin = styled.div`
         font-size: 13px;
         color: red;
         transform: translateY(-24px);
+      }
+    }
+
+    .account-helper {
+      position: absolute;
+      top: -80px;
+      right: 10px;
+      width: 40px;
+      height: 40px;
+
+      font-size: 26px;
+      font-weight: 600;
+      color: #005ed8;
+      font-family: Poppins, sans-serif;
+
+      border: none;
+      border-radius: 100%;
+      background-color: #fff;
+
+      opacity: 0.4;
+      transition: all 400ms ease, border-radius 0ms, font-size 0ms;
+
+      &:focus,
+      &:hover {
+        outline: none;
+        opacity: 1;
+      }
+
+      &.clicked {
+        font-size: 16px;
+        padding: 5px 10px;
+        width: max-content;
+        height: max-content;
+        border-radius: 8px;
+
+        span {
+          margin-right: 10px;
+          font-size: 15px;
+          font-weight: 600;
+          color: #005ed8;
+          font-family: Poppins, sans-serif;
+
+          &:last-of-type {
+            font-size: 13px;
+            margin-left: 100px;
+          }
+        }
       }
     }
   }
