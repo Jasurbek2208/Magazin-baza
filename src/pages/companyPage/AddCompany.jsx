@@ -17,6 +17,10 @@ export default function AddCompany() {
   const navigate = useNavigate();
 
   const [disbl, setDisbl] = useState(false);
+  
+  const [genre, setGenre] = useState("");
+  const [errorSpan, setErrorSpan] = useState("");
+
   const [oldDatas, setOldDatas] = useState([]);
   const [formSelect, setFormSelect] = useState("Kompaniya");
   const [companyData, setCompanyData] = useState({
@@ -34,6 +38,12 @@ export default function AddCompany() {
     birthday: "",
   });
 
+  // watching genre select changing
+  useEffect(() => {
+    changeData(setPersonData, "genre", genre);
+    setErrorSpan(false);
+  }, [genre]);
+
   //   form onchanges function
   function changeData(setData, name, value) {
     setData((p) => ({ ...p, [name]: value }));
@@ -42,6 +52,12 @@ export default function AddCompany() {
   //   form onSubmit function // set data
   async function handleSubmit(e, data) {
     e.preventDefault();
+
+    if (!personData.genre) {
+      setErrorSpan(true);
+      return;
+    }
+
     setDisbl(true);
 
     try {
@@ -101,6 +117,7 @@ export default function AddCompany() {
           >
             <div className="input__wrapper">
               <Input
+                minLength={4}
                 require
                 value={companyData.name}
                 onChange={(e) =>
@@ -113,6 +130,7 @@ export default function AddCompany() {
             <div className="input__wrapper">
               <Input
                 require
+                minLength={6}
                 value={companyData.address}
                 onChange={(e) =>
                   changeData(setCompanyData, "address", e.target.value)
@@ -124,17 +142,25 @@ export default function AddCompany() {
             <div className="input__wrapper">
               <Input
                 require
-                // type="number"
+                type="number-3"
                 value={companyData.phoneNumber}
-                onChange={(e) =>
-                  changeData(setCompanyData, "phoneNumber", e.target.value)
-                }
-                placeholder="kompaniyaning telefon raqami"
+                pattern="[+]{1}[0-9]{3}-[0-9]{2}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
+                onChange={(e) => {
+                  e.target.setCustomValidity("");
+                  changeData(setCompanyData, "phoneNumber", e.target.value);
+                  if (!e.target.validity.valid) {
+                    e.target.setCustomValidity(
+                      "Raqam noto'g'ri kiritilgan ! Misol: +998-97-105-05-05"
+                    );
+                  }
+                }}
+                placeholder="+998-97-105-05-05"
                 label="Telefon raqam"
               />
             </div>
             <div className="input__wrapper">
               <Input
+                minLength={6}
                 value={companyData.companyBoss}
                 onChange={(e) =>
                   changeData(setCompanyData, "companyBoss", e.target.value)
@@ -146,16 +172,23 @@ export default function AddCompany() {
             <div className="input__wrapper">
               <Input
                 require
-                // type="number"
+                type="number-3"
                 value={companyData.additionalPhoneNumber}
-                onChange={(e) =>
+                pattern="[+]{1}[0-9]{3}-[0-9]{2}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
+                onChange={(e) => {
+                  e.target.setCustomValidity("");
                   changeData(
                     setCompanyData,
                     "additionalPhoneNumber",
                     e.target.value
-                  )
-                }
-                placeholder="qo'shimcha telefon raqamni kiriting"
+                  );
+                  if (!e.target.validity.valid) {
+                    e.target.setCustomValidity(
+                      "Raqam noto'g'ri kiritilgan ! Misol: +998-97-105-05-05"
+                    );
+                  }
+                }}
+                placeholder="+998-97-105-05-05"
                 label="Qo'shimcha telefon raqam"
               />
             </div>
@@ -176,6 +209,7 @@ export default function AddCompany() {
             <div className="input__wrapper">
               <Input
                 require
+                minLength={4}
                 value={personData.name}
                 onChange={(e) =>
                   changeData(setPersonData, "name", e.target.value)
@@ -187,6 +221,7 @@ export default function AddCompany() {
             <div className="input__wrapper">
               <Input
                 require
+                minLength={6}
                 value={personData.address}
                 onChange={(e) =>
                   changeData(setPersonData, "address", e.target.value)
@@ -198,12 +233,19 @@ export default function AddCompany() {
             <div className="input__wrapper">
               <Input
                 require
-                // type="number"
+                type="number-3"
                 value={personData.phoneNumber}
-                onChange={(e) =>
-                  changeData(setPersonData, "phoneNumber", e.target.value)
-                }
-                placeholder="shaxsning telefon raqami"
+                pattern="[+]{1}[0-9]{3}-[0-9]{2}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
+                onChange={(e) => {
+                  e.target.setCustomValidity("");
+                  changeData(setPersonData, "phoneNumber", e.target.value);
+                  if (!e.target.validity.valid) {
+                    e.target.setCustomValidity(
+                      "Raqam noto'g'ri kiritilgan ! Misol: +998-97-105-05-05"
+                    );
+                  }
+                }}
+                placeholder="+998-97-105-05-05"
                 label="Telefon raqam"
               />
             </div>
@@ -220,15 +262,18 @@ export default function AddCompany() {
               />
             </div>
             <div className="input__wrapper">
-              <Input
-                require
-                value={personData.genre}
-                onChange={(e) =>
-                  changeData(setPersonData, "genre", e.target.value)
-                }
-                placeholder="shaxsning jinsini kiriting"
+              <Select
                 label="Jinsi"
+                list={["Erkak", "Ayol"]}
+                sortData={setGenre}
+                outlineStyle
+                isFormSelect
               />
+              {errorSpan && !personData.genre ? (
+                <span className="errrorName genre-error-message">
+                  Jinsingizni tanlamadingiz !
+                </span>
+              ) : null}
             </div>
             <div className="input__wrapper">
               <Button

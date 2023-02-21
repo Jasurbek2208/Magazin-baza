@@ -6,7 +6,7 @@ export async function getStoreHistory() {
   let hisdata = [];
   try {
     onSnapshot(doc(db, "storage2", "zWcuaTnZqglflTVQHkAE"), (docAll) => {
-      docAll.data().storeHistory.map((i) => {
+      docAll?.data()?.storeHistory?.map((i) => {
         hisdata.push(i);
         localStorage.getItem("storeHistory")
           ? localStorage.setItem(

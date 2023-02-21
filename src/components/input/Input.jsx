@@ -9,12 +9,14 @@ export default function Input({
   placeholder,
   label,
   option,
+  minLength,
   className = "",
   onChange,
   errName,
   errors,
   error,
   value,
+  pattern,
   image,
   isLoading,
 }) {
@@ -44,17 +46,26 @@ export default function Input({
           )}
         </>
       ) : type === "number-2" ? (
-        <>
-          <input
-            type="date"
-            className={className + " input"}
-            name={label}
-            value={value}
-            required={require}
-            placeholder={placeholder}
-            onChange={onChange}
-          />
-        </>
+        <input
+          type="date"
+          className={className + " input"}
+          name={label}
+          value={value}
+          required={require}
+          placeholder={placeholder}
+          onChange={onChange}
+        />
+      ) : type === "number-3" ? (
+        <input
+          type="tel"
+          className={className + " input"}
+          name={label}
+          value={value}
+          pattern={pattern}
+          required={require}
+          placeholder={placeholder}
+          onChange={onChange}
+        />
       ) : (
         <>
           {type === "file" ? (
@@ -98,6 +109,7 @@ export default function Input({
               }
               type={type}
               required={require}
+              minLength={minLength || 0}
               name={label}
               value={value}
               disabled={isLoading}

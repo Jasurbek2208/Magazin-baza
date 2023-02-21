@@ -76,6 +76,10 @@ margin: 0 auto;
       .errrorName {
         color: red;
         font-size: 12px;
+
+        &.genre-error-message {
+          position: absolute;
+        }
       }
 
       span.select-lists-title {

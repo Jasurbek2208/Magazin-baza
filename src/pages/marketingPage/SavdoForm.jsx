@@ -46,6 +46,7 @@ export default function SavdoForm() {
     mahsulotNomi: "",
     soni: "",
     narxi: "",
+    qaysiKorxonagaSotildi: "",
   });
   const {
     register,
@@ -61,12 +62,16 @@ export default function SavdoForm() {
   async function addProducts(data) {
     setDisbl(true);
     setMahsulotName((p) => ({ ...p, mahsulotNomi: data.mahsulotNomi }));
-    
+
+    let g = data.soni.split("").filter((i) => Number(i));
+    data.soni = g.join("");
+
     let newData = products;
     let isNomiError = true;
     let isSoniError = false;
     let narxi = "0";
     data.mahsulotNomi = isSelect;
+    data.qaysiKorxonagaSotildi = isCompanySelect;
 
     newData?.map((i) => {
       if (i.mahsulotNomi === isSelect) {

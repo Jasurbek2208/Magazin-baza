@@ -1,20 +1,35 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-export default function Select({ label, list, sortData, isFormSelect = false }) {
+export default function Select({
+  label,
+  list,
+  sortData,
+  isFormSelect = false,
+  outlineStyle = false,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSelect, setIsSelect] = useState(false);
-  const [selectValue, setSelectValue] = useState(isFormSelect ? list[0] : "");
+  const [selectValue, setSelectValue] = useState(
+    isFormSelect && !outlineStyle ? list[0] : ""
+  );
 
   return (
     <StyledSelect>
       {label ? <label htmlFor={label}>{label}</label> : null}
       <button
         type="button"
-        className="select-btn"
+        className={"select-btn" + (outlineStyle ? " outline" : "")}
         onClick={() => setIsOpen(true)}
       >
-        {isFormSelect ? null : <p className={(isSelect ? "On " : "") + "select_title"}>Select by</p>}
+        {isFormSelect ? null : (
+          <p className={(isSelect ? "On " : "") + "select_title"}>Select by</p>
+        )}
+        {outlineStyle ? (
+          <p className={(isSelect ? "On " : "") + "select_title"}>
+            Jinsingizni tanlang
+          </p>
+        ) : null}
         {selectValue ? <p className="selectValue">{selectValue}</p> : null}
       </button>
       <div
@@ -96,7 +111,22 @@ const StyledSelect = styled.div`
 
     .select_title,
     .selectValue {
-      margin: 0px !important;
+      margin: 0px;
+    }
+
+    &.outline {
+      padding: 12px;
+      margin: 1px !important;
+      color: #000;
+      border: 1px solid #005ed8;
+      background-color: transparent;
+      transition: none;
+
+      &:focus {
+        margin: 0px !important;
+        outline: none;
+        border: 2px solid #005ed8;
+      }
     }
   }
 
