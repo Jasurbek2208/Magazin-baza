@@ -15,6 +15,7 @@ import { auth } from "../../firebase";
 export default function Login() {
   TabTitle("Login | Magazin Baza");
 
+  const [isClicked, setIsClicked] = useState(false);
   const [disbl, setDisbl] = useState(false);
   const [error, setError] = useState(false);
   const [user, setUser] = useState();
@@ -47,7 +48,8 @@ export default function Login() {
     if (e.target.className.includes("clicked")) {
       e.target.textContent = "G";
       e.target.classList.remove("clicked");
-    } else {
+      
+    } else if (e.target.type === "button") {
       e.target.innerHTML = `<span>G:</span> jasurbek@test.com <br /> <span>22Jasurbek08</span>`;
       e.target.classList.add("clicked");
     }

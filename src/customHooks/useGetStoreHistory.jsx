@@ -20,7 +20,7 @@ export async function getStoreHistory() {
       });
     });
     onSnapshot(doc(db, "storage2", "YVkxqmCuab7CedFFrMIU"), (docAll) => {
-      docAll.data().oziqOvqatChiqim.map((i) => {
+      docAll?.data()?.oziqOvqatChiqim?.map((i) => {
         hisdata.push(i);
         localStorage.getItem("oziqOvqatChiqim")
           ? localStorage.setItem(
@@ -34,7 +34,7 @@ export async function getStoreHistory() {
       });
     });
     onSnapshot(doc(db, "storage2", "MCK41JPlggbyt5BSkqCx"), (docAll) => {
-      docAll.data().korxonaUchunChiqim.map((i) => {
+      docAll?.data()?.korxonaUchunChiqim?.map((i) => {
         hisdata.push(i);
         localStorage.getItem("korxonaUchunChiqim")
           ? localStorage.setItem(
