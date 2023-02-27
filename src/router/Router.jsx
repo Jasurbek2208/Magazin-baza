@@ -24,6 +24,7 @@ import { db } from "../firebase";
 import AddCompany from "../pages/companyPage/AddCompany";
 import CompaniesList from "../pages/companyPage/CompaniesList";
 import CompanyPage from "../pages/companyPage/CompanyPage";
+import AddProductList from "../pages/marketingPage/AddProductList";
 
 export default function Router() {
   const location = useLocation().pathname;
@@ -122,6 +123,13 @@ export default function Router() {
               <Route path="kompaniya-qoshish" element={<AddCompany />} />
               <Route path="kompaniyalar-royxati" element={<CompaniesList />} />
             </>
+          ) : null}
+
+          {userPosit.includes("Boss") || userPosit.includes("Bosh menejer") ? (
+            <Route
+              path="mahsulot-omborga-qoshish"
+              element={<AddProductList />}
+            />
           ) : null}
 
           <Route path="kassa" element={<Kassa />} />

@@ -14,7 +14,7 @@ export default function Input({
   onChange,
   errName,
   errors,
-  error,
+  error = {},
   value,
   pattern,
   image,
@@ -30,18 +30,18 @@ export default function Input({
               className +
               " input" +
               (errName === "narxi" ? " narxi" : "") +
-              (error.error ? " borderError" : "")
+              (error?.error ? " borderError" : "")
             }
             name={label}
             value={value}
             placeholder={placeholder}
-            onValueChange={onChange}
             {...option}
+            onValueChange={onChange || null}
           />
-          {errName === "narxi" ? <span className="sum">so'm</span> : null}
-          {error.error && (
+          {/* {errName === "narxi" ? <span className="sum">so'm</span> : null} */}
+          {error?.error && (
             <span className={(errName === "narxi" ? " narxi " : "") + "error"}>
-              {error.errName}
+              {error?.errName}
             </span>
           )}
         </>
@@ -108,7 +108,7 @@ export default function Input({
                 className + (error?.error ? " borderError input" : " input")
               }
               type={type}
-              required={require}
+              // required={require}
               minLength={minLength || 0}
               name={label}
               value={value}
@@ -178,7 +178,7 @@ const StyledInput = styled.div`
     transform: translateY(-7px);
 
     &.narxi {
-      transform: translateY(-33px);
+      /* transform: translateY(-33px); */
     }
   }
 

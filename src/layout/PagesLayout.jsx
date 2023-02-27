@@ -14,7 +14,7 @@ export default function PagesLayout() {
       <Navbar />
       {location === "/home" ? null : (
         <Button
-          content="&#8592; Back"
+          content="&#8592; Orqaga"
           className="zIdx"
           onClick={() => navigate(-1)}
         />

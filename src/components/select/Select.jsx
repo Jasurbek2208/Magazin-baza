@@ -23,7 +23,7 @@ export default function Select({
         onClick={() => setIsOpen(true)}
       >
         {isFormSelect ? null : (
-          <p className={(isSelect ? "On " : "") + "select_title"}>Select by</p>
+          <p className={(isSelect ? "On " : "") + "select_title"}>Tartiblash</p>
         )}
         {outlineStyle ? (
           <p className={(isSelect ? "On " : "") + "select_title"}>

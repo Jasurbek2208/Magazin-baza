@@ -34,7 +34,7 @@ export async function addStoreHistory(data, narxi = "", location) {
         qanchaSotibOlindi: data.soni,
         narxi,
         mahsulotNomi: data.mahsulotNomi,
-        qaysiKorxonadanYokiShaxsdan: data.qaysiKorxonagaSotildi,
+        qaysiKorxonadanYokiShaxsdan: data.qaysiKorxonadanSotibOlindi,
         kimTomonidan: localStorage.getItem("lastRol"),
       })
     : (historyData = {

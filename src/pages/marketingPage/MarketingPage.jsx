@@ -49,6 +49,14 @@ export default function MarketingPage() {
             navLink="/mahsulot-sotib-olish"
           />
         ) : null}
+
+        {userPosit.includes("Boss") || userPosit.includes("Bosh menejer") ? (
+          <BossCard
+            title="Mahsulot qo'shish"
+            id="qo'shish"
+            navLink="/mahsulot-omborga-qoshish"
+          />
+        ) : null}
       </div>
     </StyledMarketing>
   );

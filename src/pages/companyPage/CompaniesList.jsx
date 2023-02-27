@@ -78,7 +78,7 @@ export default function CompaniesList() {
                 sheet={isCompany ? "partner companies" : "partner persons"}
                 currentTableRef={tableRef.current}
               >
-                <Button content="Export excel" width="100%" customize={true} />
+                <Button content="Excel yuklash" width="100%" customize={true} />
               </DownloadTableExcel>
             </li>
             <li>
@@ -93,11 +93,11 @@ export default function CompaniesList() {
                 onClick={() => setIsCompany((p) => !p)}
                 content={isCompany ? "Kompaniya" : "Shaxs"}
                 customize
-                width="140px"
+                width="130px"
               />
             </li>
             <li>
-              <Input placeholder="Search..." onChange={searchPartners} />
+              <Input placeholder="Qidiruv..." onChange={searchPartners} />
             </li>
           </ul>
         </div>

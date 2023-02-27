@@ -18,7 +18,6 @@ export default function Login() {
   const [isClicked, setIsClicked] = useState(false);
   const [disbl, setDisbl] = useState(false);
   const [error, setError] = useState(false);
-  const [user, setUser] = useState();
   const {
     register,
     handleSubmit,
@@ -29,15 +28,16 @@ export default function Login() {
 
   const userLogin = (data) => {
     setDisbl(true);
+
     try {
       signInWithEmailAndPassword(auth, data.email, data.password)
         .then((userCredential) => {
-          setUser(userCredential?.user);
           localStorage.setItem("TOKEN", userCredential?.user?.uid);
           dispatch({ type: "LOG_IN" });
         })
         .catch(() => setError(true));
-    } catch {
+    } catch (error) {
+      console.log(error);
     } finally {
       setDisbl(false);
     }
@@ -48,7 +48,6 @@ export default function Login() {
     if (e.target.className.includes("clicked")) {
       e.target.textContent = "G";
       e.target.classList.remove("clicked");
-      
     } else if (e.target.type === "button") {
       e.target.innerHTML = `<span>G:</span> jasurbek@test.com <br /> <span>22Jasurbek08</span>`;
       e.target.classList.add("clicked");
@@ -61,7 +60,6 @@ export default function Login() {
         <h1>LOGIN</h1>
         <form onSubmit={handleSubmit(userLogin)} className="form__wrapper">
           <Input
-            onChange={() => setError(false)}
             className={errors?.email?.message || error ? "borderError" : ""}
             label="Email"
             type="text"
@@ -73,6 +71,7 @@ export default function Login() {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   message: "invalid email address",
                 },
+                onChange: () => setError(false),
               }),
             }}
           />
@@ -88,6 +87,7 @@ export default function Login() {
             option={{
               ...register("password", {
                 required: "password required",
+                onChange: () => setError(false),
                 minLength: { value: 6, message: "minimum lenght 6" },
                 maxLength: { value: 16, message: "maximum lenght 16" },
               }),

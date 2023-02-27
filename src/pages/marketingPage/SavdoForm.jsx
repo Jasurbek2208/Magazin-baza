@@ -18,6 +18,7 @@ import Button from "../../components/button/Button";
 // Custom Hooks
 import { addStoreHistory } from "../../customHooks/useAddStoreHistory";
 import numSort from "../../customHooks/useNumberSortForMoney";
+import { getStoreHistory } from "../../customHooks/useGetStoreHistory";
 
 export default function SavdoForm() {
   const location = useLocation().pathname;
@@ -27,7 +28,11 @@ export default function SavdoForm() {
     : TabTitle("Mahsulot-Sotib-Olish | Magazin Baza");
   //
   const [disbl, setDisbl] = useState(false);
-  const [error, setError] = useState({ nomi: false, soni: false });
+  const [error, setError] = useState({
+    nomi: false,
+    soni: false,
+    korxonaNomi: false,
+  });
 
   const [products, setProducts] = useState();
   const [companies, setCompanies] = useState();
@@ -63,15 +68,31 @@ export default function SavdoForm() {
     setDisbl(true);
     setMahsulotName((p) => ({ ...p, mahsulotNomi: data.mahsulotNomi }));
 
-    let g = data.soni.split("").filter((i) => Number(i));
+    let g = data.soni
+      .split("")
+      .filter(
+        (i) =>
+          String(i) === "0" ||
+          String(i) === "1" ||
+          String(i) === "2" ||
+          String(i) === "3" ||
+          String(i) === "4" ||
+          String(i) === "5" ||
+          String(i) === "6" ||
+          String(i) === "7" ||
+          String(i) === "8" ||
+          String(i) === "9"
+      );
     data.soni = g.join("");
 
     let newData = products;
     let isNomiError = true;
+    let isKorxonaNomiError = true;
     let isSoniError = false;
     let narxi = "0";
     data.mahsulotNomi = isSelect;
     data.qaysiKorxonagaSotildi = isCompanySelect;
+    data.qaysiKorxonadanSotibOlindi = isCompanySelect;
 
     newData?.map((i) => {
       if (i.mahsulotNomi === isSelect) {
@@ -90,10 +111,18 @@ export default function SavdoForm() {
         }
       }
     });
+
+    companies?.map((i) => {
+      if (i.name === isCompanySelect) {
+        isKorxonaNomiError = false;
+      }
+    });
+
     if (isNomiError) setError((p) => ({ ...p, nomi: true }));
     if (isSoniError) setError((p) => ({ ...p, soni: true }));
+    if (isKorxonaNomiError) setError((p) => ({ ...p, korxonaNomi: true }));
 
-    if (!isNomiError && !isSoniError) {
+    if (!isNomiError && !isSoniError && !isKorxonaNomiError) {
       try {
         addStoreHistory(data, narxi, location);
         await setDoc(doc(db, "storage2", "RQVXHDw3ev7t7N37HU1M"), {
@@ -103,8 +132,18 @@ export default function SavdoForm() {
         setIsSelect("");
         setIsCompanySelect("");
         setNumValue("");
-        data = { mahsulotNomi: "", soni: "", qaysiKorxonagaSotildi: "" };
-        reset({ mahsulotNomi: "", soni: "", qaysiKorxonagaSotildi: "" });
+        data = {
+          mahsulotNomi: "",
+          soni: "",
+          qaysiKorxonagaSotildi: "",
+          qaysiKorxonadanSotibOlindi: "",
+        };
+        reset({
+          mahsulotNomi: "",
+          soni: "",
+          qaysiKorxonagaSotildi: "",
+          qaysiKorxonadanSotibOlindi: "",
+        });
         setMahsulotName({
           mahsulotNomi: "",
           soni: "",
@@ -122,8 +161,9 @@ export default function SavdoForm() {
               "Mahsulot sotib olishda xatolik yoki internet o'chiq !"
             );
       } finally {
-        setDisbl(false);
         localStorage.removeItem("storeHistory");
+        getStoreHistory();
+        setDisbl(false);
       }
     }
   }
@@ -280,6 +320,10 @@ export default function SavdoForm() {
               <Input
                 value={isCompanySelect}
                 errors={errors}
+                error={{
+                  error: error?.korxonaNomi,
+                  errName: `Omborda bunday korxona yoki shaxs ro'yxatdan o'tilmagan !`,
+                }}
                 errName="qaysiKorxonagaSotildi"
                 placeholder="Qaysi korxonaga sotishingizni kiriting"
                 label="Qaysi korxonaga sotmoqchsiz ? *"
@@ -298,10 +342,14 @@ export default function SavdoForm() {
                 value={isCompanySelect}
                 errors={errors}
                 errName="qaysiKorxonadanSotibOlindi"
+                error={{
+                  error: error?.korxonaNomi,
+                  errName: `Omborda bunday korxona yoki shaxs ro'yxatdan o'tilmagan !`,
+                }}
                 placeholder="Qaysi korxonadan olishingizni kiriting"
                 label="Qaysi korxonadan sotib olmoqchsiz ? *"
                 option={{
-                  ...register("qaysiKorxonagaSotildi", {
+                  ...register("qaysiKorxonadanSotibOlindi", {
                     required: "Qaysi korxonadan sotib olishingizni kiriting !",
                     onChange: (e) => {
                       searchCompanies(e);

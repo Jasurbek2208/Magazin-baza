@@ -12,7 +12,7 @@ export default function Navbar() {
       <div className="container">
         <div className="user_icon"></div>
         <Button
-          content="LogOut"
+          content="Chiqish"
           onClick={() => dispatch({ type: "LOG_OUT" })}
         />
       </div>

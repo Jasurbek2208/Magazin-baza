@@ -92,7 +92,7 @@ export default function StoragePage() {
                 sheet="products"
                 currentTableRef={tableRef.current}
               >
-                <Button content="Export excel" width="100%" customize={true} />
+                <Button content="Excel yuklash" width="100%" customize={true} />
               </DownloadTableExcel>
             </li>
             <li>
@@ -112,7 +112,7 @@ export default function StoragePage() {
               />
             </li>
             <li>
-              <Input placeholder="Search..." onChange={searchProducts} />
+              <Input placeholder="Qidiruv..." onChange={searchProducts} />
             </li>
           </ul>
         </div>
