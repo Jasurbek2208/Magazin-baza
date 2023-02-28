@@ -11,9 +11,17 @@ import { db } from "../../firebase";
 import Button from "../../components/button/Button";
 import Select from "../../components/select/Select";
 import Input from "../../components/input/Input";
+import CurrentModal from "./CurrentModal";
 
 export default function CompaniesList() {
   TabTitle("Xaridorlar ro'yxati | Magazin Baza");
+
+  // Admins's rol state
+  const [userPosit, setUserPosit] = useState([""]);
+
+  // For info Modal
+  const [currentModalIsOpen, setCurrentModalIsOpen] = useState(false);
+  const [currentPartner, setCurrentPartner] = useState();
 
   let tableNum = 1;
   const [isCompany, setIsCompany] = useState(true);
@@ -28,6 +36,14 @@ export default function CompaniesList() {
     onSnapshot(doc(db, "storage2", "nDLTOuF4yuVFKBhwmCRC"), (doc) => {
       setPartners(doc?.data()?.companies);
       setFilteredData(doc?.data()?.companies);
+    });
+
+    onSnapshot(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), (doc) => {
+      doc?.data()?.admins.map((currUser) => {
+        if (localStorage.getItem("TOKEN") === currUser.accessToken) {
+          setUserPosit(currUser.rol);
+        }
+      });
     });
   }, []);
 
@@ -61,6 +77,15 @@ export default function CompaniesList() {
 
       setFilteredData(curData);
     }
+  }
+
+  // Checking admin position
+  function positionCheck(i) {
+    if (userPosit.includes("Boss") || userPosit.includes("Bosh menejeer")) {
+      setCurrentPartner(i);
+      return true;
+    }
+    return false;
   }
 
   return (
@@ -124,7 +149,12 @@ export default function CompaniesList() {
               <tbody>
                 {filteredData?.map((i, idx) =>
                   i.companyBoss ? (
-                    <tr key={i.name + idx}>
+                    <tr
+                      key={i.name + idx}
+                      onClick={() =>
+                        positionCheck(i) ? setCurrentModalIsOpen(true) : null
+                      }
+                    >
                       <td>{tableNum++}</td>
                       <td>{i.name}</td>
                       <td>{i.companyBoss}</td>
@@ -151,7 +181,12 @@ export default function CompaniesList() {
               <tbody>
                 {filteredData?.map((i, idx) =>
                   !i.companyBoss ? (
-                    <tr key={i.name + idx}>
+                    <tr
+                      key={i.name + idx}
+                      onClick={() =>
+                        positionCheck(i) ? setCurrentModalIsOpen(true) : null
+                      }
+                    >
                       <td>{tableNum++}</td>
                       <td>{i.name}</td>
                       <td>{i.phoneNumber}</td>
@@ -166,6 +201,8 @@ export default function CompaniesList() {
           )}
         </main>
       </div>
+
+      {currentModalIsOpen && <CurrentModal partners={partners} currentPartner={currentPartner} isClose={setCurrentModalIsOpen} />}
     </StyledStorage>
   );
 }

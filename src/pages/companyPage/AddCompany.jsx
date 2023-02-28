@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { TabTitle } from "../../utils/Utils";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { v4 } from "uuid";
 import { StyledSavdoForm } from "../../assets/style/formStyles";
 
 // Firebase
@@ -20,7 +21,7 @@ export default function AddCompany() {
   const navigate = useNavigate();
 
   const [disbl, setDisbl] = useState(false);
-  
+
   const [genre, setGenre] = useState("");
   const [errorSpan, setErrorSpan] = useState("");
 
@@ -56,7 +57,7 @@ export default function AddCompany() {
   async function handleSubmit(e, data) {
     e.preventDefault();
 
-    if (!personData.genre) {
+    if (data.genre && !personData.genre) {
       setErrorSpan(true);
       return;
     }
@@ -65,7 +66,7 @@ export default function AddCompany() {
 
     try {
       await setDoc(doc(db, "storage2", "nDLTOuF4yuVFKBhwmCRC"), {
-        companies: [...oldDatas, data],
+        companies: [...oldDatas, { ...data, id: v4() }],
       });
       toast.success("Xaridor muvafaqqiyatli qo'shildi");
 
@@ -267,7 +268,7 @@ export default function AddCompany() {
             <div className="input__wrapper">
               <Select
                 label="Jinsi"
-                list={["Erkak", "Ayol"]}
+                list={["erkak", "ayol"]}
                 sortData={setGenre}
                 outlineStyle
                 isFormSelect

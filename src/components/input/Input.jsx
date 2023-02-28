@@ -5,7 +5,7 @@ import Loading from "../loading/Loading";
 
 export default function Input({
   type = "text",
-  require = true,
+  require = false,
   placeholder,
   label,
   option,
@@ -108,7 +108,7 @@ export default function Input({
                 className + (error?.error ? " borderError input" : " input")
               }
               type={type}
-              // required={require}
+              required={require}
               minLength={minLength || 0}
               name={label}
               value={value}

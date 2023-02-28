@@ -10,7 +10,7 @@ export default function PagesLayout() {
   const location = useLocation().pathname;
 
   return (
-    <div style={{ padding: "100px 0px" }}>
+    <div style={{ padding: "100px 0px 50px" }}>
       <Navbar />
       {location === "/home" ? null : (
         <Button
