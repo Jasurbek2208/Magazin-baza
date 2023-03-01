@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TabTitle } from "../../utils/Utils";
 import { toast } from "react-toastify";
 import styled from "styled-components";
@@ -22,7 +22,7 @@ export default function CurrentModal({ partners, currentPartner, isClose }) {
 
   async function deleteCurrPartner() {
     setDisbl(true);
-    const oldDatas = partners.filter((i) => i.name !== currentPartner.name);
+    const oldDatas = partners.filter((i) => i.id !== currentPartner.id);
 
     try {
       await setDoc(doc(db, "storage2", "nDLTOuF4yuVFKBhwmCRC"), {
@@ -31,10 +31,8 @@ export default function CurrentModal({ partners, currentPartner, isClose }) {
 
       toast.success("Xaridor muvafaqqiyatli o'chirildi");
       isClose(false);
-
     } catch (error) {
       console.log(error);
-
     } finally {
       setDisbl(false);
     }
@@ -45,7 +43,9 @@ export default function CurrentModal({ partners, currentPartner, isClose }) {
     const oldDatas = [];
 
     partners.forEach((i) =>
-      i.id !== currentPartner.id ? oldDatas.push(i) : oldDatas.push(currEditedPartner)
+      i.id !== currentPartner.id
+        ? oldDatas.push(i)
+        : oldDatas.push(currEditedPartner)
     );
 
     try {
@@ -55,10 +55,8 @@ export default function CurrentModal({ partners, currentPartner, isClose }) {
 
       toast.success("Xaridor ma'lumoti muvafaqqiyatli o'zgartirildi");
       isClose(false);
-
     } catch (error) {
       console.log(error);
-
     } finally {
       setDisbl(false);
     }
@@ -67,6 +65,10 @@ export default function CurrentModal({ partners, currentPartner, isClose }) {
   function valueOnChanged(name, value) {
     setCurrEditedPartner((p) => ({ ...p, [name]: value }));
   }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <StyledCurrentModal>
@@ -166,7 +168,7 @@ export default function CurrentModal({ partners, currentPartner, isClose }) {
             <h1>Hamkor Tadbirkor shaxs</h1>
             <div className="info__wrapper">
               <div className={"info" + (isEdited ? " edited" : "")}>
-                <h5>ismi:</h5>
+                <h5>ism:</h5>
                 {!isEdited ? (
                   <p className={"information" + (isEdited ? " edited" : "")}>
                     {currentPartner.name}
@@ -181,7 +183,7 @@ export default function CurrentModal({ partners, currentPartner, isClose }) {
                 )}
               </div>
               <div className={"info" + (isEdited ? " edited" : "")}>
-                <h5>Jini:</h5>
+                <h5>Jinsi:</h5>
                 {!isEdited ? (
                   <p className={"information" + (isEdited ? " edited" : "")}>
                     {currentPartner.genre}
@@ -286,13 +288,12 @@ export default function CurrentModal({ partners, currentPartner, isClose }) {
   );
 }
 
-const StyledCurrentModal = styled.div`
+export const StyledCurrentModal = styled.div`
   padding: 100px 0px 50px;
-  position: fixed;
+  position: absolute;
   top: 0px;
   left: 0px;
   width: 100%;
-  height: 100%;
   background-color: #fff;
   z-index: 10;
 

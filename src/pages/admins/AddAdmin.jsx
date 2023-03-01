@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { TabTitle } from "../../utils/Utils";
+import { v4 } from "uuid";
 
 // Firebase
 import { doc, onSnapshot, setDoc } from "firebase/firestore";
@@ -15,7 +16,7 @@ import { StyledSavdoForm } from "../../assets/style/formStyles";
 // Components
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
-import { v4 } from "uuid";
+import Select from "../../components/select/Select";
 
 export default function AddAdmin() {
   TabTitle("Admin qo'shish | Magazin Baza");
@@ -37,6 +38,10 @@ export default function AddAdmin() {
   // Admins list state
   const [adminsList, setAdminsList] = useState([]);
 
+  const [genre, setGenre] = useState("");
+  const [errorSpan, setErrorSpan] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState([]);
+
   // selectedLists
   const [selectedLists, setSelectedLists] = useState([]);
 
@@ -56,11 +61,18 @@ export default function AddAdmin() {
 
   // Add ADMIN !
   async function addAdmin(data) {
+    if (!genre) {
+      setErrorSpan(true);
+      return;
+    }
+
     if (selectedLists.length < 1 || selectedLists.length > 2) {
       setError(true);
       return;
     }
-    const userID = v4();
+
+    setDisbl(true);
+
     data = { ...data, rol: selectedLists };
     setDisbl(true);
     setIsLoading(true);
@@ -73,7 +85,7 @@ export default function AddAdmin() {
         data.password
       ).then((userCredential) => {
         const user = userCredential.user;
-        data = { ...data, accessToken: user?.uid };
+        data = { ...data, phoneNumber, genre, id: v4(), accessToken: user?.uid };
       });
       if (data.accessToken) {
         await setDoc(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), {
@@ -81,6 +93,8 @@ export default function AddAdmin() {
         });
       }
       data = null;
+      setPhoneNumber("");
+      setGenre("");
       reset({ firstName: "", lastName: "", email: "", password: "", rol: [] });
       navigate("..");
       toast.success("Admin muvofaqiyatli qo'shildi !");
@@ -135,6 +149,11 @@ export default function AddAdmin() {
     return boolen;
   }
 
+  // watching genre select changing
+  useEffect(() => {
+    setErrorSpan(false);
+  }, [genre]);
+
   // get Select List
   useEffect(() => {
     getSelectList();
@@ -184,6 +203,39 @@ export default function AddAdmin() {
                 }),
               }}
             />
+          </div>
+          <div className="input__wrapper">
+            <Input
+              require
+              type="number-3"
+              value={phoneNumber}
+              pattern="[+]{1}[0-9]{3}-[0-9]{2}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
+              onChange={(e) => {
+                e.target.setCustomValidity("");
+                setPhoneNumber(e.target.value);
+                if (!e.target.validity.valid) {
+                  e.target.setCustomValidity(
+                    "Raqam noto'g'ri kiritilgan ! Misol: +998-97-105-05-05"
+                  );
+                }
+              }}
+              placeholder="+998-97-105-05-05"
+              label="Telefon raqam"
+            />
+          </div>
+          <div className="input__wrapper">
+            <Select
+              label="Jinsi"
+              list={["erkak", "ayol"]}
+              sortData={setGenre}
+              outlineStyle
+              isFormSelect
+            />
+            {errorSpan && !genre ? (
+              <span className="errrorName genre-error-message">
+                Jinsingizni tanlamadingiz !
+              </span>
+            ) : null}
           </div>
           <div className="input__wrapper">
             <Input

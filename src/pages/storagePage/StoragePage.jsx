@@ -198,7 +198,15 @@ export const StyledStorage = styled.div`
             text-align: center;
             min-width: 60px;
           }
+
+          &.none {
+            display: none !important;
+          }
         }
+      }
+
+      &.none {
+        display: none;
       }
     }
   }

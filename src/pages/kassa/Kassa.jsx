@@ -33,33 +33,35 @@ export default function Kassa() {
 
   return (
     <StyledKassa>
-      <div className="statistics-type__wrapper">
-        <h1>Harajatlar tarixi</h1>
-        <div className="statistics-types">
-          {staticsArr.map((currStatics) => (
-            <div key={currStatics.history} className="btn-wrapper">
-              <Button
-                onClick={() => {
-                  setIsStatics(currStatics.history);
-                }}
-                content={currStatics.content}
-                width="100%"
-                statistics
-                isActive={isStatics === currStatics.history ? true : false}
-              />
-            </div>
-          ))}
+      <div className="container">
+        <div className="statistics-type__wrapper">
+          <h1>Harajatlar tarixi</h1>
+          <div className="statistics-types">
+            {staticsArr.map((currStatics) => (
+              <div key={currStatics.history} className="btn-wrapper">
+                <Button
+                  onClick={() => {
+                    setIsStatics(currStatics.history);
+                  }}
+                  content={currStatics.content}
+                  width="100%"
+                  statistics
+                  isActive={isStatics === currStatics.history ? true : false}
+                />
+              </div>
+            ))}
+          </div>
         </div>
+        {isStatics ? (
+          isStatics === "storeHistory" ? (
+            <Statistics />
+          ) : isStatics === "oziqOvqatChiqim" ? (
+            <TaminotStatistics staticsType="oziqOvqatChiqim" />
+          ) : (
+            <TaminotStatistics staticsType="korxonaUchunChiqim" />
+          )
+        ) : null}
       </div>
-      {isStatics ? (
-        isStatics === "storeHistory" ? (
-          <Statistics />
-        ) : isStatics === "oziqOvqatChiqim" ? (
-          <TaminotStatistics staticsType="oziqOvqatChiqim" />
-        ) : (
-          <TaminotStatistics staticsType="korxonaUchunChiqim" />
-        )
-      ) : null}
     </StyledKassa>
   );
 }

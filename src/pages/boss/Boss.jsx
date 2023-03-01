@@ -68,7 +68,7 @@ export default function Boss() {
             />
           ) : null}
 
-          {userPosit.includes("Boss") ? (
+          {userPosit.includes("Boss") || userPosit.includes("Bosh menejer") ? (
             <>
               <BossCard
                 navLink="/company-page"
@@ -77,10 +77,10 @@ export default function Boss() {
                 img="fa-tower"
               />
               <BossCard
-                navLink="/admin-qo'shish"
-                id="kassa"
-                title="Admin qo'shish"
-                img="fa-user"
+                navLink="/admins-page"
+                id="admins"
+                title="Adminlar"
+                img="fa-users-gear"
               />
             </>
           ) : null}

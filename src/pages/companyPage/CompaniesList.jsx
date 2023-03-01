@@ -128,11 +128,9 @@ export default function CompaniesList() {
         </div>
       </nav>
       <div className="container">
-        <main className="table__wrapper">
+        <main className={"table__wrapper" + (currentModalIsOpen ? " none" : "")}>
           {filteredData?.length === 0 ? (
-            <h1 className="no-found-message">
-              {console.log("Topilmadi tablelar !!")}Topilmadi!
-            </h1>
+            <h1 className="no-found-message">Topilmadi!</h1>
           ) : null}
           {isCompany ? (
             <table ref={tableRef}>
@@ -158,8 +156,8 @@ export default function CompaniesList() {
                       <td>{tableNum++}</td>
                       <td>{i.name}</td>
                       <td>{i.companyBoss}</td>
-                      <td>{i.phoneNumber}</td>
-                      <td>{i.additionalPhoneNumber}</td>
+                      <td>{i.phoneNumber.split("+").join("")}</td>
+                      <td>{i.additionalPhoneNumber.split("+").join("")}</td>
                       <td>{i.address}</td>
                     </tr>
                   ) : null
@@ -189,7 +187,7 @@ export default function CompaniesList() {
                     >
                       <td>{tableNum++}</td>
                       <td>{i.name}</td>
-                      <td>{i.phoneNumber}</td>
+                      <td>{i.phoneNumber.split("+").join("")}</td>
                       <td>{i.birthday}</td>
                       <td>{i.genre}</td>
                       <td>{i.address}</td>
@@ -202,7 +200,13 @@ export default function CompaniesList() {
         </main>
       </div>
 
-      {currentModalIsOpen && <CurrentModal partners={partners} currentPartner={currentPartner} isClose={setCurrentModalIsOpen} />}
+      {currentModalIsOpen && (
+        <CurrentModal
+          partners={partners}
+          currentPartner={currentPartner}
+          isClose={setCurrentModalIsOpen}
+        />
+      )}
     </StyledStorage>
   );
 }
