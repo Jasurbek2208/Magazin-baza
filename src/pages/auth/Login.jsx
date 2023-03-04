@@ -57,7 +57,7 @@ export default function Login() {
   return (
     <StyledLogin>
       <main className="login__wrapper">
-        <h1>LOGIN</h1>
+        <h1>KIRISH</h1>
         <form onSubmit={handleSubmit(userLogin)} className="form__wrapper">
           <Input
             className={errors?.email?.message || error ? "borderError" : ""}
@@ -66,10 +66,10 @@ export default function Login() {
             placeholder="Email"
             option={{
               ...register("email", {
-                required: "email required",
+                required: "elektron pochta kiritilmadi",
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "invalid email address",
+                  message: "elektron pochtada xatolik",
                 },
                 onChange: () => setError(false),
               }),
@@ -86,23 +86,23 @@ export default function Login() {
             placeholder="Password"
             option={{
               ...register("password", {
-                required: "password required",
+                required: "parol kiritilmadi",
                 onChange: () => setError(false),
-                minLength: { value: 6, message: "minimum lenght 6" },
-                maxLength: { value: 16, message: "maximum lenght 16" },
+                minLength: { value: 6, message: "minimal uzunlik 6ta belgi" },
+                maxLength: { value: 16, message: "maksimal uzunlik 16ta belgi" },
               }),
             }}
           />
           {errors.password && (
             <span className="error">{errors.password.message}</span>
           )}
-          <Button disbl={disbl} type="submit" content="Login" />
+          <Button disbl={disbl} type="submit" content="Kirish" />
           {error && (
             <span
               className="error"
               style={{ textAlign: "center", fontWeight: 600 }}
             >
-              invalid login or password !
+              Elektron pochta yoki parol noto'g'ri !
             </span>
           )}
         </form>

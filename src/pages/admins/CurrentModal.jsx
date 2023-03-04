@@ -1,36 +1,72 @@
 import React, { useEffect, useState } from "react";
-import { TabTitle } from "../../utils/Utils";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { TabTitle } from "../../utils/Utils";
+
+// Style
 import { StyledCurrentModal } from "../companyPage/CurrentModal";
 
 // Firebase
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
+import { auth } from "../../firebase";
 import { db } from "../../firebase";
 
 // Components
-import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
+import Button from "../../components/button/Button";
+import Select from "../../components/select/Select";
 
 export default function CurrentModal({ admins, currentAdmin, isClose }) {
   TabTitle("Xaridor ma'lumoti | Magazin Baza");
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
   const [disbl, setDisbl] = useState(false);
+  const [error, setError] = useState(false);
   const [isEdited, setIsEdited] = useState(false);
 
   // for edit current partner
   const [currEditedPartner, setCurrEditedPartner] = useState(currentAdmin);
+  const [genre, setGenre] = useState(currentAdmin.genre);
 
   async function deleteCurrPartner() {
-    setDisbl(true);
+    // setDisbl(true);
     const oldDatas = admins.filter((i) => i.id !== currentAdmin.id);
 
     try {
-      await setDoc(doc(db, "storage2", "nDLTOuF4yuVFKBhwmCRC"), {
-        companies: oldDatas,
-      });
+      // await setDoc(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), {
+      //   admins: oldDatas,
+      // });
 
-      toast.success("Xaridor muvafaqqiyatli o'chirildi");
-      isClose(false);
+      signInWithEmailAndPassword(
+        auth,
+        currentAdmin.email,
+        currentAdmin.password
+      )
+        .then((userCredential) => {
+          console.log(userCredential.user);
+          // userCredential.user
+          //   .delete()
+          //   .then(() => {
+          //     console.log("User account deleted successfully");
+          //   })
+          //   .catch((error) => {
+          //     console.error("Error deleting user account:", error);
+          //   });
+        })
+        .catch(() => setError(true));
+
+      // toast.success("Xaridor muvafaqqiyatli o'chirildi");
+      // isClose(false);
     } catch (error) {
       console.log(error);
     } finally {
@@ -38,9 +74,45 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
     }
   }
 
+  async function editAccount() {
+    // Delete edited accaunt
+    await signInWithEmailAndPassword(
+      auth,
+      currentAdmin.email,
+      currentAdmin.password
+    )
+      .then((userCredential) => {
+        console.log(userCredential.user);
+        userCredential.user
+          .delete()
+          .then(() => {
+            console.log("User account deleted successfully");
+          })
+          .catch((error) => {
+            console.error("Error deleting user account:", error);
+          });
+      })
+      .catch(() => setError(true));
+
+    // Register new accaunt
+    await createUserWithEmailAndPassword(
+      auth,
+      currEditedPartner.email,
+      currEditedPartner.password
+    )
+      .then((userCredential) => {
+        currEditedPartner.accessToken = userCredential.user.uid;
+      })
+      .catch(() => setError(true));
+  }
+
   async function saveEditedPartner() {
     setDisbl(true);
     const oldDatas = [];
+
+    if (currentAdmin.email !== currEditedPartner.email) {
+      await editAccount();
+    }
 
     admins.forEach((i) =>
       i.id !== currentAdmin.id
@@ -49,8 +121,8 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
     );
 
     try {
-      await setDoc(doc(db, "storage2", "nDLTOuF4yuVFKBhwmCRC"), {
-        companies: oldDatas,
+      await setDoc(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), {
+        admins: oldDatas,
       });
 
       toast.success("Xaridor ma'lumoti muvafaqqiyatli o'zgartirildi");
@@ -67,6 +139,10 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
   }
 
   useEffect(() => {
+    valueOnChanged("genre", genre);
+  }, [genre]);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
@@ -74,7 +150,10 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
     <StyledCurrentModal>
       <div className="container">
         <h1>Admin</h1>
-        <div className="info__wrapper">
+        <form
+          onSubmit={handleSubmit(saveEditedPartner)}
+          className="info__wrapper"
+        >
           <div className={"info" + (isEdited ? " edited" : "")}>
             <h5>Ism:</h5>
             {!isEdited ? (
@@ -84,8 +163,25 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
             ) : (
               <div className="input__wrapper">
                 <Input
-                  value={currEditedPartner.firstName}
-                  onChange={(e) => valueOnChanged("firstName", e.target.value)}
+                  placeholder="ism kiriting"
+                  errors={errors}
+                  error={{
+                    error: errors?.firstName?.message ? true : false,
+                    errName: errors?.firstName?.message,
+                  }}
+                  option={{
+                    ...register("firstName", {
+                      value: currEditedPartner.firstName,
+                      required: "ism kiritilmadi !",
+                      minLength: {
+                        value: 3,
+                        message: "bu darajada qisqa ism bo'lmaydi !",
+                      },
+                      onChange: (e) => {
+                        valueOnChanged("firstName", e.target.value);
+                      },
+                    }),
+                  }}
                 />
               </div>
             )}
@@ -99,8 +195,25 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
             ) : (
               <div className="input__wrapper">
                 <Input
-                  value={currEditedPartner.lastName}
-                  onChange={(e) => valueOnChanged("lastName", e.target.value)}
+                  placeholder="familiya kiriting"
+                  errors={errors}
+                  error={{
+                    error: errors?.lastName?.message ? true : false,
+                    errName: errors?.lastName?.message,
+                  }}
+                  option={{
+                    ...register("lastName", {
+                      value: currEditedPartner.lastName,
+                      required: "familiya kiritilmadi !",
+                      minLength: {
+                        value: 3,
+                        message: "bu darajada qisqa familiya bo'lmaydi !",
+                      },
+                      onChange: (e) => {
+                        valueOnChanged("lastName", e.target.value);
+                      },
+                    }),
+                  }}
                 />
               </div>
             )}
@@ -113,9 +226,11 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
               </p>
             ) : (
               <div className="input__wrapper">
-                <Input
-                  value={currEditedPartner.genre}
-                  onChange={(e) => valueOnChanged("genre", e.target.value)}
+                <Select
+                  list={["erkak", "ayol"]}
+                  sortData={setGenre}
+                  selected={genre}
+                  isFormSelect
                 />
               </div>
             )}
@@ -128,9 +243,85 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
               </p>
             ) : (
               <div className="input__wrapper">
-                <Input
+                {/* <Input
+                  require
+                  type="email"
                   value={currEditedPartner.email}
-                  onChange={(e) => valueOnChanged("email", e.target.value)}
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                  onChange={(e) => {
+                    valueOnChanged("email", e.target.value);
+                    // e.target.setCustomValidity("");
+
+                    // console.log(e.target.validity);
+
+                    // if (!e.target.validity.valid) {
+                    //   e.target.setCustomValidity("Elektron pochtada xatolik.");
+                    // }
+                    // if (e.target.validity.customError) {
+                    //   e.target.setCustomValidity("Elektron pochta kiritilmadi.");
+                    // }
+                    // if (e.target.validity.typeMismatch) {
+                    //   e.target.setCustomValidity(
+                    //     "Elektron pochta noto'g'ri kiritilgan ! Misol: misol@gmail.uz"
+                    //   );
+                    // }
+                  }}
+                /> */}
+                <Input
+                  // type="email"
+                  // value={currEditedPartner.email}
+                  placeholder="email kiriting"
+                  errors={errors}
+                  error={{
+                    error: errors?.email?.message ? true : false,
+                    errName: errors?.email?.message,
+                  }}
+                  option={{
+                    ...register("email", {
+                      value: currEditedPartner.email,
+                      required: "elektron pochta kiritilmadi !",
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                        message: "elektron pochtada xatolik",
+                      },
+                      onChange: (e) => {
+                        valueOnChanged("email", e.target.value);
+                      },
+                    }),
+                  }}
+                />
+              </div>
+            )}
+          </div>
+          <div className={"info" + (isEdited ? " edited" : "")}>
+            <h5>Parol:</h5>
+            {!isEdited ? (
+              <p className={"information" + (isEdited ? " edited" : "")}>
+                {currentAdmin.password}
+              </p>
+            ) : (
+              <div className="input__wrapper">
+                <Input
+                  placeholder="parolni kiriting"
+                  errors={errors}
+                  error={{
+                    error: errors?.password?.message ? true : false,
+                    errName: errors?.password?.message,
+                  }}
+                  option={{
+                    ...register("password", {
+                      value: currEditedPartner.password,
+                      required: "parol kiritilmadi !",
+                      minLength: { value: 6, message: "minimal uzunlik 6ta belgi" },
+                      maxLength: {
+                        value: 16,
+                        message: "maxsimal uzunlik 16 ta belgi",
+                      },
+                      onChange: (e) => {
+                        valueOnChanged("password", e.target.value);
+                      },
+                    }),
+                  }}
                 />
               </div>
             )}
@@ -165,7 +356,7 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
           <div className={"info" + (isEdited ? " edited" : "")}>
             <h5>Lavozimi:</h5>
             <p
-              title={!isEdited ? "Lavozimni o'zgartirish mumkin emas!" : null}
+              title={isEdited ? "Lavozimni o'zgartirish mumkin emas!" : null}
               className="information"
             >
               {currentAdmin.rol.map((rol, idx) => (
@@ -176,39 +367,41 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
               ))}
             </p>
           </div>
-        </div>
 
-        <div className="actions__wrapper">
-          <div className="button__wrapper">
-            <Button
-              content={isEdited ? "Save" : "Close"}
-              width="100%"
-              disbl={disbl}
-              onClick={() => (isEdited ? saveEditedPartner() : isClose(false))}
-            />
-          </div>
+          <div className="actions__wrapper">
+            <div className="button__wrapper">
+              <Button
+                type={isEdited ? "submit" : "button"}
+                content={isEdited ? "Save" : "Close"}
+                width="100%"
+                disbl={disbl}
+                onClick={() => (isEdited ? null : isClose(false))}
+              />
+            </div>
 
-          <div className="button__wrapper">
-            <Button
-              content={isEdited ? "Cencel" : "Edit"}
-              width="100%"
-              disbl={disbl}
-              onClick={() => {
-                setIsEdited((p) => !p);
-                setCurrEditedPartner(currentAdmin);
-              }}
-            />
-          </div>
+            <div className="button__wrapper">
+              <Button
+                content={isEdited ? "Cencel" : "Edit"}
+                width="100%"
+                disbl={disbl}
+                onClick={() => {
+                  setIsEdited((p) => !p);
+                  setCurrEditedPartner(currentAdmin);
+                  reset();
+                }}
+              />
+            </div>
 
-          <div className="button__wrapper">
-            <Button
-              content="Delete"
-              width="100%"
-              disbl={disbl || isEdited}
-              onClick={deleteCurrPartner}
-            />
+            <div className="button__wrapper">
+              <Button
+                content="Delete"
+                width="100%"
+                disbl={disbl || isEdited}
+                onClick={deleteCurrPartner}
+              />
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </StyledCurrentModal>
   );

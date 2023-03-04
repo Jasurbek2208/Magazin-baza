@@ -312,7 +312,7 @@ export const StyledCurrentModal = styled.div`
     overflow-x: auto;
 
     .info {
-      padding: 10px 0px 18.2px;
+      padding: 10px 0px 22.2px;
       min-width: 480px;
 
       display: flex;
@@ -325,7 +325,7 @@ export const StyledCurrentModal = styled.div`
       }
 
       &.edited {
-        padding: 0px 0px 10px;
+        padding: 0px 0px 22.2px;
       }
 
       h5,

@@ -4,6 +4,7 @@ import styled from "styled-components";
 export default function Select({
   label,
   list,
+  selected = null,
   sortData,
   isFormSelect = false,
   outlineStyle = false,
@@ -11,7 +12,11 @@ export default function Select({
   const [isOpen, setIsOpen] = useState(false);
   const [isSelect, setIsSelect] = useState(false);
   const [selectValue, setSelectValue] = useState(
-    isFormSelect && !outlineStyle ? list[0] : ""
+    isFormSelect && selected
+      ? selected
+      : isFormSelect && !outlineStyle
+      ? list[0]
+      : ""
   );
 
   return (
@@ -71,9 +76,10 @@ const StyledSelect = styled.div`
 
   .select-btn {
     width: 100%;
+    min-width: 150px;
     cursor: pointer;
     position: relative;
-    padding: 10px 22px;
+    padding: 10px 0px;
     position: relative;
     color: #fff;
 
@@ -112,6 +118,7 @@ const StyledSelect = styled.div`
     .select_title,
     .selectValue {
       margin: 0px;
+      text-align: center;
     }
 
     &.outline {

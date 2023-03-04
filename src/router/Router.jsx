@@ -86,6 +86,12 @@ export default function Router() {
             <>
               <Route path="savdo" element={<MarketingPage />} />
               <Route path="mahsulot-sotish" element={<SavdoForm />} />
+            </>
+          ) : null}
+
+          {userPosit.includes("Mahsulot sotib olish bo'limi ma'suli") ? (
+            <>
+              <Route path="savdo" element={<MarketingPage />} />
               <Route path="mahsulot-sotib-olish" element={<SavdoForm />} />
             </>
           ) : null}

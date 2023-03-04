@@ -141,6 +141,9 @@ export default function StoragePage() {
               ))}
             </tbody>
           </table>
+          {!filteredData?.length > 0 ? (
+            <h1 className="no-found-message">Topilmadi!</h1>
+          ) : null}
         </main>
       </div>
     </StyledStorage>

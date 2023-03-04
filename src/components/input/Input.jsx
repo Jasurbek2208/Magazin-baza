@@ -8,7 +8,7 @@ export default function Input({
   require = false,
   placeholder,
   label,
-  option,
+  option = null,
   minLength,
   className = "",
   onChange,
@@ -108,6 +108,7 @@ export default function Input({
                 className + (error?.error ? " borderError input" : " input")
               }
               type={type}
+              pattern={pattern || null}
               required={require}
               minLength={minLength || 0}
               name={label}

@@ -149,22 +149,24 @@ export default function AdminsList() {
               </tr>
             </thead>
             <tbody>
-              {filteredData?.map((i, idx) => (
-                <tr
-                  key={i.id}
-                  onClick={() =>
-                    positionCheck(i) ? setCurrentModalIsOpen(true) : null
-                  }
-                >
-                  <td>{tableNum++}</td>
-                  <td>{i.firstName}</td>
-                  <td>{i.lastName}</td>
-                  <td>{i.genre}</td>
-                  <td>{i.phoneNumber.split("+").join("")}</td>
-                  <td>{i.email}</td>
-                  <td className="none">{i.rol.join(", ")}</td>
-                </tr>
-              ))}
+              {filteredData?.map((i) =>
+                !i.rol.includes("Boss") ? (
+                  <tr
+                    key={i.id}
+                    onClick={() =>
+                      positionCheck(i) ? setCurrentModalIsOpen(true) : null
+                    }
+                  >
+                    <td>{tableNum++}</td>
+                    <td>{i.firstName}</td>
+                    <td>{i.lastName}</td>
+                    <td>{i.genre}</td>
+                    <td>{i.phoneNumber.split("+").join("")}</td>
+                    <td>{i.email}</td>
+                    <td className="none">{i.rol.join(", ")}</td>
+                  </tr>
+                ) : null
+              )}
             </tbody>
           </table>
         </main>
