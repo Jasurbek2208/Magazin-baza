@@ -3,10 +3,14 @@ import styled from "styled-components";
 export const StyledStatistics = styled.main`
 &.statistcs__wrapper {
   margin-top: 80px;
-  
+
   .action__wrapper {
     padding: 14px 10px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+    &.openImg {
+      display: none;
+    }
 
     .top {
       display: flex;
@@ -104,6 +108,9 @@ export const StyledStatistics = styled.main`
       width: 100%;
       padding: 30px 10%;
       background-color: #3b3b3b19;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      z-index: 10;
 
       ul {
         margin: 0px;
@@ -122,27 +129,76 @@ export const StyledStatistics = styled.main`
       }
     }
 
-    .img-full {
+    .img__wrapper {
       position: absolute;
-      width: 600px;
-      transition: 300ms;
+      max-width: 100vw;
+      max-height: 100vh;
+      width: 100vw;
+      height: 100vh;
 
-      &.zoomX {
-        width: 150%;
-        cursor: grab;
-      }
+      display: grid;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      transition: 300ms;
       
       &.zoomX2 {
-        width: 300%;
-        cursor: grab;
+        align-items: left;
+        justify-content: left;
       }
+
+      .img-full {
+        width: 600px;
+        cursor: zoom-in;
+
+        &.zoomX {
+          width: 100%;
+        }
+        
+        &.zoomX2 {
+          width: 200%;
+          cursor: zoom-out;
+        }
+      }
+      
+    /* SCROLLBAR STYLE */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.2); 
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #333; 
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555; 
+    }
     }
   }
 
-  @media (max-width: 700px) {  
+  @media (max-width: 600px) {  
     .image-full-size {
-      .img-full {
-        width: 90%;
+      .img__wrapper {
+        .img-full {
+          width: 100%;
+          
+          &.zoomX {
+            width: 200%;
+          }
+          
+          &.zoomX2 {
+            width: 320%;
+            cursor: zoom-out;
+          }
+        }
       }
     } 
   }

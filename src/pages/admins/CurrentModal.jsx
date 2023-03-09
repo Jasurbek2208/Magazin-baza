@@ -312,7 +312,10 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
                     ...register("password", {
                       value: currEditedPartner.password,
                       required: "parol kiritilmadi !",
-                      minLength: { value: 6, message: "minimal uzunlik 6ta belgi" },
+                      minLength: {
+                        value: 6,
+                        message: "minimal uzunlik 6ta belgi",
+                      },
                       maxLength: {
                         value: 16,
                         message: "maxsimal uzunlik 16 ta belgi",

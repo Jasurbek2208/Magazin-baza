@@ -193,7 +193,7 @@ export const StyledStorage = styled.div`
         td {
           padding: 12px 36px 12px 10px;
           text-align: left;
-          min-width: max-content;
+          min-width: 200px;
           border: 1px solid silver;
 
           &:first-of-type {
