@@ -40,4 +40,23 @@ export const GlobalStyle = createGlobalStyle`
     ::-webkit-scrollbar-thumb:hover {
         background: #555; 
     }
+
+    /* ANIMATIONS  */
+    @keyframes modalOpening {
+        0% {
+        left: -1000px;
+        }
+        100% {
+        left: 0;
+        }
+    }
+
+    @keyframes modalClosing {
+        0% {
+        left: 0;
+        }
+        100% {
+        left: -1000px;
+        }
+    }
 `

@@ -362,4 +362,12 @@ export const StyledCurrentModal = styled.div`
       width: 100%;
     }
   }
+
+  @media (max-width: 490px) {
+  .actions__wrapper {
+    .button__wrapper {
+      max-width: 100%;
+    }
+  }
+  }
 `;

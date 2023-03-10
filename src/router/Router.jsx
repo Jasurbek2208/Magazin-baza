@@ -39,6 +39,7 @@ export default function Router() {
 
   // Admins's rol state
   const [userPosit, setUserPosit] = useState([""]);
+  const [currentuser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     if (location !== "/home") {
@@ -49,10 +50,10 @@ export default function Router() {
   useEffect(() => {
     if (isAuth) {
       localNum += 1;
-      localStorage.removeItem("storeHistory");
-      localStorage.removeItem("oziqOvqatChiqim");
-      localStorage.removeItem("korxonaUchunChiqim");
-      if (localNum === 1) getStoreHistory();
+      // localStorage.removeItem("storeHistory");
+      // localStorage.removeItem("oziqOvqatChiqim");
+      // localStorage.removeItem("korxonaUchunChiqim");
+      // if (localNum === 1) getStoreHistory();
       userPosition();
     }
   }, [isAuth]);
@@ -62,6 +63,7 @@ export default function Router() {
     onSnapshot(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), (doc) => {
       doc?.data()?.admins.map((currUser) => {
         if (localStorage.getItem("TOKEN") === currUser.accessToken) {
+          setCurrentUser(currUser);
           setUserPosit(currUser.rol);
           localStorage.setItem(
             "lastRol",
@@ -75,7 +77,7 @@ export default function Router() {
   if (isAuth) {
     return (
       <Routes>
-        <Route element={<PagesLayout />}>
+        <Route element={<PagesLayout currentuser={currentuser} />}>
           <Route path="home" element={<Home />} />
 
           {userPosit.includes("Ombor kuzatuvchisi") ? (
