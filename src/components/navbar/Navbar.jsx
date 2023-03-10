@@ -192,6 +192,9 @@ const StyledNavbar = styled.nav`
         gap: 22px;
 
         li {
+          width: 270px;
+          max-width: 270px;
+
           p {
             margin: 0px;
             font-weight: 700;

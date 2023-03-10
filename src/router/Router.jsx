@@ -50,10 +50,10 @@ export default function Router() {
   useEffect(() => {
     if (isAuth) {
       localNum += 1;
-      // localStorage.removeItem("storeHistory");
-      // localStorage.removeItem("oziqOvqatChiqim");
-      // localStorage.removeItem("korxonaUchunChiqim");
-      // if (localNum === 1) getStoreHistory();
+      localStorage.removeItem("storeHistory");
+      localStorage.removeItem("oziqOvqatChiqim");
+      localStorage.removeItem("korxonaUchunChiqim");
+      if (localNum === 1) getStoreHistory();
       userPosition();
     }
   }, [isAuth]);
