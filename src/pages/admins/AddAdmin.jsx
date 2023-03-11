@@ -239,8 +239,8 @@ export default function AddAdmin() {
           </div>
           <div className="input__wrapper">
             <Input
-              label="Email"
-              placeholder="email kiriting"
+              label="Elektron pochta"
+              placeholder="elektron pochta kiriting"
               errors={errors}
               error={{
                 error: errors?.email?.message ? true : false,
@@ -248,10 +248,10 @@ export default function AddAdmin() {
               }}
               option={{
                 ...register("email", {
-                  required: "email kiritilmadi !",
+                  required: "elektron pochta kiritilmadi !",
                   pattern: {
                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "invalid email address",
+                    message: "elektron pochtada xatolik",
                   },
                 }),
               }}

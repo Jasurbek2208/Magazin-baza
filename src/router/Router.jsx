@@ -40,6 +40,7 @@ export default function Router() {
   // Admins's rol state
   const [userPosit, setUserPosit] = useState([""]);
   const [currentuser, setCurrentUser] = useState(null);
+  const [admins, setAdmins] = useState(null);
 
   useEffect(() => {
     if (location !== "/home") {
@@ -61,6 +62,7 @@ export default function Router() {
   //
   function userPosition() {
     onSnapshot(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), (doc) => {
+      setAdmins(doc?.data()?.admins);
       doc?.data()?.admins.map((currUser) => {
         if (localStorage.getItem("TOKEN") === currUser.accessToken) {
           setCurrentUser(currUser);
@@ -77,7 +79,7 @@ export default function Router() {
   if (isAuth) {
     return (
       <Routes>
-        <Route element={<PagesLayout currentuser={currentuser} />}>
+        <Route element={<PagesLayout currentuser={currentuser} admins={admins} />}>
           <Route path="home" element={<Home />} />
 
           {userPosit.includes("Ombor kuzatuvchisi") ? (

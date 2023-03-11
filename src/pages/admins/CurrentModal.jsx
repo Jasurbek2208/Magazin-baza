@@ -110,7 +110,7 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
     setDisbl(true);
     const oldDatas = [];
 
-    if (currentAdmin.email !== currEditedPartner.email) {
+    if (currentAdmin.email !== currEditedPartner.email || currentAdmin.password !== currEditedPartner.password) {
       await editAccount();
     }
 
@@ -244,33 +244,7 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
                 </p>
               ) : (
                 <div className="input__wrapper">
-                  {/* <Input
-                  require
-                  type="email"
-                  value={currEditedPartner.email}
-                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                  onChange={(e) => {
-                    valueOnChanged("email", e.target.value);
-                    // e.target.setCustomValidity("");
-
-                    // console.log(e.target.validity);
-
-                    // if (!e.target.validity.valid) {
-                    //   e.target.setCustomValidity("Elektron pochtada xatolik.");
-                    // }
-                    // if (e.target.validity.customError) {
-                    //   e.target.setCustomValidity("Elektron pochta kiritilmadi.");
-                    // }
-                    // if (e.target.validity.typeMismatch) {
-                    //   e.target.setCustomValidity(
-                    //     "Elektron pochta noto'g'ri kiritilgan ! Misol: misol@gmail.uz"
-                    //   );
-                    // }
-                  }}
-                /> */}
                   <Input
-                    // type="email"
-                    // value={currEditedPartner.email}
                     placeholder="email kiriting"
                     errors={errors}
                     error={{

@@ -59,4 +59,21 @@ export const GlobalStyle = createGlobalStyle`
         left: -1000px;
         }
     }
+    @keyframes modalOpeningStaticPosition {
+        0% {
+        margin-left: -1000px;
+        }
+        100% {
+        margin-left: 0;
+        }
+    }
+
+    @keyframes modalClosingStaticPosition {
+        0% {
+        margin-left: 0;
+        }
+        100% {
+        margin-left: -1000px;
+        }
+    }
 `
