@@ -27,6 +27,7 @@ export default function AddAdmin() {
     formState: { errors },
     reset,
   } = useForm();
+  
   const navigate = useNavigate();
   const [disbl, setDisbl] = useState(false);
   const [error, setError] = useState(false);
@@ -85,7 +86,7 @@ export default function AddAdmin() {
         data.password
       ).then((userCredential) => {
         const user = userCredential.user;
-        data = { ...data, phoneNumber, genre, id: v4(), accessToken: user?.uid };
+        data = { ...data, phoneNumber, avatar: "", genre, id: v4(), accessToken: user?.uid };
       });
       if (data.accessToken) {
         await setDoc(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), {

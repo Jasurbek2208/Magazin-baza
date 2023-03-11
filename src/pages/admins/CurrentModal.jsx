@@ -39,13 +39,13 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
   const [genre, setGenre] = useState(currentAdmin.genre);
 
   async function deleteCurrPartner() {
-    // setDisbl(true);
+    setDisbl(true);
     const oldDatas = admins.filter((i) => i.id !== currentAdmin.id);
 
     try {
-      // await setDoc(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), {
-      //   admins: oldDatas,
-      // });
+      await setDoc(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), {
+        admins: oldDatas,
+      });
 
       signInWithEmailAndPassword(
         auth,
@@ -53,20 +53,12 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
         currentAdmin.password
       )
         .then((userCredential) => {
-          console.log(userCredential.user);
-          // userCredential.user
-          //   .delete()
-          //   .then(() => {
-          //     console.log("User account deleted successfully");
-          //   })
-          //   .catch((error) => {
-          //     console.error("Error deleting user account:", error);
-          //   });
+          userCredential.user.delete();
         })
         .catch(() => setError(true));
 
-      // toast.success("Xaridor muvafaqqiyatli o'chirildi");
-      // isClose(false);
+      toast.success("Xaridor muvafaqqiyatli o'chirildi");
+      isClose(false);
     } catch (error) {
       console.log(error);
     } finally {
@@ -82,15 +74,7 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
       currentAdmin.password
     )
       .then((userCredential) => {
-        console.log(userCredential.user);
-        userCredential.user
-          .delete()
-          .then(() => {
-            console.log("User account deleted successfully");
-          })
-          .catch((error) => {
-            console.error("Error deleting user account:", error);
-          });
+        userCredential.user.delete();
       })
       .catch(() => setError(true));
 
@@ -110,7 +94,10 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
     setDisbl(true);
     const oldDatas = [];
 
-    if (currentAdmin.email !== currEditedPartner.email || currentAdmin.password !== currEditedPartner.password) {
+    if (
+      currentAdmin.email !== currEditedPartner.email ||
+      currentAdmin.password !== currEditedPartner.password
+    ) {
       await editAccount();
     }
 
@@ -150,10 +137,7 @@ export default function CurrentModal({ admins, currentAdmin, isClose }) {
     <StyledCurrentModal>
       <div className="container">
         <h1>Admin</h1>
-        <form
-          onSubmit={handleSubmit(saveEditedPartner)}
-          // className="info__wrapper"
-        >
+        <form onSubmit={handleSubmit(saveEditedPartner)}>
           <div className="info__wrapper">
             <div className={"info" + (isEdited ? " edited" : "")}>
               <h5>Ism:</h5>

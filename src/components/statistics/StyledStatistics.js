@@ -148,15 +148,15 @@ export const StyledStatistics = styled.main`
       }
 
       .img-full {
-        width: 600px;
+        width: 60vw;
         cursor: zoom-in;
 
         &.zoomX {
-          width: 100%;
+          width: 100vw;
         }
         
         &.zoomX2 {
-          width: 200%;
+          width: 150vw;
           cursor: zoom-out;
         }
       }

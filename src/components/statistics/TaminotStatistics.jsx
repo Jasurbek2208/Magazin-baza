@@ -29,6 +29,7 @@ export default function TaminotStatistics({ staticsType }) {
   useEffect(() => {
     const handleScroll = () => {
       if (!isZoom) {
+        console.log("kirdi !");
         setScrollY(window.scrollY);
       }
     };
@@ -42,9 +43,10 @@ export default function TaminotStatistics({ staticsType }) {
 
   useEffect(() => {
     if (!isZoom) {
+      console.log("bunisigayam kirdi !");
       window.scrollTo(0, scrollY);
     }
-  }, [isZoom, scrollY]);
+  }, [isZoom]);
 
   return (
     <StyledStatistics className="statistcs__wrapper">

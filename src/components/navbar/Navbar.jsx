@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { v4 } from "uuid";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 // Firebase
@@ -28,8 +28,8 @@ export default function Navbar({ currentuser, admins }) {
     reset,
   } = useForm();
 
-  const isAuth = useSelector((state) => state.isAuth);
   const dispatch = useDispatch();
+
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isClosingTime, setIsClosingTime] = useState(false);
   const [image, setImage] = useState("");

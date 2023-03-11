@@ -13,8 +13,10 @@ import { auth } from "../firebase";
 export default function AuthRedux({ children }) {
     const navigate = useNavigate();
     const [isAuth, setIsAuth] = useState(false);
+    const [token, setToken] = useState("");
     const defaultState = {
         isAuth,
+        token
     };
 
     const reduser = (state = defaultState, action) => {
@@ -30,7 +32,7 @@ export default function AuthRedux({ children }) {
                 return state;
             case "RESET_EMAIL":
                 editAccount(action.currentAdmin, action.currEdited);
-            // return state;
+                return state;
             default:
                 return state;
         }
@@ -44,17 +46,9 @@ export default function AuthRedux({ children }) {
             currentAdmin.password
         )
             .then((userCredential) => {
-                console.log(userCredential.user);
                 userCredential.user
                     .delete()
-                    .then(() => {
-                        console.log("User account deleted successfully");
-                    })
-                    .catch((error) => {
-                        console.error("Error deleting user account:", error);
-                    });
             })
-        // .catch(() => setError(true));
 
         // Register new accaunt
         await createUserWithEmailAndPassword(
@@ -63,9 +57,8 @@ export default function AuthRedux({ children }) {
             currEdited.password
         )
             .then((userCredential) => {
-                currEdited.accessToken = userCredential.user.uid;
+                setToken(userCredential.user.uid);
             })
-        // .catch(() => setError(true));
     }
     const store = createStore(reduser);
 
