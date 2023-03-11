@@ -35,7 +35,6 @@ export default function Navbar({ currentuser, admins }) {
   const [image, setImage] = useState("");
   const [disbl, setDisbl] = useState(false);
   const [editProfile, isEditProfile] = useState(false);
-  const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [genre, setGenre] = useState("");
   const [errorSpan, setErrorSpan] = useState("");
@@ -61,20 +60,21 @@ export default function Navbar({ currentuser, admins }) {
       return;
     }
     if (
-      (currentuser.firstName === data.firstName,
-      currentuser.lastName === data.lastName,
-      currentuser.email === data.email,
-      currentuser.password === data.password,
-      currentuser.phoneNumber === phoneNumber,
-      currentuser.genre === genre)
+      currentuser.firstName === data.firstName &&
+      currentuser.lastName === data.lastName &&
+      currentuser.email === data.email &&
+      currentuser.password === data.password &&
+      currentuser.phoneNumber === phoneNumber &&
+      currentuser.genre === genre &&
+      currentuser.avatar === image
     ) {
       isEditProfile(false);
       return;
     }
-    
+
     setDisbl(true);
     const oldDatas = [];
-    data = { ...currentuser, ...data, genre, phoneNumber };
+    data = { ...currentuser, ...data, genre, phoneNumber, avatar: image };
 
     admins.forEach((i) =>
       i.id !== currentuser.id ? oldDatas.push(i) : oldDatas.push(data)
@@ -97,13 +97,11 @@ export default function Navbar({ currentuser, admins }) {
       });
       toast.success("Profil muvafaqiyatli o'zgartirildi!");
       isEditProfile(false);
-      
     } catch (error) {
       console.log(error);
       toast.success(
         "Profil o'zgartirishda xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring!"
       );
-
     } finally {
       setDisbl(false);
     }
@@ -118,7 +116,7 @@ export default function Navbar({ currentuser, admins }) {
       currentuser?.firstName +
       "_" +
       currentuser?.lastName +
-      "_avatar" +
+      "_avatar-" +
       v4();
     const storageRef = ref(storage, urlName);
     const file = e.target.files[0];
@@ -145,15 +143,9 @@ export default function Navbar({ currentuser, admins }) {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImage(downloadURL);
           setIsLoading(false);
-          checkWatcher(true);
         });
       }
     );
-  }
-
-  // img watcher
-  function checkWatcher(isTrue = false) {
-    image || isTrue === true ? setError(false) : setError(true);
   }
 
   // form number & genre first validation
@@ -164,10 +156,13 @@ export default function Navbar({ currentuser, admins }) {
     if (!phoneNumber) {
       setPhoneNumber(currentuser?.phoneNumber);
     }
+    if (!image) {
+      setImage(currentuser?.avatar);
+    }
   }, [currentuser?.phoneNumber]);
 
   return (
-    <StyledNavbar>
+    <StyledNavbar image={image} avatar={currentuser?.avatar}>
       <div className="container">
         <div
           className="user_profile"
@@ -185,7 +180,7 @@ export default function Navbar({ currentuser, admins }) {
         <div
           className={"user-profile-modal" + (isClosingTime ? " closing" : "")}
         >
-          <div className="modal-close-btn">
+          <div className={"modal-close-btn" + (editProfile ? " off" : "")}>
             <i
               className="icon fa-solid fa-close"
               onClick={() => setIsClosingTime(true)}
@@ -233,6 +228,13 @@ export default function Navbar({ currentuser, admins }) {
           ) : (
             <div className="info-edit user-info__wrapper">
               <div className="user_profile">
+                <input
+                  title="Rasm yuklash"
+                  type="file"
+                  name="admin-avatar"
+                  id="admin-avatar"
+                  onChange={uploadImage}
+                />
                 <i className="icon fa-solid fa-user"></i>
               </div>
               <form
@@ -407,17 +409,19 @@ const StyledNavbar = styled.nav`
     height: 56px;
     border-radius: 100%;
     border: 1px solid #1e90ff;
+    background: url(${({ avatar }) => avatar}) no-repeat center center / cover;
     overflow: hidden;
 
     & > .icon {
       margin-top: 10px;
       color: #ccc;
       font-size: 50px;
+      opacity: ${({ avatar }) => (avatar ? "0" : "1")};
     }
   }
 
   .user-profile-modal {
-    padding: 22px 12px 60px;
+    padding: 18px 12px 40px;
     position: fixed;
     top: 0;
     left: 0;
@@ -451,7 +455,12 @@ const StyledNavbar = styled.nav`
 
     .modal-close-btn {
       padding: 0px 20px;
-      display: none;
+      display: flex;
+      justify-content: flex-end;
+
+      &.off {
+        display: none;
+      }
 
       & > .icon {
         width: max-content;
@@ -512,6 +521,63 @@ const StyledNavbar = styled.nav`
       }
 
       &.info-edit {
+        .user_profile {
+          cursor: pointer;
+          position: relative;
+          background: url(${({ image }) => image}) no-repeat center center /
+            cover;
+
+          & > .icon {
+            opacity: ${({ image }) => (image ? "0" : "1")} !important;
+
+            &::after {
+              pointer-events: none !important;
+            }
+          }
+
+          & > input#admin-avatar {
+            cursor: pointer;
+            position: absolute;
+            top: -35px;
+            left: 0;
+
+            width: 100%;
+            min-height: 142px;
+            z-index: 10;
+          }
+
+          &::after {
+            content: "+";
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 100%;
+            background-color: #00000036;
+
+            color: #0080ff;
+            font-size: 120px;
+            font-weight: 400;
+
+            transition: 300ms ease-in-out;
+            opacity: 0;
+          }
+
+          &:hover {
+            &::after,
+            &::before {
+              opacity: 1;
+            }
+          }
+        }
+
         .user-edit-form {
           display: flex;
           align-items: center;
@@ -548,11 +614,6 @@ const StyledNavbar = styled.nav`
   @media (max-width: 460px) {
     .user-profile-modal {
       width: 100%;
-
-      .modal-close-btn {
-        display: flex;
-        justify-content: flex-end;
-      }
 
       .close-modal {
         display: none;
