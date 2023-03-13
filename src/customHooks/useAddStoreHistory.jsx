@@ -21,6 +21,7 @@ export async function addStoreHistory(data, narxi = "", location) {
 
   location === "/mahsulot-sotish"
     ? (historyData = {
+        id: data.id,
         qachonSotildi: getNowTime(),
         qanchaSotildi: data.soni,
         narxi,
@@ -30,6 +31,7 @@ export async function addStoreHistory(data, narxi = "", location) {
       })
     : location === "/mahsulot-sotib-olish"
     ? (historyData = {
+        id: data.id,
         qachonSotibOlindi: getNowTime(),
         qanchaSotibOlindi: data.soni,
         narxi,
@@ -38,6 +40,7 @@ export async function addStoreHistory(data, narxi = "", location) {
         kimTomonidan: localStorage.getItem("lastRol"),
       })
     : (historyData = {
+        id: data.id,
         kiritilganSana: getNowTime(),
         chiqim: data.soni,
         check: data.check,

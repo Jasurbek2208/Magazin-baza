@@ -51,7 +51,7 @@ export default function TaminotForm() {
   async function addSupply(data) {
     if (!image) return;
     setDisbl(true);
-    data = { ...data, check: image };
+    data = { ...data, check: image, id: uuidV4() };
 
     try {
       addStoreHistory(data, null, location);

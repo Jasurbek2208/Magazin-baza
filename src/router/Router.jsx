@@ -28,6 +28,7 @@ import { getStoreHistory } from "../customHooks/useGetStoreHistory";
 // Firebase
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
+import { v4 } from "uuid";
 
 export default function Router() {
   const location = useLocation().pathname;
@@ -79,7 +80,9 @@ export default function Router() {
   if (isAuth) {
     return (
       <Routes>
-        <Route element={<PagesLayout currentuser={currentuser} admins={admins} />}>
+        <Route
+          element={<PagesLayout currentuser={currentuser} admins={admins} />}
+        >
           <Route path="home" element={<Home />} />
 
           {userPosit.includes("Ombor kuzatuvchisi") ? (

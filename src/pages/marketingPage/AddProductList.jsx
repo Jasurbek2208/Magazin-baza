@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useForm } from "react-hook-form";
 import { TabTitle } from "../../utils/Utils";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { v4 } from "uuid";
+
+// Style
 import { StyledSavdoForm } from "../../assets/style/formStyles";
 
 // Firebase
@@ -18,7 +21,6 @@ export default function AddProductList() {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm();
 
   // Title
@@ -68,7 +70,7 @@ export default function AddProductList() {
     if (isNomiError) {
       try {
         await setDoc(doc(db, "storage2", "RQVXHDw3ev7t7N37HU1M"), {
-          products: [...products, data],
+          products: [...products, { ...data, id: v4() }],
         });
         navigate("..");
         toast.success("Mahsulot muvofaqiyatli qo'shildi !");

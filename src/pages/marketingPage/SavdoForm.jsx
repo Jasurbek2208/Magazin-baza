@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { TabTitle } from "../../utils/Utils";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { v4 } from "uuid";
 
 // Style
 import { StyledSavdoForm } from "../../assets/style/formStyles";
@@ -17,8 +18,8 @@ import Button from "../../components/button/Button";
 
 // Custom Hooks
 import { addStoreHistory } from "../../customHooks/useAddStoreHistory";
-import numSort from "../../customHooks/useNumberSortForMoney";
 import { getStoreHistory } from "../../customHooks/useGetStoreHistory";
+import numSort from "../../customHooks/useNumberSortForMoney";
 
 export default function SavdoForm() {
   const location = useLocation().pathname;
@@ -93,6 +94,7 @@ export default function SavdoForm() {
     data.mahsulotNomi = isSelect;
     data.qaysiKorxonagaSotildi = isCompanySelect;
     data.qaysiKorxonadanSotibOlindi = isCompanySelect;
+    data.id = v4();
 
     newData?.map((i) => {
       if (i.mahsulotNomi === isSelect) {
