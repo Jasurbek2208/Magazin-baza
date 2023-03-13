@@ -5,6 +5,7 @@ export default function TaminotStatistics({ staticsType }) {
   const [isZoom, setIsZoom] = useState("");
   const [zoomX, setZoomX] = useState("");
   const [scrollY, setScrollY] = useState(0);
+  const [backClick, setBackClick] = useState(false);
 
   // image download
   // function downloadImage(imageSrc) {
@@ -70,7 +71,10 @@ export default function TaminotStatistics({ staticsType }) {
             </div>
             <div className="right">
               <img
-                onClick={() => setIsZoom(i.check)}
+                onClick={() => {
+                  setBackClick(false);
+                  setIsZoom(i.check);
+                }}
                 src={i.check}
                 alt={"check-" + idx + 1}
                 className="img"
@@ -81,8 +85,15 @@ export default function TaminotStatistics({ staticsType }) {
       ))}
 
       {isZoom ? (
-        <div className="image-full-size">
-          <nav className="full-img-navbar">
+        <div
+          className="image-full-size"
+          onClick={() =>
+            window.matchMedia("only screen and (max-width: 760px)").matches
+              ? setBackClick((p) => !p)
+              : null
+          }
+        >
+          <nav className={(backClick ? "ON " : "") + "full-img-navbar"}>
             <ul>
               {/* <li>
                 <i
@@ -101,10 +112,25 @@ export default function TaminotStatistics({ staticsType }) {
               </li>
             </ul>
           </nav>
-          <div className={(zoomX ? zoomX : "") + "img__wrapper"}>
+          <div
+            className={
+              (zoomX ? zoomX : "") + (backClick ? "ON " : "") + "img__wrapper"
+            }
+          >
             <img
               onClick={() =>
-                zoomX === "zoomX2 "
+                window.matchMedia("only screen and (max-width: 760px)").matches
+                  ? null
+                  : zoomX === "zoomX2 "
+                  ? setZoomX("")
+                  : zoomX === "zoomX "
+                  ? setZoomX("zoomX2 ")
+                  : setZoomX("zoomX ")
+              }
+              onDoubleClick={() =>
+                !window.matchMedia("only screen and (max-width: 760px)").matches
+                  ? null
+                  : zoomX === "zoomX2 "
                   ? setZoomX("")
                   : zoomX === "zoomX "
                   ? setZoomX("zoomX2 ")

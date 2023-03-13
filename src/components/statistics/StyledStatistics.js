@@ -110,7 +110,12 @@ export const StyledStatistics = styled.main`
       background-color: #3b3b3b19;
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
+      transition: 300ms ease-in-out;
       z-index: 10;
+
+      &.ON {
+        display: none;
+      }
 
       ul {
         margin: 0px;
@@ -131,16 +136,20 @@ export const StyledStatistics = styled.main`
 
     .img__wrapper {
       position: absolute;
-      max-width: 100vw;
-      max-height: 100vh;
-      width: 100vw;
-      height: 100vh;
+      max-width: 500px;
+      /* max-height: 400px; */
+      width: 100%;
+      height: 100%;
 
       display: grid;
       align-items: center;
       justify-content: center;
       overflow: auto;
       transition: 300ms;
+
+      &.ON {
+        background-color: #000;
+      }
       
       &.zoomX2 {
         align-items: left;
@@ -148,15 +157,15 @@ export const StyledStatistics = styled.main`
       }
 
       .img-full {
-        width: 60vw;
+        width: 100%;
         cursor: zoom-in;
 
         &.zoomX {
-          width: 100vw;
+          width: 150%;
         }
         
         &.zoomX2 {
-          width: 150vw;
+          width: 250%;
           cursor: zoom-out;
         }
       }

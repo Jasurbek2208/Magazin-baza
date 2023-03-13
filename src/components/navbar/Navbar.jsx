@@ -29,15 +29,20 @@ export default function Navbar({ currentuser, admins }) {
   } = useForm();
 
   const dispatch = useDispatch();
-
+  
+  // 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isClosingTime, setIsClosingTime] = useState(false);
-  const [image, setImage] = useState("");
+
+  // 
   const [disbl, setDisbl] = useState(false);
+  const [errorSpan, setErrorSpan] = useState("");
   const [editProfile, isEditProfile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
+  // 
+  const [image, setImage] = useState("");
   const [genre, setGenre] = useState("");
-  const [errorSpan, setErrorSpan] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
   function closingModal() {
@@ -97,6 +102,8 @@ export default function Navbar({ currentuser, admins }) {
       });
       toast.success("Profil muvafaqiyatli o'zgartirildi!");
       isEditProfile(false);
+      setPhoneNumber("");
+      setGenre("");
     } catch (error) {
       console.log(error);
       toast.success(
