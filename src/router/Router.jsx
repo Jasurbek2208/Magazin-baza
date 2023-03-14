@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // Layouts
 import PagesLayout from "../layout/PagesLayout";
@@ -28,10 +28,12 @@ import { getStoreHistory } from "../customHooks/useGetStoreHistory";
 // Firebase
 import { doc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
-import { v4 } from "uuid";
 
 export default function Router() {
   const location = useLocation().pathname;
+
+  // redux
+  const dispatch = useDispatch();
 
   let localNum = 0;
   const isAuth =
@@ -39,7 +41,7 @@ export default function Router() {
     JSON.parse(localStorage.getItem("ISAUTH"));
 
   // Admins's rol state
-  const [userPosit, setUserPosit] = useState([""]);
+  const [userPosit, setUserPosit] = useState(null);
   const [currentuser, setCurrentUser] = useState(null);
   const [admins, setAdmins] = useState(null);
 
@@ -49,14 +51,12 @@ export default function Router() {
     }
   }, [location]);
 
+  // Watching and inspection pirats
   useEffect(() => {
-    if (isAuth) {
-      localNum += 1;
-      localStorage.removeItem("storeHistory");
-      localStorage.removeItem("oziqOvqatChiqim");
-      localStorage.removeItem("korxonaUchunChiqim");
-      if (localNum === 1) getStoreHistory();
-      userPosition();
+    localNum += 1;
+    if (isAuth && localNum === 1) userPosition();
+    if(JSON.parse(localStorage.getItem("ISAUTH")) && !localStorage.getItem("TOKEN")) {
+      dispatch({ type: "LOG_OUT" });
     }
   }, [isAuth]);
 
@@ -66,6 +66,7 @@ export default function Router() {
       setAdmins(doc?.data()?.admins);
       doc?.data()?.admins.map((currUser) => {
         if (localStorage.getItem("TOKEN") === currUser.accessToken) {
+          getStoreHistory();
           setCurrentUser(currUser);
           setUserPosit(currUser.rol);
           localStorage.setItem(
@@ -84,71 +85,94 @@ export default function Router() {
           element={<PagesLayout currentuser={currentuser} admins={admins} />}
         >
           <Route path="home" element={<Home />} />
-
-          {userPosit.includes("Ombor kuzatuvchisi") ? (
-            <Route path="ombor" element={<StoragePage />} />
-          ) : null}
-
-          {userPosit.includes("Mahsulot sotish bo'limi ma'suli") ? (
+          {currentuser?.accessToken === localStorage.getItem("TOKEN") ? (
             <>
-              <Route path="savdo" element={<MarketingPage />} />
-              <Route path="mahsulot-sotish" element={<SavdoForm />} />
+
+              {userPosit?.includes("Ombor kuzatuvchisi") ? (
+                <Route path="ombor" element={<StoragePage />} />
+              ) : null}
+
+              {userPosit?.includes("Mahsulot sotish bo'limi ma'suli") ? (
+                <>
+                  <Route path="savdo" element={<MarketingPage />} />
+                  <Route path="mahsulot-sotish" element={<SavdoForm />} />
+                </>
+              ) : null}
+
+              {userPosit?.includes("Mahsulot sotib olish bo'limi ma'suli") ? (
+                <>
+                  <Route path="savdo" element={<MarketingPage />} />
+                  <Route path="mahsulot-sotib-olish" element={<SavdoForm />} />
+                </>
+              ) : null}
+
+              {userPosit?.includes("Korxona ta'minoti bo'limi ma'suli") ? (
+                <>
+                  <Route path="taminot" element={<TaminotPage />} />
+                  <Route
+                    path="korxona-uchun-taminot"
+                    element={<TaminotForm />}
+                  />
+                </>
+              ) : null}
+
+              {userPosit?.includes("Oziq-ovqat taminoti bo'limi ma'suli") ? (
+                <>
+                  <Route path="taminot" element={<TaminotPage />} />
+                  <Route
+                    path="oziq-ovqat-uchun-chiqim"
+                    element={<TaminotForm />}
+                  />
+
+                  <Route path="company-page" element={<CompanyPage />} />
+                  <Route path="kompaniya-qoshish" element={<AddCompany />} />
+                  <Route
+                    path="kompaniyalar-royxati"
+                    element={<CompaniesList />}
+                  />
+                </>
+              ) : null}
+
+              {userPosit?.includes("Boss") ||
+              userPosit?.includes("Bosh menejer") ? (
+                <>
+                  <Route path="ombor" element={<StoragePage />} />
+
+                  <Route path="savdo" element={<MarketingPage />} />
+                  <Route path="mahsulot-sotish" element={<SavdoForm />} />
+                  <Route path="mahsulot-sotib-olish" element={<SavdoForm />} />
+                  <Route
+                    path="mahsulot-omborga-qoshish"
+                    element={<AddProductList />}
+                  />
+
+                  <Route path="taminot" element={<TaminotPage />} />
+                  <Route
+                    path="korxona-uchun-taminot"
+                    element={<TaminotForm />}
+                  />
+                  <Route
+                    path="oziq-ovqat-uchun-chiqim"
+                    element={<TaminotForm />}
+                  />
+
+                  <Route path="company-page" element={<CompanyPage />} />
+                  <Route path="kompaniya-qoshish" element={<AddCompany />} />
+                  <Route
+                    path="kompaniyalar-royxati"
+                    element={<CompaniesList />}
+                  />
+
+                  <Route path="admins-page" element={<AdminsPage />} />
+                  <Route path="admin-qo'shish" element={<AddAdmin />} />
+                  <Route path="adminlar-royxati" element={<AdminsList />} />
+                </>
+              ) : null}
+
+              <Route path="kassa" element={<Kassa />} />
+              <Route path="*" element={<Navigate to="home" />} />
             </>
           ) : null}
-
-          {userPosit.includes("Mahsulot sotib olish bo'limi ma'suli") ? (
-            <>
-              <Route path="savdo" element={<MarketingPage />} />
-              <Route path="mahsulot-sotib-olish" element={<SavdoForm />} />
-            </>
-          ) : null}
-
-          {userPosit.includes("Korxona ta'minoti bo'limi ma'suli") ? (
-            <>
-              <Route path="taminot" element={<TaminotPage />} />
-              <Route path="korxona-uchun-taminot" element={<TaminotForm />} />
-            </>
-          ) : null}
-
-          {userPosit.includes("Oziq-ovqat taminoti bo'limi ma'suli") ? (
-            <>
-              <Route path="taminot" element={<TaminotPage />} />
-              <Route path="oziq-ovqat-uchun-chiqim" element={<TaminotForm />} />
-
-              <Route path="company-page" element={<CompanyPage />} />
-              <Route path="kompaniya-qoshish" element={<AddCompany />} />
-              <Route path="kompaniyalar-royxati" element={<CompaniesList />} />
-            </>
-          ) : null}
-
-          {userPosit.includes("Boss") || userPosit.includes("Bosh menejer") ? (
-            <>
-              <Route path="ombor" element={<StoragePage />} />
-
-              <Route path="savdo" element={<MarketingPage />} />
-              <Route path="mahsulot-sotish" element={<SavdoForm />} />
-              <Route path="mahsulot-sotib-olish" element={<SavdoForm />} />
-              <Route
-                path="mahsulot-omborga-qoshish"
-                element={<AddProductList />}
-              />
-
-              <Route path="taminot" element={<TaminotPage />} />
-              <Route path="korxona-uchun-taminot" element={<TaminotForm />} />
-              <Route path="oziq-ovqat-uchun-chiqim" element={<TaminotForm />} />
-
-              <Route path="company-page" element={<CompanyPage />} />
-              <Route path="kompaniya-qoshish" element={<AddCompany />} />
-              <Route path="kompaniyalar-royxati" element={<CompaniesList />} />
-
-              <Route path="admins-page" element={<AdminsPage />} />
-              <Route path="admin-qo'shish" element={<AddAdmin />} />
-              <Route path="adminlar-royxati" element={<AdminsList />} />
-            </>
-          ) : null}
-
-          <Route path="kassa" element={<Kassa />} />
-          <Route path="*" element={<Navigate to="home" />} />
         </Route>
       </Routes>
     );

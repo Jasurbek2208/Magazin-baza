@@ -1,24 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { v4 } from "uuid";
-import { useDispatch } from "react-redux";
+
+// Style
 import styled from "styled-components";
 
 // Firebase
+import { doc, setDoc } from "firebase/firestore";
+import { auth, db } from "../../firebase";
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 // Components
 import Button from "../button/Button";
 import Input from "../input/Input";
 import Select from "../select/Select";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../../firebase";
+import Loading from "../loading/Loading";
 
 export default function Navbar({ currentuser, admins }) {
   const {
@@ -27,20 +34,21 @@ export default function Navbar({ currentuser, admins }) {
     formState: { errors },
     reset,
   } = useForm();
-
-  const dispatch = useDispatch();
   
-  // 
+  // redux
+  const dispatch = useDispatch();
+
+  //
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isClosingTime, setIsClosingTime] = useState(false);
 
-  // 
+  //
   const [disbl, setDisbl] = useState(false);
   const [errorSpan, setErrorSpan] = useState("");
   const [editProfile, isEditProfile] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
-  // 
+
+  //
   const [image, setImage] = useState("");
   const [genre, setGenre] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -64,6 +72,7 @@ export default function Navbar({ currentuser, admins }) {
       setErrorSpan(true);
       return;
     }
+
     if (
       currentuser.firstName === data.firstName &&
       currentuser.lastName === data.lastName &&
@@ -78,45 +87,41 @@ export default function Navbar({ currentuser, admins }) {
     }
 
     setDisbl(true);
+    setIsLoading(true);
+
     const oldDatas = [];
     data = { ...currentuser, ...data, genre, phoneNumber, avatar: image };
 
-    admins.forEach((i) =>
-      i.id !== currentuser.id ? oldDatas.push(i) : oldDatas.push(data)
-    );
-
-    if (
-      currentuser.email !== data.email ||
-      currentuser.password !== data.password
-    ) {
-      dispatch({
-        type: "RESET_EMAIL",
-        currentAdmin: currentuser,
-        currEdited: data,
-      });
-    }
-
     try {
+      if (
+        currentuser.email !== data.email ||
+        currentuser.password !== data.password
+      ) {
+        await editAccount(currentuser, data);
+      }
+
+      admins.forEach((i) =>
+        i.id !== currentuser.id ? oldDatas.push(i) : oldDatas.push(data)
+      );
+
       await setDoc(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), {
         admins: oldDatas,
       });
-      toast.success("Profil muvafaqiyatli o'zgartirildi!");
-      isEditProfile(false);
-      setPhoneNumber("");
-      setGenre("");
-    } catch (error) {
-      console.log(error);
+
+      toast.success("Profil muvaffaqiyatli o'zgartirildi!");
+      resetForm();
+    } catch {
       toast.success(
         "Profil o'zgartirishda xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring!"
       );
     } finally {
       setDisbl(false);
+      setIsLoading(false);
     }
   }
 
   // Storagega rasm yuklash
   function uploadImage(e) {
-    setIsLoading(true);
     const storage = getStorage();
     const urlName =
       "adminsAvatar/" +
@@ -156,7 +161,7 @@ export default function Navbar({ currentuser, admins }) {
   }
 
   // form number & genre first validation
-  useEffect(() => {
+  function currentValidation() {
     if (!genre) {
       setGenre(currentuser?.genre);
     }
@@ -166,7 +171,46 @@ export default function Navbar({ currentuser, admins }) {
     if (!image) {
       setImage(currentuser?.avatar);
     }
-  }, [currentuser?.phoneNumber]);
+    isEditProfile((p) => !p);
+  }
+
+  // LogOut
+  function logOut() {
+    dispatch({ type: "LOG_OUT" });
+    resetForm();
+  }
+
+  // Reset Form
+  function resetForm() {
+    isEditProfile(false);
+    setIsClosingTime(true);
+    setPhoneNumber("");
+    setGenre("");
+    setImage("");
+    reset();
+  }
+
+  // Edit email
+  async function editAccount(currentAdmin, currEdited) {
+    // Delete edited account
+    await signInWithEmailAndPassword(
+      auth,
+      currentAdmin.email,
+      currentAdmin.password
+    ).then((userCredential) => {
+      userCredential.user.delete();
+    });
+
+    // Register new account
+    await createUserWithEmailAndPassword(
+      auth,
+      currEdited.email,
+      currEdited.password
+    ).then((userCredential) => {
+      currEdited.accessToken = userCredential.user.uid;
+      localStorage.setItem("TOKEN", userCredential.user.uid);
+    });
+  }
 
   return (
     <StyledNavbar image={image} avatar={currentuser?.avatar}>
@@ -177,10 +221,7 @@ export default function Navbar({ currentuser, admins }) {
         >
           <i className="icon fa-solid fa-user"></i>
         </div>
-        <Button
-          content="Chiqish"
-          onClick={() => dispatch({ type: "LOG_OUT" })}
-        />
+        <Button content="Chiqish" onClick={logOut} />
       </div>
 
       {isProfileOpen && (
@@ -228,7 +269,7 @@ export default function Navbar({ currentuser, admins }) {
                 <Button
                   content="Edit profile"
                   width="100%"
-                  onClick={() => isEditProfile((p) => !p)}
+                  onClick={currentValidation}
                 />
               </div>
             </div>
@@ -381,10 +422,14 @@ export default function Navbar({ currentuser, admins }) {
             </div>
           )}
 
-          <div
-            className="close-modal"
-            onClick={() => setIsClosingTime(true)}
-          ></div>
+          <div className="close-modal" onClick={resetForm}></div>
+        </div>
+      )}
+
+      {/* Profil save Loading */}
+      {isLoading && (
+        <div className="loading__wrapper">
+          <Loading />
         </div>
       )}
     </StyledNavbar>
@@ -616,6 +661,23 @@ const StyledNavbar = styled.nav`
       height: 100vh;
       background-color: transparent;
     }
+  }
+
+  /* loading */
+  .loading__wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: transparent;
+    backdrop-filter: blur(0.7px);
+    z-index: 100;
   }
 
   @media (max-width: 460px) {

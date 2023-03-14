@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import { TabTitle } from "../../utils/Utils";
-import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+
+// Style
+import styled from "styled-components";
 
 // Firebase
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
 
 // Components
 import Button from "../../components/button/Button";
 import Input from "../../components/input/Input";
-import { auth } from "../../firebase";
 
 export default function Login() {
   TabTitle("Login | Magazin Baza");
 
-  const [isClicked, setIsClicked] = useState(false);
   const [disbl, setDisbl] = useState(false);
   const [error, setError] = useState(false);
   const {
@@ -23,7 +24,8 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const isAuth = useSelector((state) => state.isAuth);
+
+  // redux
   const dispatch = useDispatch();
 
   const userLogin = (data) => {
@@ -36,8 +38,10 @@ export default function Login() {
           dispatch({ type: "LOG_IN" });
         })
         .catch(() => setError(true));
+
     } catch (error) {
       console.log(error);
+
     } finally {
       setDisbl(false);
     }
