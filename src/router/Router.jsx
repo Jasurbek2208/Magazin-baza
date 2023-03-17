@@ -55,6 +55,7 @@ export default function Router() {
   useEffect(() => {
     localNum += 1;
     if (isAuth && localNum === 1) userPosition();
+    
     if(JSON.parse(localStorage.getItem("ISAUTH")) && !localStorage.getItem("TOKEN")) {
       dispatch({ type: "LOG_OUT" });
     }
@@ -64,15 +65,16 @@ export default function Router() {
   function userPosition() {
     onSnapshot(doc(db, "users", "hjJzOpbuR3XqjX817DGvJMG3Xr82"), (doc) => {
       setAdmins(doc?.data()?.admins);
+
       doc?.data()?.admins.map((currUser) => {
+
         if (localStorage.getItem("TOKEN") === currUser.accessToken) {
+
           getStoreHistory();
           setCurrentUser(currUser);
           setUserPosit(currUser.rol);
-          localStorage.setItem(
-            "lastRol",
-            currUser.firstName + " " + currUser.lastName
-          );
+
+          localStorage.setItem("lastRol", currUser.firstName + " " + currUser.lastName);
         }
       });
     });

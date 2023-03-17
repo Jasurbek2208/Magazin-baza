@@ -22,24 +22,23 @@ import {
 } from "firebase/auth";
 
 // Components
-import Button from "../button/Button";
 import Input from "../input/Input";
+import Button from "../button/Button";
 import Select from "../select/Select";
 import Loading from "../loading/Loading";
 
-export default function Navbar({ currentuser, admins }) {
+export default function Navbar({ currentuser, admins, isProfileOpen, setIsProfileOpen }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
-  
+
   // redux
   const dispatch = useDispatch();
 
   //
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isClosingTime, setIsClosingTime] = useState(false);
 
   //
@@ -175,15 +174,17 @@ export default function Navbar({ currentuser, admins }) {
   }
 
   // LogOut
-  function logOut() {
+  async function logOut() {
     dispatch({ type: "LOG_OUT" });
-    resetForm();
+    resetForm(true);
   }
 
   // Reset Form
-  function resetForm() {
+  function resetForm(isCencel) {
     isEditProfile(false);
-    setIsClosingTime(true);
+
+    if(!isCencel) setIsClosingTime(true);
+
     setPhoneNumber("");
     setGenre("");
     setImage("");
@@ -418,11 +419,20 @@ export default function Navbar({ currentuser, admins }) {
                     disbl={disbl}
                   />
                 </div>
+                <div className="button__wrapper">
+                  <Button
+                    type="button"
+                    content="Cencel"
+                    width="100%"
+                    disbl={disbl}
+                    onClick={() => resetForm(true)}
+                  />
+                </div>
               </form>
             </div>
           )}
 
-          <div className="close-modal" onClick={resetForm}></div>
+          <div className="close-modal" onClick={() => resetForm(false)}></div>
         </div>
       )}
 
