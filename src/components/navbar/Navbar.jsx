@@ -238,7 +238,7 @@ export default function Navbar({ currentuser, admins, isProfileOpen, setIsProfil
           </div>
           {!editProfile ? (
             <div className={"user-info__wrapper" + (avatarView ? " On" : "")}>
-              <div className="user_profile" onClick={() => !avatarView ? setAvatarView(true) : null}>
+              <div className="user_profile" onClick={() => !avatarView && image ? setAvatarView(true) : null}>
                 <i className="icon fa-solid fa-user"></i>
               </div>
               <h2 className="user-fullname">
