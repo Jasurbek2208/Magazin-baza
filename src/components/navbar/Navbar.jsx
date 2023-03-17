@@ -40,6 +40,7 @@ export default function Navbar({ currentuser, admins, isProfileOpen, setIsProfil
 
   //
   const [isClosingTime, setIsClosingTime] = useState(false);
+  const [avatarView, setAvatarView] = useState(false);
 
   //
   const [disbl, setDisbl] = useState(false);
@@ -232,12 +233,12 @@ export default function Navbar({ currentuser, admins, isProfileOpen, setIsProfil
           <div className={"modal-close-btn" + (editProfile ? " off" : "")}>
             <i
               className="icon fa-solid fa-close"
-              onClick={() => setIsClosingTime(true)}
+              onClick={() => avatarView ? setAvatarView(false) : setIsClosingTime(true)}
             ></i>
           </div>
           {!editProfile ? (
-            <div className="user-info__wrapper">
-              <div className="user_profile">
+            <div className={"user-info__wrapper" + (avatarView ? " On" : "")}>
+              <div className="user_profile" onClick={() => !avatarView ? setAvatarView(true) : null}>
                 <i className="icon fa-solid fa-user"></i>
               </div>
               <h2 className="user-fullname">
@@ -432,7 +433,7 @@ export default function Navbar({ currentuser, admins, isProfileOpen, setIsProfil
             </div>
           )}
 
-          <div className="close-modal" onClick={() => resetForm(false)}></div>
+          <div className="close-modal" onClick={() => avatarView ? setAvatarView(false) : resetForm(false)}></div>
         </div>
       )}
 
@@ -531,6 +532,7 @@ const StyledNavbar = styled.nav`
         font-size: 36px;
         min-width: max-content;
         min-height: max-content;
+        z-index: 2000;
       }
     }
 
@@ -548,6 +550,66 @@ const StyledNavbar = styled.nav`
 
         & > .icon {
           font-size: 95px;
+        }
+
+        &.On {
+          position: fixed;
+          top: 50%;
+          transform: translateY(-50%);
+          max-width: 380px;
+          height: 380px;
+          width: 100%;
+          border-radius: 0px;
+          background-size: contain;
+          z-index: 1000;
+
+          &::before {
+            position: fixed;
+            content: "";
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            /* background-color: red; */
+            z-index: 900;
+          }
+        }
+      }
+
+      &.On {
+        &::before {
+          position: fixed;
+          content: "";
+          top: 0;
+          left: 0;
+          max-width: 399px;
+          width: 100%;
+          height: 100vh;
+          z-index: 900;
+          background-color: #000;
+        }
+
+        .user_profile {
+          position: fixed;
+          top: 50%;
+          transform: translateY(-50%);
+          max-width: 380px;
+          height: 380px;
+          width: 100%;
+          border-radius: 0px;
+          background-size: contain;
+          z-index: 1000;
+
+          &::before {
+            position: fixed;
+            content: "";
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            /* background-color: red; */
+            z-index: 900;
+          }
         }
       }
 
