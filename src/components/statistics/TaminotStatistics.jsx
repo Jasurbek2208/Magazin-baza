@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+
+// Style
 import { StyledStatistics } from "./StyledStatistics";
 
 export default function TaminotStatistics({ staticsType }) {
@@ -27,6 +29,11 @@ export default function TaminotStatistics({ staticsType }) {
   //     });
   // }
 
+  function resetImg() {
+    setIsZoom("");
+    setZoomX("");
+  }
+
   useEffect(() => {
     const handleScroll = () => {
       if (!isZoom) {
@@ -42,10 +49,30 @@ export default function TaminotStatistics({ staticsType }) {
   }, [isZoom]);
 
   useEffect(() => {
-    if (!isZoom) {
-      window.scrollTo(0, scrollY);
-    }
+    if (!isZoom) window.scrollTo(0, scrollY);
   }, [isZoom]);
+
+  document.addEventListener("keyup", (e) => {
+    if (!isZoom) return;
+
+    if (e.code === "Escape") {
+      resetImg();
+    }
+
+    if (e.ctrlKey) {
+
+      if (e.key === "+") {
+        
+        if (!zoomX) {
+          setZoomX("zoomX ");
+
+        } else if (zoomX === "zoomX ") {
+          setZoomX("zoomX2 ");
+        }
+
+      } else if (e.key === "-" && zoomX === "zoomX2 ") setZoomX("");
+    }
+  });
 
   return (
     <StyledStatistics className="statistcs__wrapper">
@@ -95,18 +122,9 @@ export default function TaminotStatistics({ staticsType }) {
         >
           <nav className={(backClick ? "ON " : "") + "full-img-navbar"}>
             <ul>
-              {/* <li>
-                <i
-                  onClick={() => downloadImage(isZoom)}
-                  className="icon fa-sharp fa-solid fa-download"
-                ></i>
-              </li> */}
               <li>
                 <i
-                  onClick={() => {
-                    setIsZoom("");
-                    setZoomX("");
-                  }}
+                  onClick={resetImg}
                   className="icon fa-regular fa-circle-xmark"
                 ></i>
               </li>
