@@ -92,7 +92,7 @@ export default function StoragePage() {
                 sheet="products"
                 currentTableRef={tableRef.current}
               >
-                <Button content="Excel yuklash" width="100%" customize={true} />
+                <Button content="Excel yuklash" width="100%" customize={true} isDownloadble={true} />
               </DownloadTableExcel>
             </li>
             <li>
@@ -206,6 +206,10 @@ export const StyledStorage = styled.div`
             display: none !important;
           }
         }
+      }
+
+      tbody > tr > td {
+        cursor: pointer;
       }
 
       &.none {

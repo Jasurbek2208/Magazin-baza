@@ -103,7 +103,7 @@ export default function CompaniesList() {
                 sheet={isCompany ? "partner companies" : "partner persons"}
                 currentTableRef={tableRef.current}
               >
-                <Button content="Excel yuklash" width="100%" customize={true} />
+                <Button content="Excel yuklash" width="100%" customize={true} isDownloadble={true} />
               </DownloadTableExcel>
             </li>
             <li>

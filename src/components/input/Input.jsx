@@ -28,7 +28,7 @@ export default function Input({
           <CurrencyInput
             className={
               className +
-              " input" +
+              " input form-control" +
               (errName === "narxi" ? " narxi" : "") +
               (error?.error ? " borderError" : "")
             }
@@ -48,7 +48,7 @@ export default function Input({
       ) : type === "number-2" ? (
         <input
           type="date"
-          className={className + " input"}
+          className={className + " input form-control"}
           name={label}
           value={value}
           required={require}
@@ -58,7 +58,7 @@ export default function Input({
       ) : type === "number-3" ? (
         <input
           type="tel"
-          className={className + " input"}
+          className={className + " input form-control"}
           name={label}
           value={value}
           pattern={pattern}
@@ -105,7 +105,7 @@ export default function Input({
           ) : (
             <input
               className={
-                className + (error?.error ? " borderError input" : " input")
+                className + (error?.error ? " borderError input" : " input form-control")
               }
               type={type}
               pattern={pattern || null}
@@ -192,6 +192,7 @@ const StyledInput = styled.div`
     width: 100%;
     height: 200px;
     border: 1px solid #005ed8;
+    border-radius: 6px;
     overflow: hidden;
 
     .loading {
@@ -232,6 +233,7 @@ const StyledInput = styled.div`
     position: relative;
     cursor: pointer;
     color: #fff;
+    border-radius: 6px;
 
     &::before {
       content: "Checkni yuklash";

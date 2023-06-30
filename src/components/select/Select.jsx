@@ -20,8 +20,16 @@ export default function Select({
   );
 
   return (
-    <StyledSelect>
-      {label ? <label htmlFor={label}>{label}</label> : null}
+    <select
+      className="form-select py-2"
+      onChange={(e) => {
+        sortData(e.target.value);
+        // setIsOpen(false);
+        // setIsSelect(true);
+        setSelectValue(e.target.value);
+      }}
+    >
+      {/* {label ? <label htmlFor={label}>{label}</label> : null}
       <button
         type="button"
         className={"select-btn" + (outlineStyle ? " outline" : "")}
@@ -42,33 +50,21 @@ export default function Select({
         onClick={() => {
           setIsOpen(false);
         }}
-      ></div>
-      {isOpen ? (
-        <div className="select-modal">
-          <ul>
-            {list?.map((i) => (
-              <li key={i}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    sortData(i);
-                    setIsOpen(false);
-                    setIsSelect(true);
-                    setSelectValue(i);
-                  }}
-                >
-                  {i}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
-    </StyledSelect>
+      ></div> */}
+      {list
+        ? list?.map((i) => (
+            // <li key={i}>
+            <option key={i} type="button">
+              {i}
+            </option>
+            // </li>
+          ))
+        : null}
+    </select>
   );
 }
 
-const StyledSelect = styled.div`
+const StyledSelect = styled.select`
   label {
     margin-bottom: 8px;
     font-family: "Poppins", sans-serif;

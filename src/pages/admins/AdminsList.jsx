@@ -104,7 +104,7 @@ export default function AdminsList() {
                 sheet="admins"
                 currentTableRef={tableRef.current}
               >
-                <Button content="Excel yuklash" width="100%" customize={true} />
+                <Button content="Excel yuklash" width="100%" customize={true} isDownloadble={true} />
               </DownloadTableExcel>
             </li>
             <li>
@@ -130,7 +130,7 @@ export default function AdminsList() {
       </nav>
       <div className="container">
         <main
-          className={"table__wrapper" + (currentModalIsOpen ? " none" : "")}
+          className={"table__wrapper " + (currentModalIsOpen ? " none" : "")}
         >
           {filteredData?.length === 0 ? (
             <h1 className="no-found-message">Topilmadi!</h1>
@@ -139,13 +139,13 @@ export default function AdminsList() {
           <table ref={tableRef}>
             <thead>
               <tr>
-                <th>N0_</th>
-                <th>Ism</th>
-                <th>Familiya</th>
-                <th>Jinsi</th>
-                <th>Telefon raqam</th>
-                <th>Email</th>
-                <th className="none">Lavozimi</th>
+                <th scope="col">N0_</th>
+                <th scope="col">Ism</th>
+                <th scope="col">Familiya</th>
+                <th scope="col">Jinsi</th>
+                <th scope="col">Telefon raqam</th>
+                <th scope="col">Email</th>
+                <th scope="col" className="none">Lavozimi</th>
               </tr>
             </thead>
             <tbody>
@@ -157,7 +157,7 @@ export default function AdminsList() {
                       positionCheck(i) ? setCurrentModalIsOpen(true) : null
                     }
                   >
-                    <td>{tableNum++}</td>
+                    <td scope="row">{tableNum++}</td>
                     <td>{i.firstName}</td>
                     <td>{i.lastName}</td>
                     <td>{i.genre}</td>

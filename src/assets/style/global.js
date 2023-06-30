@@ -14,11 +14,11 @@ export const GlobalStyle = createGlobalStyle`
         font-family: 'Roboto', sans-serif;
     }
 
-    .container {
+    /* .container {
         margin: 0 auto;
         padding: 0px 16px;
         max-width: 1200px;
-    }
+    } */
 
     /* SCROLLBAR STYLE */
     ::-webkit-scrollbar {

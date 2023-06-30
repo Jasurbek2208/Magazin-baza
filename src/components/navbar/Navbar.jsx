@@ -423,7 +423,7 @@ export default function Navbar({ currentuser, admins, isProfileOpen, setIsProfil
                 <div className="button__wrapper">
                   <Button
                     type="button"
-                    content="Cencel"
+                    content="Cancel"
                     width="100%"
                     disbl={disbl}
                     onClick={() => resetForm(true)}

@@ -264,7 +264,7 @@ export default function CurrentModal({ partners, currentPartner, isClose }) {
 
           <div className="button__wrapper">
             <Button
-              content={isEdited ? "Cencel" : "Edit"}
+              content={isEdited ? "Cancel" : "Edit"}
               width="100%"
               disbl={disbl}
               onClick={() => {

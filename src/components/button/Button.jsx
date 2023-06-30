@@ -12,21 +12,27 @@ export default function Button({
   isLoading,
   statistics = false,
   isActive,
+  isDownloadble,
 }) {
   return (
     <StyledButton
+      // className={
+      //   (className ? className : "") +
+      //   (customize ? " customize" : "") +
+      //   (statistics ? " statistics" : "") +
+      //   (isActive ? " active" : "")
+      // }
       className={
         (className ? className : "") +
         (customize ? " customize" : "") +
-        (statistics ? " statistics" : "") +
-        (isActive ? " active" : "")
+        " btn btn-primary "
       }
       disabled={disbl || isLoading}
       style={{ width: width, cursor: isLoading ? "not-allowed" : "pointer" }}
       type={type}
       onClick={onClick}
     >
-      {content}
+      {isDownloadble && <i className="fas fa-download" />}{" "}{content}
     </StyledButton>
   );
 }
