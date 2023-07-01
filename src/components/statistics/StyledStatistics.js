@@ -159,7 +159,7 @@ export const StyledStatistics = styled.main`
       .img-full {
         width: 100%;
         height: 100%;
-        max-height: 70vh;
+        max-height: 30vw;
         cursor: zoom-in;
 
         &.zoomX {

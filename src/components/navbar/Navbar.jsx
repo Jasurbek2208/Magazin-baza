@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -28,6 +29,8 @@ import Select from "../select/Select";
 import Loading from "../loading/Loading";
 
 export default function Navbar({ currentuser, admins, isProfileOpen, setIsProfileOpen }) {
+  const location = useLocation().pathname;
+
   const {
     register,
     handleSubmit,
@@ -213,6 +216,28 @@ export default function Navbar({ currentuser, admins, isProfileOpen, setIsProfil
       localStorage.setItem("TOKEN", userCredential.user.uid);
     });
   }
+
+  useEffect(() => {
+    const handleKeyUp = (e) => {
+      if (location === '/kassa') return;
+  
+      if (e.code === 'Escape') {
+        setAvatarView(false);
+        resetForm(false);
+      }
+  
+      if (e.ctrlKey && e.key === 'q') {
+        setIsProfileOpen(true);
+      }
+    };
+  
+    document.addEventListener('keyup', handleKeyUp);
+  
+    return () => {
+      document.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
+  
 
   return (
     <StyledNavbar image={image} avatar={currentuser?.avatar}>
@@ -570,7 +595,6 @@ const StyledNavbar = styled.nav`
             left: 0;
             width: 100%;
             height: 100vh;
-            /* background-color: red; */
             z-index: 900;
           }
         }
@@ -607,7 +631,6 @@ const StyledNavbar = styled.nav`
             left: 0;
             width: 100%;
             height: 100vh;
-            /* background-color: red; */
             z-index: 900;
           }
         }
