@@ -36,9 +36,7 @@ export default function Router() {
   const dispatch = useDispatch();
 
   let localNum = 0;
-  const isAuth =
-    useSelector((state) => state.isAuth) |
-    JSON.parse(localStorage.getItem("ISAUTH"));
+  const isAuth = useSelector((state) => state.isAuth);
 
   // Admins's rol state
   const [userPosit, setUserPosit] = useState(null);
@@ -55,7 +53,7 @@ export default function Router() {
   useEffect(() => {
     localNum += 1;
     if (isAuth && localNum === 1) userPosition();
-    
+
     if(JSON.parse(localStorage.getItem("ISAUTH")) && !localStorage.getItem("TOKEN")) {
       dispatch({ type: "LOG_OUT" });
     }

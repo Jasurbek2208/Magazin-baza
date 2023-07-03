@@ -52,7 +52,7 @@ export default function Input({
           name={label}
           value={value}
           required={require}
-          placeholder={placeholder}
+          placeholder={placeholder || '22.08.2004'}
           onChange={onChange}
         />
       ) : type === "number-3" ? (
@@ -247,6 +247,12 @@ const StyledInput = styled.div`
 
     &::-webkit-file-upload-button {
       visibility: hidden;
+    }
+  }
+
+  input {
+    &::placeholder {
+      opacity: .6;
     }
   }
 `;

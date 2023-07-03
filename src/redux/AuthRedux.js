@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createStore } from 'redux';
 
 export default function AuthRedux({ children }) {
     const navigate = useNavigate();
-    const [isAuth, setIsAuth] = useState(false);
-    const defaultState = {
-        isAuth,
+
+    const initialState = {
+        isAuth: JSON.parse(localStorage.getItem("ISAUTH")),
     };
 
-    const reducer = (state = defaultState, action) => {
+    const reducer = (state = initialState, action) => {
         switch (action.type) {
             case 'LOG_IN':
                 localStorage.setItem('ISAUTH', 'true');
-                setIsAuth(true);
-                return state;
+                return { isAuth: true };
             case 'LOG_OUT':
                 localStorage.removeItem("TOKEN");
                 localStorage.removeItem("lastRol");
@@ -23,9 +22,8 @@ export default function AuthRedux({ children }) {
                 localStorage.setItem('ISAUTH', 'false');
                 localStorage.removeItem("oziqOvqatChiqim");
                 localStorage.removeItem("korxonaUchunChiqim");
-                setIsAuth(false);
                 navigate('..');
-                return state;
+                return { isAuth: false };
             default:
                 return state;
         }
