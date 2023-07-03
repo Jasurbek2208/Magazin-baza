@@ -3,13 +3,13 @@
     "name": "Magazin Baza",
     "icons": [
       {
-        "src": "favicon.ico",
+        "src": "favicon.webp",
         "sizes": "64x64 32x32 24x24 16x16",
-        "type": "image/x-icon"
+        "type": "image/x-webp"
       },
       {
-        "src": "logo192.png",
-        "type": "image/png",
+        "src": "logo192.webp",
+        "type": "image/webp",
         "sizes": "192x192"
       },
       {
