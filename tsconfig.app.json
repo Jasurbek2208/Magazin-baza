@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "esnext",
+    "module": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "bundler",
+    "jsxImportSource": "react",
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": "src",
+    "types": ["react", "react-dom"],
+    "paths": {
+      "types/*": ["types/*"],
+      "pages/*": ["pages/*"],
+      "Locale/*": ["Locale/*"],
+      "hooks/*": ["hooks/*"],
+      "store/*": ["store/*"],
+      "assets/*": ["assets/*"],
+      "layout/*": ["layout/*"],
+      "router/*": ["router/*"],
+      "helpers/*": ["helpers/*"],
+      "service/*": ["service/*"],
+      "components/*": ["components/*"]
+    }
+  },
+  "composite": true,
+  "include": ["./src", "src/declaration.d.ts", "tailwind.config.mts"]
+}

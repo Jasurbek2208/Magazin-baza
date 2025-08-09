@@ -1,0 +1,18 @@
+import { lazy } from 'react'
+
+export const Home = lazy(() => import('../pages/Home'))
+export const Boss = lazy(() => import('../pages/boss/Boss'))
+export const Login = lazy(() => import('../pages/auth/Login'))
+export const Kassa = lazy(() => import('../pages/kassa/Kassa'))
+export const AddAdmin = lazy(() => import('../pages/admins/AddAdmin'))
+export const AdminsPage = lazy(() => import('../pages/admins/AdminPage'))
+export const AdminsList = lazy(() => import('../pages/admins/AdminsList'))
+export const AddCompany = lazy(() => import('../pages/companyPage/AddCompany'))
+export const SavdoForm = lazy(() => import('../pages/marketingPage/SavdoForm'))
+export const CompanyPage = lazy(() => import('../pages/companyPage/CompanyPage'))
+export const TaminotForm = lazy(() => import('../pages/taminotPage/TaminotForm'))
+export const TaminotPage = lazy(() => import('../pages/taminotPage/TaminotPage'))
+export const StoragePage = lazy(() => import('../pages/storagePage/StoragePage'))
+export const CompaniesList = lazy(() => import('../pages/companyPage/CompaniesList'))
+export const MarketingPage = lazy(() => import('../pages/marketingPage/MarketingPage'))
+export const AddProductList = lazy(() => import('../pages/marketingPage/AddProductList'))

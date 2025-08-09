@@ -1,5 +1,5 @@
 import React from "react";
-import { TabTitle } from "../../utils/Utils";
+import { TabTitle } from "utils";
 import styled from "styled-components";
 
 // Components

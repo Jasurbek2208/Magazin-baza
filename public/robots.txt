@@ -1,0 +1,36 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Crawl-delay: 1000
+Disallow: /
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /dashboard
+Disallow: /home
+Disallow: /profile
+Disallow: /profile/settings
+Disallow: /settings
+
+User-agent: Googlebot
+Disallow: /
+
+User-agent: Bingbot
+Disallow: /
+
+# Blocking known bad bots
+User-agent: AhrefsBot
+Disallow: /
+User-agent: SemrushBot
+Disallow: /
+User-agent: MJ12bot
+Disallow: /
+
+# Block specific malicious bots
+User-agent: BadBot
+Disallow: /
+
+User-agent: EvilScraper
+Disallow: /
+
+User-agent: HackerBot
+Disallow: /

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { TabTitle } from "../../utils/Utils";
+import { useState } from "react";
+import { TabTitle } from "utils";
 import styled from "styled-components";
 import { doc, onSnapshot } from "firebase/firestore";
 

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html class="light" style="color-scheme: light" lang="ru" translate="no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+
+    <!-- Add more SEO-NO-friendly meta tags -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="googlebot" content="noindex, nofollow" />
+    <meta name="yandex" content="noindex, nofollow" />
+    <meta name="applebot" content="noindex, nofollow" />
+    <meta name="bingbot" content="noindex, nofollow" />
+
+    <!-- Application Titles -->
+    <meta name="apple-mobile-web-app-title" content="Flakon.uz - Admin" />
+    <meta name="application-name" content="Flakon.uz - Admin" />
+
+    <!-- IOS meta tags & icons -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="apple-touch-icon" href="https://admin.flakon.uz/logo.png" />
+
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/webp" href="https://admin.flakon.uz/logo.png" />
+    <link rel="icon" type="image/webp" sizes="32x32" href="https://admin.flakon.uz/logo.png" />
+    <link rel="icon" type="image/webp" sizes="16x16" href="https://admin.flakon.uz/logo.png" />
+
+    <!-- Manifest -->
+    <!-- <link rel="manifest" href="https://admin.flakon.uz/manifest.json" crossorigin="use-credentials"> -->
+
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Referrer-Policy" content="no-referrer" />
+    <meta name="referrer" content="no-referrer" />
+
+    <meta name="description" content="We offer a warehouse base for large stores and small factories!" />
+
+    <title>Magazin Baza</title>
+  </head>
+  <body>
+    <div id="root" role="main" aria-label="Magazin Baza"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script defer>
+      document?.addEventListener('DOMContentLoaded', () => {
+        if (navigator?.webdriver) {
+          alert('Bot activity detected')
+          document.body.innerHTML = '<h1>Access Denied</h1>'
+          setTimeout(() => window?.close(), 3000)
+        }
+      })
+
+      document?.querySelectorAll('form')?.forEach((form) => {
+        form?.addEventListener('submit', (e) => {
+          if (navigator?.webdriver) {
+            e?.preventDefault()
+            alert('Bot activity detected')
+            document.body.innerHTML = '<h1>Access Denied</h1>'
+            setTimeout(() => window?.close(), 3000)
+          }
+        })
+      })
+    </script>
+  </body>
+</html>

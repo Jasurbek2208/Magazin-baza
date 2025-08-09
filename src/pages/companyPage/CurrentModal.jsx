@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { TabTitle } from "../../utils/Utils";
+import { useEffect, useState } from "react";
+import { TabTitle } from "utils";
 import { toast } from "react-toastify";
 import styled from "styled-components";
 

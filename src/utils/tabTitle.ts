@@ -1,0 +1,1 @@
+export const TabTitle = (newTitle: string): string => (document.title = newTitle)

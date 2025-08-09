@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { DownloadTableExcel } from "react-export-table-to-excel";
-import { TabTitle } from "../../utils/Utils";
+import { TabTitle } from "utils";
 import { StyledStorage } from "../storagePage/StoragePage";
 
 // Firebase

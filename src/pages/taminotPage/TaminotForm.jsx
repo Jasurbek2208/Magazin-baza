@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { TabTitle } from "../../utils/Utils";
+import { useState } from "react";
+import { TabTitle } from "utils";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";

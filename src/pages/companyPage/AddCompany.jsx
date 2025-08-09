@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { TabTitle } from "../../utils/Utils";
+import { useEffect, useState } from "react";
+import { TabTitle } from "utils";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { v4 } from "uuid";

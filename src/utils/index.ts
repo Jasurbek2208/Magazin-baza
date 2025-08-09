@@ -1,0 +1,1 @@
+export{TabTitle}from'./tabTitle'
